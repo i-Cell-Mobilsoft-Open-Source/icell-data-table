@@ -14,4 +14,9 @@
 
   - Version:
   - Platform:
-  - Subsystem:
+  - Browser:
+    - [ ] Chrome
+    - [ ] Chromium
+    - [ ] Edge
+    - [ ] Firefox
+    - [ ] Safari
