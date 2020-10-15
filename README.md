@@ -9,7 +9,7 @@ npm i @i-cell/data-table
 
 ### Configuration
 
-IMPORTANT: The table uses `materialdesignicons` svg icon, you will need to download the latest `mdi.svg` from [here](https://materialdesignicons.com/api/download/angularmaterial/38EF63D0-4744-11E4-B3CF-842B2B6CFE1B). Place the dovnloaded svg inside the `assets/` folder of your application.
+IMPORTANT: The table uses `materialdesignicons` svg icon, you will need to download the latest `mdi.svg` from [here](https://materialdesignicons.com/api/download/angularmaterial/38EF63D0-4744-11E4-B3CF-842B2B6CFE1B). Place the downloaded svg inside the `assets/` folder of your application.
 
 NOTE: If you structure your `assets/` folder in a specific way, you have the option to set the path of the svg, while you import the module.
 
