@@ -163,7 +163,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 ></ic-data-table>
 ----
 
-==== Adatforrás beállítása
+==== DataSource configuration
 
 [source, javascript]
 .some.server-side-datasource.ts
