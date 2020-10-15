@@ -1,0 +1,27 @@
+<!-- cell templates -->
+<!-- default cell -->
+<ng-template #labelTemplate [cellTemplate]="'labelTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
+  {{ getFieldData(row, col.field) }}
+</ng-template>
+
+<!-- strong cell -->
+<ng-template #labelBoldTemplate [cellTemplate]="'labelBoldTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
+  <strong>{{ getFieldData(row, col.field) }}</strong>
+</ng-template>
+
+<!-- numeric cell -->
+<ng-template #numericTemplate [cellTemplate]="'numericTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
+  <div [style.textAlign]="'right'">{{ asNumeric(getFieldData(row, col.field)) }}</div>
+</ng-template>
+
+<!-- icon cell -->
+<ng-template #iconTemplate [cellTemplate]="'iconTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
+  <mat-icon aria-hidden="false" aria-label="row[col.altText]" [svgIcon]="getFieldData(row, col.field)"></mat-icon>
+</ng-template>
+
+<!-- component cell -->
+<ng-template #componentTemplate [cellTemplate]="'componentTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
+  <ng-container
+    *ngComponentOutlet="col.component; ndcDynamicInputs: { data: row, parent: col.parent }; ndcDynamicOutputs: col.outputs"
+  ></ng-container>
+</ng-template>

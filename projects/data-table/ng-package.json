@@ -1,0 +1,21 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist",
+  "lib": {
+    "cssUrl": "none",
+    "entryFile": "index.ts",
+    "umdModuleIds": {
+      "@icell/base": "icellBase",
+      "@ngx-translate/core": "ngxTranslateCore",
+      "lodash": "lodash",
+      "lodash-es": "lodashEs",
+      "ngx-webstorage": "ngxWebstorage",
+      "angular-resizable-element": "angularResizableElement",
+      "ng-dynamic-component": "ngDynamicComponent",
+      "ngx-multi-line-ellipsis": "ngxMultiLineEllipsis"
+    }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib"
+  ]
+}
