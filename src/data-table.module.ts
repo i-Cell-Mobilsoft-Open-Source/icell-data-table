@@ -21,10 +21,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { ResizableModule } from 'angular-resizable-element';
 import { DynamicIoModule, DynamicModule } from 'ng-dynamic-component';
-import { NgxMultiLineEllipsisModule } from 'ngx-multi-line-ellipsis';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
 import { DataTableComponent } from './data-table.component';
 import { CellTemplateDirective } from './directives/cell-template.directive';
+import { NgxMultiLineEllipsisDirective } from './directives/ngx-multi-line-ellipsis.directive';
 
 export interface DataTableConfig {
   mdiSvgResourcePath: string;
@@ -63,10 +63,9 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
     DynamicIoModule,
     HttpClientModule,
     DragDropModule,
-    NgxMultiLineEllipsisModule,
   ],
-  declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent],
-  exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent],
+  declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective],
+  exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective],
   providers: [MatSortHeaderIntl],
   schemas: [NO_ERRORS_SCHEMA],
 })

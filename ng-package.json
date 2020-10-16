@@ -31,7 +31,6 @@
     "angular-resizable-element",
     "lodash-es",
     "ng-dynamic-component",
-    "ngx-multi-line-ellipsis",
     "ngx-webstorage",
     "rxjs",
     "zone.js"
