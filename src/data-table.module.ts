@@ -1,8 +1,7 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Inject, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import { Inject, InjectionToken, ModuleWithProviders, NgModule, NO_ERRORS_SCHEMA, Optional } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,10 +20,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { ResizableModule } from 'angular-resizable-element';
 import { DynamicIoModule, DynamicModule } from 'ng-dynamic-component';
-import { NgxMultiLineEllipsisModule } from 'ngx-multi-line-ellipsis';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
 import { DataTableComponent } from './data-table.component';
 import { CellTemplateDirective } from './directives/cell-template.directive';
+import { NgxMultiLineEllipsisDirective } from './directives/ngx-multi-line-ellipsis.directive';
 
 export interface DataTableConfig {
   mdiSvgResourcePath: string;
@@ -60,13 +59,12 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
     TranslateModule,
     ResizableModule,
     DynamicModule,
-    DynamicIoModule,
+    // DynamicIoModule,
     HttpClientModule,
     DragDropModule,
-    NgxMultiLineEllipsisModule,
   ],
-  declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent],
-  exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent],
+  declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective],
+  exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective],
   providers: [MatSortHeaderIntl],
   schemas: [NO_ERRORS_SCHEMA],
 })
@@ -74,9 +72,9 @@ export class DataTableModule {
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(DATATABLE_CONFIG_TOKEN) private config: DataTableConfig
+    @Optional() @Inject(DATATABLE_CONFIG_TOKEN) private config: DataTableConfig
   ) {
-    this.matIconRegistry.addSvgIconSet(this.domSanitizer.bypassSecurityTrustResourceUrl(config.mdiSvgResourcePath));
+    this.matIconRegistry.addSvgIconSet(this.domSanitizer.bypassSecurityTrustResourceUrl(config ? config.mdiSvgResourcePath : './assets/mdi.svg'));
   }
 
   /**
