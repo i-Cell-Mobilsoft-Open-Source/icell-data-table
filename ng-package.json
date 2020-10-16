@@ -5,7 +5,6 @@
     "cssUrl": "none",
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "@icell/base": "icellBase",
       "@ngx-translate/core": "ngxTranslateCore",
       "lodash": "lodash",
       "lodash-es": "lodashEs",
