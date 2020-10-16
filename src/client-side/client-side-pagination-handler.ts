@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PaginationHandler, PaginationParams } from '../interfaces';
 
 /**
- * Kliens oldali adatokhoz használható lapozó.
+ * Client side pagination handler.
  */
 export class ClientSidePaginationHandler implements PaginationHandler {
 
