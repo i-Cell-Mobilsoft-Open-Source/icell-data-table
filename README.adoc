@@ -22,6 +22,9 @@ NOTE: If you structure your `assets/` folder in a specific way, you have the opt
 [source, javascript, subs="verbatim,quotes"]
 ----
 import { DataTableModule } from '@icell/widget-data-table';
+import { MatTableModule } from '@angular/material/table';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 ...
 
 const pathToSvg: string = 'assets/path-to-svg/mdi.svg';
@@ -31,6 +34,9 @@ const pathToSvg: string = 'assets/path-to-svg/mdi.svg';
   imports: [
     ...
     *DataTableModule.forRoot(pathToSvg),*
+    MatTableModule,
+    TranslateModule.forRoot(),
+    NgxWebstorageModule.forRoot(),
     ...
   ],
   ...
