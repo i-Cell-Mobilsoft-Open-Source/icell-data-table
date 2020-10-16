@@ -1,0 +1,20 @@
+#!/bin/bash
+ASCIIDOCTOR_VERSION=`dpkg -l | awk '/asciidoctor/ {print $3}'`
+PANDOC_VERSION=`dpkg -l | awk '/pandoc\s/ {print $3}'`
+
+if [ $ASCIIDOCTOR_VERSION ]; then
+  ASCIIDOCTOR_BIN=`which asciidoctor`
+else
+  sudo apt install asciidoctor
+  ASCIIDOCTOR_BIN=`which asciidoctor`
+fi
+if [ $PANDOC_VERSION ]; then
+  PANDOC_BIN=`which pandoc`
+else
+  sudo wget https://github.com/jgm/pandoc/releases/download/2.0.0.1/pandoc-2.0.0.1-1-amd64.deb
+  sudo dpkg -i pandoc-2.0.0.1-1-amd64.deb
+  PANDOC_BIN=`which pandoc`
+fi
+
+$ASCIIDOCTOR_BIN -b docbook ./README.adoc
+$PANDOC_BIN -f docbook -t gfm ./README.xml -o ./README.md

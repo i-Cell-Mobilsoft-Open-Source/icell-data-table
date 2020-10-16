@@ -1,14 +1,42 @@
 {
-  "name": "icell-data-table",
+  "name": "@i-cell/data-table",
   "version": "1.0.2-beta.0",
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "publish": "cd dist/ && npm publish",
-    "lint": "ng lint"
+    "build:prod": "npm run docs:readme && ng build --prod && npm run docs:cleanup",
+    "docs:cleanup": "rm ./README.md",
+    "docs:readme": "bash ./scripts/readme-adoc2md",
+    "pack": "npm pack dist/",
+    "publish": "npm publish dist/",
+    "prepare": "npm run lint && npm run version:prepatch && npm run build:prod",
+    "lint": "ng lint",
+    "version:patch": "npm version patch",
+    "version:prepatch": "npm version prepatch --preid=beta"
   },
-  "private": true,
+  "private": false,
+  "description": "Data table component for Angular 9 projects @ i-Cell",
+  "main": "src/index.ts",
+  "contributors": [
+    "Egry Csaba",
+    "Nagy Gábor",
+    "Németh Zsófia",
+    "Onofer Dávid",
+    "Szabó Nándor",
+    "Szalai József"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/i-Cell-Mobilsoft-Open-Source/icell-data-table"
+  },
   "dependencies": {
+    "tslib": "^1.10.0"
+  },
+  "peerDependencies": {
     "@angular/animations": "~9.0.5",
     "@angular/cdk": "^9.2.4",
     "@angular/common": "~9.0.5",
@@ -27,10 +55,7 @@
     "ngx-multi-line-ellipsis": "^1.0.4",
     "ngx-webstorage": "^6.0.0",
     "rxjs": "~6.5.4",
-    "tslib": "^1.10.0",
-    "zone.js": "~0.10.2"
-  },
-  "devDependencies": {
+    "zone.js": "~0.10.2",
     "@angular-devkit/build-angular": "~0.900.7",
     "@angular-devkit/build-ng-packagr": "~0.900.7",
     "@angular/cli": "~9.0.5",

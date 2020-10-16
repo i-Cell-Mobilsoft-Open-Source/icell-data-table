@@ -6,7 +6,6 @@ npmrc
 npm
 bck_npmrc
 
-
 # compiled output
 /dist
 /tmp
@@ -56,4 +55,7 @@ lerna-debug.log
 commit.log
 
 /docs
+**/*.deb
 **/*.tgz
+!/**/.gitkeep
+README.xml

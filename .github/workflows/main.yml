@@ -14,6 +14,10 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
+    - name: Install asciidoctor
+      run: sudo apt install asciidoctor
+    - name: Install pandoc
+      run: sudo wget https://github.com/jgm/pandoc/releases/download/2.0.0.1/pandoc-2.0.0.1-1-amd64.deb; sudo dpkg -i pandoc-2.0.0.1-1-amd64.deb
     - uses: actions/checkout@v1
     - name: Use Node.js 12.8
       uses: actions/setup-node@v1
@@ -23,5 +27,9 @@ jobs:
       run: npm ci
     - name: Lint
       run: npm run lint
+    - name: Create README markdown for npmjs.org
+      run: npm run docs:readme
     - name: Build
-      run: npm run build -- --prod
+      run: npm run build:prod
+    - name: Cleanup
+      run: npm run docs:cleanup
