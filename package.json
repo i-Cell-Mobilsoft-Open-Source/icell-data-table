@@ -12,7 +12,7 @@
     "prepublish:dist": "npm run lint && npm run version:prepatch && npm run build:prod",
     "lint": "ng lint",
     "version:patch": "npm version patch",
-    "version:prepatch": "npm version prepatch --preid=beta"
+    "version:prepatch": "npm --no-git-tag-version version prepatch --preid=beta"
   },
   "private": false,
   "description": "Data table component for Angular 9 projects @ i-Cell",
