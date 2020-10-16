@@ -24,7 +24,7 @@ jobs:
       with:
         node-version: 12.8
     - name: Install dependencies
-      run: npm ci
+      run: npm i
     - name: Lint
       run: npm run lint
     - name: Create README markdown for npmjs.org
