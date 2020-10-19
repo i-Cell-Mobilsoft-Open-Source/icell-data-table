@@ -36,11 +36,9 @@
   "dependencies": {
     "tslib": "^1.10.0",
     "@mdi/angular-material": "^5.7.55",
-    "@ngx-translate/core": "^13.0.0",
     "angular-resizable-element": "^3.3.3",
     "lodash-es": "^4.17.15",
-    "ng-dynamic-component": "^7.0.1",
-    "ngx-webstorage": "^6.0.0"
+    "ng-dynamic-component": "^7.0.1"
   },
   "devDependencies": {
     "@angular/animations": "~9.0.5",
@@ -75,6 +73,8 @@
     "tslint": "~5.18.0",
     "typescript": "~3.7.5",
     "rxjs": "~6.5.4",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "@ngx-translate/core": "^13.0.0",
+    "ngx-webstorage": "^6.0.0"
   }
 }
