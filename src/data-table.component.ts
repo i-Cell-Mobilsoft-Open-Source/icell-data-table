@@ -62,6 +62,15 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @ViewChild('cellTemplates', { static: true }) public cellTemplates: CellTemplatesComponent;
   @ViewChild(MatSort, { static: true }) public sort: MatSort;
 
+  get rowCount(): number {
+    let numRows: number;
+    if (Array.isArray(this.dataSource)) {
+      numRows = this.dataSource.length;
+    } else {
+      numRows = this.dataSource.data.length;
+    }
+    return numRows;
+  }
   /**
    * Flag indicating to render with *detail* rows.
    */
@@ -298,13 +307,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   // selection checkboxes
   isAllSelected() {
     const numSelected = this.rowSelection.selected.length;
-    let numRows: number;
-    if (Array.isArray(this.dataSource)) {
-      numRows = this.dataSource.length;
-    } else {
-      numRows = this.dataSource.data.length;
-    }
-    return numSelected === numRows;
+    return numSelected === this.rowCount;
   }
 
   masterToggle() {

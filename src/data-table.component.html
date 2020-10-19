@@ -31,7 +31,6 @@
   <div *ngIf="isLoading() | async" [class.loadOverlay]="true">
     <mat-spinner></mat-spinner>
   </div>
-
   <table mat-table [dataSource]="dataSource" multiTemplateDataRows cdkDropListGroup matSort>
     <!-- multiselect -->
     <ng-container matColumnDef="$selectBoxes" sticky>
@@ -147,15 +146,20 @@
     <!-- header row render -->
     <tr mat-header-row *matHeaderRowDef="actualColumns; sticky: fixedHeader"></tr>
     <!-- row render -->
-    <tr
-      mat-row
-      *matRowDef="let row; columns: actualColumns"
-      [class.expanded-detail]="expandedRow === row"
-      (click)="onRowClick($event, row)"
-    ></tr>
+    <ng-container>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: actualColumns"
+        [class.expanded-detail]="expandedRow === row"
+        (click)="onRowClick($event, row)"
+      ></tr>
+    </ng-container>
     <!-- detail row render -->
     <ng-container *ngIf="showDetails">
       <tr mat-row *matRowDef="let row; columns: ['$expandedDetail']; when: hasDetailRow" class="detail-row"></tr>
     </ng-container>
   </table>
+  <div *ngIf="rowCount === 0">
+    <span class="noRowsToShowOverlay">{{ 'ICELL_DATA_TABLE.NOROWSTOSHOW' | translate }}</span>
+  </div>
 </div>
