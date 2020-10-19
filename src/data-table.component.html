@@ -146,14 +146,12 @@
     <!-- header row render -->
     <tr mat-header-row *matHeaderRowDef="actualColumns; sticky: fixedHeader"></tr>
     <!-- row render -->
-    <ng-container>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: actualColumns"
-        [class.expanded-detail]="expandedRow === row"
-        (click)="onRowClick($event, row)"
-      ></tr>
-    </ng-container>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: actualColumns"
+      [class.expanded-detail]="expandedRow === row"
+      (click)="onRowClick($event, row)"
+    ></tr>
     <!-- detail row render -->
     <ng-container *ngIf="showDetails">
       <tr mat-row *matRowDef="let row; columns: ['$expandedDetail']; when: hasDetailRow" class="detail-row"></tr>
