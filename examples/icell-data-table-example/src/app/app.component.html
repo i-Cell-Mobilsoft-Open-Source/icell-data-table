@@ -1,0 +1,31 @@
+<ng-template #detailTemplate let-row="row" >
+  <div class="element-detail">
+    <div
+      class="element-diagram"
+      [style.backgroundColor]="toColor(row.cpkHexColor)"
+    >
+      <div class="element-position">{{ row.atomicNumber }}</div>
+      <div class="element-symbol">{{ row.symbol }}</div>
+      <div class="element-name">{{ row.name }}</div>
+      <div class="element-weight">{{ toNumber(row.atomicMass) }}</div>
+    </div>
+    <div class="element-description">
+      {{ getDescription(row) | async }}
+      <span class="element-description-attribution"> -- Wikipedia </span>
+    </div>
+  </div>
+</ng-template>
+
+<ic-data-table
+  class="mat-elevation-z4"
+  [columnSettings]="columnDefs"
+  [detailTemplate]="detailTemplate"
+  [dataSource]="data"
+  [showDetails]="true"
+  [useSelection]="true"
+  [showColumnMenu]="true"
+  [hasSorting]="true"
+  [fixedHeader]="true"
+  (rowClick)="rowClick($event)"
+  (cellClick)="cellClick($event)"
+></ic-data-table>
