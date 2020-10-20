@@ -18,19 +18,13 @@ export class ServerSideDataSource implements DataSource<any> {
   private dataSubject = new BehaviorSubject<any[]>(this.data);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
-  private dataSourceEndpoint: any;
-  private dataHolder: string | symbol;
-  private sort: MatSort;
-
   private paginatorInitSubscription: Subscription;
   private pageSubscription: Subscription;
   private sortSubscription: Subscription;
 
   public loading$ = this.loadingSubject.asObservable();
 
-  public withDetail: boolean;
   public paginator: MatPaginator;
-  public paginationParams: PaginationParams;
 
   public get length() {
     return this.data.length;
@@ -42,27 +36,23 @@ export class ServerSideDataSource implements DataSource<any> {
    * @param dataHolder Field of the response that holds the array to be rendered.
    * @param paginationParams Pagination configuration.
    * @param sort `matSort` of the table.
+   * @param rowSelection Needed to clear selection if [clearSelectionOnPageChange]{@link ServerSideDataSource#clearSelectionOnPageChange} is set.
    * @param paginatorIntl Needed to factory a `mat-paginator` component.
    * @param cdRef Needed to factory a `mat-paginator` component.
    * @param withDetail Flag to extend the response for master-detail representation.
-   * @param clearSelectionOnPageChange Flag if set the selecction will be cleared on paging.
+   * @param clearSelectionOnPageChange Flag if set the selection will be cleared on paging.
    */
   constructor(
-    dataSourceEndpoint: QueryFunction,
-    dataHolder: string | symbol,
-    paginationParams: PaginationParams,
-    sort: MatSort,
+    private dataSourceEndpoint: QueryFunction,
+    private dataHolder: string | symbol,
+    public paginationParams: PaginationParams,
+    private sort: MatSort,
     public rowSelection: SelectionModel<any>,
     private paginatorIntl: MatPaginatorIntl,
     private cdRef: ChangeDetectorRef,
-    withDetail: boolean = false,
-    public clearSelectionOnPageChange: boolean = false
+    public withDetail: boolean = false,
+    public clearSelectionOnPageChange: boolean = false,
   ) {
-    this.dataSourceEndpoint = dataSourceEndpoint;
-    this.dataHolder = dataHolder;
-    this.paginationParams = paginationParams;
-    this.sort = sort;
-    this.withDetail = withDetail;
     this.paginator = new MatPaginator(this.paginatorIntl, this.cdRef);
   }
 
