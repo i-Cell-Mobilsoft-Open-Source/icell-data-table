@@ -32,26 +32,26 @@ export class ServerSideDataSource implements DataSource<any> {
 
   /**
    *
-   * @param paginationParams Pagination configuration.
-   * @param rowSelection Needed to clear selection if [clearSelectionOnPageChange]{@link ServerSideDataSource#clearSelectionOnPageChange} is set.
-   * @param withDetail Flag to extend the response for master-detail representation.
-   * @param clearSelectionOnPageChange Flag if set the selection will be cleared on paging.
    * @param dataSourceEndpoint Data query endpoint function.
    * @param dataHolder Field of the response that holds the array to be rendered.
+   * @param paginationParams Pagination configuration.
    * @param sort `matSort` of the table.
+   * @param rowSelection Needed to clear selection if [clearSelectionOnPageChange]{@link ServerSideDataSource#clearSelectionOnPageChange} is set.
    * @param paginatorIntl Needed to factory a `mat-paginator` component.
    * @param cdRef Needed to factory a `mat-paginator` component.
+   * @param withDetail Flag to extend the response for master-detail representation.
+   * @param clearSelectionOnPageChange Flag if set the selection will be cleared on paging.
    */
   constructor(
-    public paginationParams: PaginationParams,
-    public rowSelection: SelectionModel<any>,
-    public withDetail: boolean = false,
-    public clearSelectionOnPageChange: boolean = false,
     private dataSourceEndpoint: QueryFunction,
     private dataHolder: string | symbol,
+    public paginationParams: PaginationParams,
     private sort: MatSort,
+    public rowSelection: SelectionModel<any>,
     private paginatorIntl: MatPaginatorIntl,
     private cdRef: ChangeDetectorRef,
+    public withDetail: boolean = false,
+    public clearSelectionOnPageChange: boolean = false,
   ) {
     this.paginator = new MatPaginator(this.paginatorIntl, this.cdRef);
   }
