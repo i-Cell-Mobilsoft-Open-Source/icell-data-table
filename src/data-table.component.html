@@ -12,7 +12,9 @@
 </ng-template>
 
 <ng-template #columnMenu>
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label=""><mat-icon [svgIcon]="'dots-vertical'"></mat-icon></button>
+  <button class="boldCol" mat-icon-button [matMenuTriggerFor]="menu" aria-label="">
+    <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
+  </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item *ngFor="let col of columnSettings" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
       <mat-checkbox
@@ -64,7 +66,7 @@
           <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item *ngFor="let act of row.actions" color="accent" (click)="act.callBack(row)">
+          <button class="boldCol" mat-menu-item *ngFor="let act of row.actions" color="accent" (click)="act.callBack(row)">
             {{ act.label | translate }}
           </button>
         </mat-menu>
@@ -118,7 +120,7 @@
           [id]="'table-header--' + colIndex"
           scope="col"
         >
-          <div ngxEllipsis [lines]="2">{{ col.label | translate }}</div>
+          <div class="boldCol" ngxEllipsis [lines]="2">{{ col.label | translate }}</div>
         </th>
       </ng-container>
       <ng-container *ngIf="!col.sortable || !hasSorting">
@@ -132,7 +134,7 @@
           [id]="'table-header--' + colIndex"
           scope="col"
         >
-          <div ngxEllipsis [lines]="2">{{ col.label | translate }}</div>
+          <div class="boldCol" ngxEllipsis [lines]="2">{{ col.label | translate }}</div>
         </th>
       </ng-container>
       <td mat-cell *matCellDef="let row; let idx = index" (click)="onCellClick($event, { row: row, col: col })">
