@@ -3,9 +3,10 @@ import { DataSource } from '@angular/cdk/table';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { PaginationParams } from '../interfaces';
+import { get as _get } from 'lodash-es';
 import { BehaviorSubject, merge, Observable, of, Subscription } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { PaginationParams } from '../interfaces';
 import { DataWithQueryResponseDetails } from '../interfaces/data-with-query-response-details.interface';
 import { QueryFunction } from '../interfaces/query-function';
 import { QueryRequestDetails } from '../interfaces/query-request-details.interface';
@@ -122,10 +123,13 @@ export class ServerSideDataSource implements DataSource<any> {
             page: this.paginator.pageIndex + 1,
           };
 
+          const rows = _get(data, this.dataHolder, []);
+
           if (this.withDetail) {
-            data[this.dataHolder].forEach((item) => (item.$detail = true));
+            rows.forEach((item: any) => (item.$detail = true));
           }
-          return data[this.dataHolder];
+
+          return rows;
         }),
         catchError(() => {
           this.loadingSubject.next(false);
