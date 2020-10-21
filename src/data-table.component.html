@@ -12,7 +12,9 @@
 </ng-template>
 
 <ng-template #columnMenu>
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label=""><mat-icon [svgIcon]="'dots-vertical'"></mat-icon></button>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="">
+    <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
+  </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item *ngFor="let col of columnSettings" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
       <mat-checkbox

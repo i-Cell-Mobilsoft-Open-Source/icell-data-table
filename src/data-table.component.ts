@@ -67,7 +67,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     if (Array.isArray(this.dataSource)) {
       numRows = this.dataSource.length;
     } else {
-      numRows = this.dataSource.data.length;
+      numRows = this.dataSource?.data?.length ?? 0;
     }
     return numRows;
   }
