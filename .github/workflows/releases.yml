@@ -23,8 +23,6 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-      - env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Install asciidoctor
         run: sudo apt install asciidoctor
       - name: Install pandoc
@@ -39,6 +37,8 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Publish release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm run publish:dist
       - name: Cleanup
         run: npm run docs:cleanup
