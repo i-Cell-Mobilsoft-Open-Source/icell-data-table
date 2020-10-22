@@ -6,7 +6,7 @@ name: Releases
 # events but only for the main branch
 on:
   push:
-    branches: 
+    branches:
       - "releases/**"
       - "!releases/**-alpha"
   pull_request:
@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
+      - env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Install asciidoctor
         run: sudo apt install asciidoctor
       - name: Install pandoc
