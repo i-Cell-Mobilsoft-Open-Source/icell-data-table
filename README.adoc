@@ -4,7 +4,7 @@
 
 # ICELL-DATA-TABLE
 
-image:https://img.shields.io/github/license/i-Cell-Mobilsoft-Open-Source/icell-data-table[GitHub] image:https://img.shields.io/npm/v/@i-cell/data-table[npm] image:https://img.shields.io/npm/dt/@i-cell/data-table[npm]
+image:https://img.shields.io/github/license/i-Cell-Mobilsoft-Open-Source/icell-data-table[GitHub] image:https://img.shields.io/npm/v/@i-cell/data-table[npm] image:https://img.shields.io/npm/dt/@i-cell/data-table[npm] image:https://github.com/i-Cell-Mobilsoft-Open-Source/icell-data-table/workflows/CI/badge.svg[Build]
 
 ## Installation
 
