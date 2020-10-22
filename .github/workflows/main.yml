@@ -36,9 +36,17 @@ jobs:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Lint
       run: npm run lint
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Create README markdown for npmjs.org
       run: npm run docs:readme
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Build
       run: npm run build:prod
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Cleanup
       run: npm run docs:cleanup
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
