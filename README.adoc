@@ -53,7 +53,9 @@ export class Module {
 |===
 | Property | Type | Optional | Default | Description
 
-| field | `string` | &#10060; |  | Path to field that should be rendered.
+| field | `string` | &#10004;&#65039; |  | Path to field that should be rendered.
+| valueFormatter | `function` | &#10004;&#65039; |  | Callback to transform the cell's data.
+| valueGetter | `function` | &#10004;&#65039; |  | Callback to transform the row model to a displayable value.
 | label | `string` | &#10060; |  | Column label; can be a localization key.
 | hideable | `boolean` | &#10060; |  | Defines if the column dis hideable.
 | visible | `boolean` | &#10060; |  | Defines if the column is visible. If used with hideable, the column will be in the column menu unchecked.
@@ -95,7 +97,14 @@ this.columnSettings: DataTableColumnDefinition[] = [
     visible: true,
   },
   {
-    field: 'name',
+    field: 'type',
+    label: 'Item type',
+    valueFormatter: (type) => ('ITEM_TYPES.' + type)
+    sortable: true,
+    hideable: true,
+    visible: true,
+  },
+  {
     label: 'name',
     sortable: true,
     template: 'labelBoldTemplate',
@@ -103,8 +112,8 @@ this.columnSettings: DataTableColumnDefinition[] = [
     visible: true,
   },
   {
-    field: 'atomicMass',
     label: 'weight',
+    valueGetter: (item) => (item.type === 'NET' ? item.netWeight : item.grossWeight)
     template: 'numericTemplate',
     sortable: true,
     hideable: true,

@@ -2,7 +2,17 @@ export interface DataTableColumnDefinition {
   /**
    * Path to field that should be rendered.
    */
-  field: string;
+  field?: string;
+
+  /**
+   * Callback to transform the cell's data
+   */
+  valueFormatter?: (data: any) => string;
+
+  /**
+   * Callback to transform the row model to a displayable value
+   */
+  valueGetter?: (row: any) => string;
 
   /**
    * Column label; can be a localization key.

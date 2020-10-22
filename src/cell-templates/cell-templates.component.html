@@ -1,22 +1,22 @@
 <!-- cell templates -->
 <!-- default cell -->
 <ng-template #labelTemplate [cellTemplate]="'labelTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  {{ getFieldData(row, col.field) }}
+  {{ getFieldData(row, col) || ' ' | translate }}
 </ng-template>
 
 <!-- strong cell -->
 <ng-template #labelBoldTemplate [cellTemplate]="'labelBoldTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <strong>{{ getFieldData(row, col.field) }}</strong>
+  <strong>{{ getFieldData(row, col) || ' ' | translate }}</strong>
 </ng-template>
 
 <!-- numeric cell -->
 <ng-template #numericTemplate [cellTemplate]="'numericTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <div [style.textAlign]="'right'">{{ asNumeric(getFieldData(row, col.field)) }}</div>
+  <div [style.textAlign]="'right'">{{ asNumeric(getFieldData(row, col)) }}</div>
 </ng-template>
 
 <!-- icon cell -->
 <ng-template #iconTemplate [cellTemplate]="'iconTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <mat-icon aria-hidden="false" aria-label="row[col.altText]" [svgIcon]="getFieldData(row, col.field)"></mat-icon>
+  <mat-icon aria-hidden="false" aria-label="row[col.altText]" [svgIcon]="getFieldData(row, col)"></mat-icon>
 </ng-template>
 
 <!-- component cell -->
