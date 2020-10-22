@@ -1,15 +1,14 @@
 # GitHub Actions docs
 # https://help.github.com/en/articles/about-github-actions
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
-name: CI
+name: Publish
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
-      - main
+      - 'releases/**'
+    branches-ignore:
+      - 'releases/**-alpha'
 
 jobs:
   build:
@@ -33,9 +32,7 @@ jobs:
       run: npm i
     - name: Lint
       run: npm run lint
-    - name: Create README markdown for npmjs.org
-      run: npm run docs:readme
-    - name: Build
-      run: npm run build:prod
+    - name: Publish release
+      run: npm run publish:dist
     - name: Cleanup
       run: npm run docs:cleanup

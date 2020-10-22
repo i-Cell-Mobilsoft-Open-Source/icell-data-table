@@ -9,9 +9,9 @@
     "docs:readme": "bash ./scripts/readme-adoc2md",
     "pack": "npm pack dist/",
     "publish:dist": "npm publish dist/",
-    "prepublish:dist": "npm run lint && npm run version:prepatch && npm run build:prod",
+    "prepublish:dist": "npm run lint && npm run version:patch && npm run build:prod",
     "lint": "ng lint",
-    "version:patch": "npm version patch",
+    "version:patch": "npm --no-git-tag-version version patch",
     "version:prepatch": "npm --no-git-tag-version version prepatch --preid=beta"
   },
   "private": false,
