@@ -1,0 +1,42 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Releases
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the main branch
+on:
+  push:
+    branches: 
+      - "releases/**"
+      - "!releases/**-alpha"
+  pull_request:
+    branches:
+      - "releases/**"
+      - "!releases/**-alpha"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: Publish
+    # The type of runner that the job will run on
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Install asciidoctor
+        run: sudo apt install asciidoctor
+      - name: Install pandoc
+        run: sudo wget https://github.com/jgm/pandoc/releases/download/2.0.0.1/pandoc-2.0.0.1-1-amd64.deb; sudo dpkg -i pandoc-2.0.0.1-1-amd64.deb
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12.8
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.8
+      - name: Install dependencies
+        run: npm i
+      - name: Lint
+        run: npm run lint
+      - name: Publish release
+        run: npm run publish:dist
+      - name: Cleanup
+        run: npm run docs:cleanup
