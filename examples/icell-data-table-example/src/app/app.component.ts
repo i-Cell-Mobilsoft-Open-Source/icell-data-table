@@ -8,7 +8,7 @@ import {
   DataWithQueryResponseDetails,
   QueryRequestDetails,
   ServerSideDataSource,
-  ServerSidePaginationHandler
+  ServerSidePaginationHandler,
 } from '@i-cell/data-table';
 import { PaginationParams } from '@i-cell/data-table/interfaces';
 import { TranslateService } from '@ngx-translate/core';
@@ -45,7 +45,17 @@ export class AppComponent implements OnInit {
     private ds: TableDemoService,
     private cdRef: ChangeDetectorRef,
     private paginatorIntl: MatPaginatorIntl
-  ) {}
+  ) {
+    this.translate.addLangs(['en', 'hu']);
+    this.translate.setTranslation(
+      'en',
+      {
+        'ICELL_DATA_TABLE.NOROWSTOSHOW': 'No data present',
+      },
+      true
+    );
+    this.translate.setDefaultLang('en');
+  }
 
   toNumber(mass) {
     return Intl.NumberFormat(this.translate.getBrowserLang()).format(
@@ -113,7 +123,8 @@ export class AppComponent implements OnInit {
       {
         field: 'atomicMass',
         label: 'weight',
-        template: 'numericTemplate',
+        template: 'labelTemplate',
+        valueFormatter: (atomicMass) => `${atomicMass} molar mass`,
         sortable: true,
         hideable: true,
         visible: true,
