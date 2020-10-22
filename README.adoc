@@ -1,5 +1,5 @@
 :source-highlighter: highlightjs
-:highlightjs-languages: javascript, xml, css, bash
+:highlightjs-languages: javascript, xml, css, bash, typescript
 :icons: font
 
 # ICELL-DATA-TABLE
@@ -21,7 +21,7 @@ IMPORTANT: The table uses `materialdesignicons` svg icon, you will need to downl
 
 NOTE: If you structure your `assets/` folder in a specific way, you have the option to set the path of the svg, while you import the module.
 
-[source, javascript, subs="verbatim,quotes"]
+[source, typescript, subs="verbatim,quotes"]
 ----
 import { DataTableModule } from '@icell/widget-data-table';
 import { MatTableModule } from '@angular/material/table';
@@ -207,3 +207,24 @@ this.data = new ServerSideDataSource(
 this.data = new MatTableDataSource([]);
 ...
 ----
+
+=== Examples
+
+==== Run example project
+
+[source, bash]
+----
+# Build a local version
+npm run build:prod
+npm run pack
+# Switch directories
+cd ./examples/icell-data-table-example/
+# Edit the package.json to have the proper path to the tgz
+#   "@i-cell/data-table": "file:../../i-cell-data-table-<version>.tgz",
+# Install dependencies
+npm i
+# Start up the example
+npm start
+----
+
+If no issues emerge the application should up and running, so you can start to experiment.
