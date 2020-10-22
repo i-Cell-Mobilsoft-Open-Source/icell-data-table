@@ -7,11 +7,11 @@ on:
   pull_request:
     branches:
       - 'releases/**'
-    branches-ignore:
-      - 'releases/**-alpha'
+      - '!releases/**-alpha'
 
 jobs:
   build:
+    name: Publish
 
     # Machine environment:
     # https://help.github.com/en/articles/software-in-virtual-environments-for-github-actions#ubuntu-1804-lts
