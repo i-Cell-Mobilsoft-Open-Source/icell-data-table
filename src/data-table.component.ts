@@ -74,7 +74,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    * Native table indentifier.
    */
-  @Input() public customId: string;
+  @Input('id') public customId: string;
   /**
    * Flag indicating to render with *detail* rows.
    */
