@@ -72,6 +72,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     return numRows;
   }
   /**
+   * Native table indentifier.
+   */
+  @Input() public customId: string;
+  /**
    * Flag indicating to render with *detail* rows.
    */
   @Input() public showDetails: boolean = false;
