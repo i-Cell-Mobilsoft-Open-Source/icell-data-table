@@ -5,6 +5,11 @@ export interface DataTableColumnDefinition {
   field?: string;
 
   /**
+   * Custom ordering parameter
+   */
+  orderName?: string;
+
+  /**
    * Callback to transform the cell's data
    */
   valueFormatter?: (data: any) => string;
