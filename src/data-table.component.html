@@ -111,7 +111,7 @@
         <th
           *matHeaderCellDef
           mat-header-cell
-          mat-sort-header
+          [mat-sort-header]="col?.orderName || col?.field"
           mwlResizable
           [enableGhostResize]="false"
           (resizeStart)="onResizeStart($event)"
