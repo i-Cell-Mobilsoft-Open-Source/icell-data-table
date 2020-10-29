@@ -164,11 +164,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     private matSortService: MatSortHeaderIntl,
     private localStorage: LocalStorageService
   ) {
-    this.matSortService.sortButtonLabel = this.sortButtonLabel.bind(this);
-  }
-
-  private sortButtonLabel(id: string) {
-    return this.trans.instant('SORT_BUTTON_LABEL', { id });
+    //this.matSortService.sortButtonLabel = this.sortButtonLabel.bind(this);
   }
 
   ngOnDestroy() {
@@ -216,9 +212,16 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   setDisplayedColumns() {
+    let ariaLabels = {};
     this.actualColumns = _orderBy(this.columnSettings, ['sticky', 'stickyEnd'], ['asc', 'desc'])
       .filter((c) => c.visible)
-      .map((c) => c.field);
+      .map((c) => {
+        ariaLabels = {
+          ...ariaLabels,
+          [c.orderName || c.field]: c.label,
+        };
+        return c.field;
+      });
     if (this.showDetails) {
       this.actualColumns.unshift('$masterDetail'); // masodik
     }
@@ -228,6 +231,9 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     if (this.showColumnMenu) {
       this.actualColumns.push('$columnMenu'); // utolso
     }
+    this.matSortService.sortButtonLabel = (id: string) => {
+      return ariaLabels[id];
+    };
   }
 
   loadColumnSettings() {
