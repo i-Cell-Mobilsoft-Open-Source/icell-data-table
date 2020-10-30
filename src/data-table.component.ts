@@ -44,6 +44,9 @@ import { ServerSideDataSource } from './server-side/server-side-data-source';
 ></ic-data-table>
  * ```
  */
+
+let localeLabels = {};
+
 @Component({
   selector: 'ic-data-table',
   templateUrl: 'data-table.component.html',
@@ -151,7 +154,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   public isResizing: boolean;
 
   private destroyedSignal: ReplaySubject<boolean> = new ReplaySubject(1);
-  private localeLabels = {};
 
   expandedRow: any;
 
@@ -167,7 +169,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   ) {}
 
   private sortButtonLabel(id: string) {
-    return this.trans.instant('SORT_BUTTON_LABEL', { id: this.trans.instant(this.localeLabels[id]) });
+    return this.trans.instant('SORT_BUTTON_LABEL', { id: this.trans.instant(localeLabels[id]) });
   }
 
   ngOnDestroy() {
@@ -189,7 +191,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     if (changes.columnSettings) {
       this.loadColumnSettings();
       if (!changes.columnSettings.previousValue) {
-        this.localeLabels = this.columnSettings.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {});
+        localeLabels = {
+          ...localeLabels,
+          ...this.columnSettings.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
+        };
         this.originalColumnSettings = [...this.columnSettings];
       }
       this.columnSelection = new SelectionModel<any>(
