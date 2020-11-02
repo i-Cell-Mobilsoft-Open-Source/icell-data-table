@@ -22,7 +22,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ResizeEvent } from 'angular-resizable-element';
 import { orderBy as _orderBy } from 'lodash-es';
 import { LocalStorageService } from 'ngx-webstorage';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
 import { CellClickEvent } from './interfaces/cell-click-event.interface';
 import { DataTableColumnDefinition } from './interfaces/data-table-column-definition.interface';
@@ -154,6 +154,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   public isResizing: boolean;
 
   private destroyedSignal: ReplaySubject<boolean> = new ReplaySubject(1);
+  private onLangChange: Subscription;
 
   expandedRow: any;
 
@@ -175,6 +176,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   ngOnDestroy() {
     this.destroyedSignal.next(true);
     this.destroyedSignal.complete();
+    this.onLangChange.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -185,6 +187,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   ngOnInit() {
     this.setDisplayedColumns();
+    this.onLangChange = this.trans.onLangChange.subscribe(() => this.matSortService.changes.next());
   }
 
   ngOnChanges(changes: SimpleChanges) {
