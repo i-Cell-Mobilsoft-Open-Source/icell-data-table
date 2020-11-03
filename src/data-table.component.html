@@ -16,10 +16,13 @@
     <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item *ngFor="let col of columnSettings"
-      (click)="$event.stopPropagation(); columnSelection.toggle(col)">
-      <mat-checkbox name="column-checkbox--{{ col.label }}" (click)="$event.stopPropagation()"
-        (change)="$event ? columnSelection.toggle(col) : null" [checked]="columnSelection.isSelected(col)">
+    <button mat-menu-item *ngFor="let col of columnSettings" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
+      <mat-checkbox
+        name="column-checkbox--{{ col.label }}"
+        (click)="$event.stopPropagation()"
+        (change)="$event ? columnSelection.toggle(col) : null"
+        [checked]="columnSelection.isSelected(col)"
+      >
         {{ col.label | translate }}
       </mat-checkbox>
     </button>
@@ -34,13 +37,21 @@
     <!-- multiselect -->
     <ng-container matColumnDef="$selectBoxes" sticky>
       <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header">
-        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="rowSelection.hasValue() && isAllSelected()"
-          [indeterminate]="rowSelection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+        <mat-checkbox
+          (change)="$event ? masterToggle() : null"
+          [checked]="rowSelection.hasValue() && isAllSelected()"
+          [indeterminate]="rowSelection.hasValue() && !isAllSelected()"
+          [aria-label]="checkboxLabel()"
+        >
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
-        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? rowSelection.toggle(row) : null"
-          [checked]="rowSelection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? rowSelection.toggle(row) : null"
+          [checked]="rowSelection.isSelected(row)"
+          [aria-label]="checkboxLabel(row)"
+        >
         </mat-checkbox>
       </td>
     </ng-container>
@@ -67,9 +78,11 @@
       <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header"></th>
       <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
         <div *ngIf="hasDetailRow(idx, row)" [class.master-detail]="hasDetailRow(idx, row)" (click)="expandRow(row)">
-          <mat-icon aria-hidden="false"
+          <mat-icon
+            aria-hidden="false"
             [attr.aria-label]="(row.$expanded ? 'MASTER_DETAIL.COLLAPSE' : 'MASTER_DETAIL.EXPAND') | translate"
-            [svgIcon]="row.$expanded ? detailOpenIcon : detailClosedIcon"></mat-icon>
+            [svgIcon]="row.$expanded ? detailOpenIcon : detailClosedIcon"
+          ></mat-icon>
         </div>
       </td>
     </ng-container>
@@ -81,35 +94,53 @@
             <ng-container *ngTemplateOutlet="detailTemplate; context: { row: row, idx: idx }"></ng-container>
           </ng-container>
           <ng-container *ngIf="!detailTemplate">
-            <ng-container
-              *ngTemplateOutlet="default; context: { row: [row], cols: getHiddenProps(actualColumns, row) }">
-            </ng-container>
+            <ng-container *ngTemplateOutlet="default; context: { row: [row], cols: getHiddenProps(actualColumns, row) }"> </ng-container>
           </ng-container>
         </div>
       </td>
     </ng-container>
 
     <!-- setup columns -->
-    <ng-container *ngFor="let col of columnSettings; let colIndex = index; let isLast = last"
-      matColumnDef="{{ col.field }}" [sticky]="col.sticky && !col.stickyEnd" [stickyEnd]="col.stickyEnd && !col.sticky">
+    <ng-container
+      *ngFor="let col of columnSettings; let colIndex = index; let isLast = last"
+      matColumnDef="{{ col.field }}"
+      [sticky]="col.sticky && !col.stickyEnd"
+      [stickyEnd]="col.stickyEnd && !col.sticky"
+    >
       <ng-container *ngIf="col.sortable && hasSorting">
-        <th *matHeaderCellDef mat-header-cell [mat-sort-header]="col?.orderName || col?.field" mwlResizable
-          [enableGhostResize]="false" (resizeStart)="onResizeStart($event)" (resizeEnd)="onResizeEnd($event, col)"
+        <th
+          *matHeaderCellDef
+          mat-header-cell
+          [mat-sort-header]="col?.orderName || col?.field"
+          mwlResizable
+          [enableGhostResize]="false"
+          (resizeStart)="onResizeStart($event)"
+          (resizeEnd)="onResizeEnd($event, col)"
           [resizeEdges]="{ bottom: false, right: true, top: false, left: true }"
-          [id]="customId + '-header-' + col.field" scope="col">
+          [id]="customId + '-header-' + col.field"
+          scope="col"
+        >
           {{ col.label | translate }}
         </th>
       </ng-container>
       <ng-container *ngIf="!col.sortable || !hasSorting">
-        <th mat-header-cell *matHeaderCellDef mwlResizable [enableGhostResize]="false"
-          (resizeEnd)="onResizeEnd($event, col)" [resizeEdges]="{ bottom: false, right: true, top: false, left: true }"
-          [id]="customId + '-header-' + col.field" scope="col">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mwlResizable
+          [enableGhostResize]="false"
+          (resizeEnd)="onResizeEnd($event, col)"
+          [resizeEdges]="{ bottom: false, right: true, top: false, left: true }"
+          [id]="customId + '-header-' + col.field"
+          scope="col"
+        >
           {{ col.label | translate }}
         </th>
       </ng-container>
       <td mat-cell *matCellDef="let row; let idx = index" (click)="onCellClick($event, { row: row, col: col })">
         <ng-container
-          *ngTemplateOutlet="getTemplate(col.template ? col.template : 'labelTemplate'); context: { row: row, col: col, rowIdx: idx }">
+          *ngTemplateOutlet="getTemplate(col.template ? col.template : 'labelTemplate'); context: { row: row, col: col, rowIdx: idx }"
+        >
         </ng-container>
       </td>
     </ng-container>
@@ -117,8 +148,14 @@
     <!-- header row render -->
     <tr mat-header-row *matHeaderRowDef="actualColumns; sticky: fixedHeader"></tr>
     <!-- row render -->
-    <tr mat-row *matRowDef="let row; columns: actualColumns" [class.expanded-detail]="expandedRow === row"
-      (click)="onRowClick($event, row)"></tr>
+    <tr
+      mat-row
+      [attr.tabindex]="0"
+      *matRowDef="let row; columns: actualColumns"
+      [class.expanded-detail]="expandedRow === row"
+      (click)="onRowClick($event, row)"
+      (keydown)="onRowKeyDown($event, row)"
+    ></tr>
     <!-- detail row render -->
     <ng-container *ngIf="showDetails">
       <tr mat-row *matRowDef="let row; columns: ['$expandedDetail']; when: hasDetailRow" class="detail-row"></tr>

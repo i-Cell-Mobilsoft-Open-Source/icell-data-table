@@ -27,6 +27,7 @@ import { CellTemplatesComponent } from './cell-templates/cell-templates.componen
 import { CellClickEvent } from './interfaces/cell-click-event.interface';
 import { DataTableColumnDefinition } from './interfaces/data-table-column-definition.interface';
 import { RowClickEvent } from './interfaces/row-click-event.interface';
+import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
 import { ServerSideDataSource } from './server-side/server-side-data-source';
 
 /**
@@ -128,16 +129,20 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @Input() public detailOpenIcon: string = 'chevron-down';
 
   /**
-   * Emited row click event.
+   * Emitted row click event.
    * @emits (RowClickEvent)
    */
   @Output() public rowClick: EventEmitter<RowClickEvent> = new EventEmitter<RowClickEvent>();
   /**
-   * Emited cell click event.
+   * Emitted cell click event.
    * @emits (CellClickEvent)
    */
   @Output() public cellClick: EventEmitter<CellClickEvent> = new EventEmitter<CellClickEvent>();
-
+  /**
+   * Emitted row onkeydown event.
+   * @emits (RowKeyDownEvent)
+   */
+  @Output() public rowKeyDown: EventEmitter<RowKeyDownEvent> = new EventEmitter<RowKeyDownEvent>();
   /**
    * @returns True if table is loading data.
    */
@@ -342,6 +347,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   // click events
   onRowClick(event: MouseEvent, rowData: any) {
     this.rowClick.emit({ ...event, row: rowData });
+  }
+
+  onRowKeyDown(event: KeyboardEvent, rowData: any) {
+    this.rowKeyDown.emit({ event, row: rowData });
   }
 
   onCellClick(event: MouseEvent, cellData: any) {
