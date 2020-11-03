@@ -11,5 +11,6 @@ export * from './interfaces/query-function';
 export * from './interfaces/query-request-details.interface';
 export * from './interfaces/query-response-details.interface';
 export * from './interfaces/row-click-event.interface';
+export * from './interfaces/row-key-down-event.interface';
 export * from './server-side/server-side-data-source';
 export * from './server-side/server-side-pagination-handler';
