@@ -129,17 +129,17 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @Input() public detailOpenIcon: string = 'chevron-down';
 
   /**
-   * Emited row click event.
+   * Emitted row click event.
    * @emits (RowClickEvent)
    */
   @Output() public rowClick: EventEmitter<RowClickEvent> = new EventEmitter<RowClickEvent>();
   /**
-   * Emited cell click event.
+   * Emitted cell click event.
    * @emits (CellClickEvent)
    */
   @Output() public cellClick: EventEmitter<CellClickEvent> = new EventEmitter<CellClickEvent>();
   /**
-   * Emited row onkeydown event.
+   * Emitted row onkeydown event.
    * @emits (RowKeyDownEvent)
    */
   @Output() public rowKeyDown: EventEmitter<RowKeyDownEvent> = new EventEmitter<RowKeyDownEvent>();
