@@ -16,6 +16,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortHeaderIntl } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -92,6 +93,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * Flag to render with checkboxes for multiselect rows.
    */
   @Input() public useSelection: boolean = false;
+  /**
+   * Use this palette for mat elements
+   */
+  @Input() public color: ThemePalette = 'primary';
   /**
    * Flag to enable sorting.
    */
