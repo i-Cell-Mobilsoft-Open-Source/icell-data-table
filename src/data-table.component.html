@@ -49,6 +49,7 @@
       </th>
       <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
         <mat-checkbox
+          [color]="color"
           (click)="$event.stopPropagation()"
           (change)="$event ? rowSelection.toggle(row) : null"
           [checked]="rowSelection.isSelected(row)"
