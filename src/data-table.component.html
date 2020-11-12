@@ -18,6 +18,7 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item *ngFor="let col of columnSettings" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
       <mat-checkbox
+        [color]="color"
         name="column-checkbox--{{ col.label }}"
         (click)="$event.stopPropagation()"
         (change)="$event ? columnSelection.toggle(col) : null"
@@ -31,13 +32,14 @@
 
 <div class="">
   <div *ngIf="isLoading() | async" [class.loadOverlay]="true">
-    <mat-spinner></mat-spinner>
+    <mat-spinner [diameter]="50" [color]="color"></mat-spinner>
   </div>
   <table mat-table [id]="customId" [dataSource]="dataSource" multiTemplateDataRows cdkDropListGroup matSort>
     <!-- multiselect -->
     <ng-container matColumnDef="$selectBoxes" sticky>
       <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header">
         <mat-checkbox
+          [color]="color"
           (change)="$event ? masterToggle() : null"
           [checked]="rowSelection.hasValue() && isAllSelected()"
           [indeterminate]="rowSelection.hasValue() && !isAllSelected()"
