@@ -180,7 +180,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   ) {}
 
   private sortButtonLabel(id: string) {
-    if (!localeLabels.hasOwnProperty(id)) {
+    if (!localeLabels[id]) {
       return;
     }
     return this.trans.instant('SORT_BUTTON_LABEL', { id: this.trans.instant(localeLabels[id]) });
