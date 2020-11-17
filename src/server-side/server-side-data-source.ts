@@ -65,6 +65,7 @@ export class ServerSideDataSource implements DataSource<any> {
 
     this.paginator.initialized.subscribe(() => {
       this.paginator.pageSize = this.paginationParams.rows;
+      this.paginator.pageIndex = this.paginationParams.page - 1 || 0;
     });
 
     this.initDataLoading();
