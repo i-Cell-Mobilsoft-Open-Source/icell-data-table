@@ -1,5 +1,6 @@
 export * from './cell-click-event.interface';
 export * from './cell-template-component.interface';
+export * from './component-options.interface';
 export * from './data-table-column-definition.interface';
 export * from './data-with-query-response-details.interface';
 export * from './pagination-handler.interface';
