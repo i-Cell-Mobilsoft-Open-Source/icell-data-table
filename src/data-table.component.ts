@@ -136,7 +136,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    * Dynamically set per-row CSS class
    */
-  @Input() public rowClass: (data: any) => string | null = () => null;
+  @Input() public rowClass: (data: any) => string = () => '';
 
   /**
    * Emitted row click event.
