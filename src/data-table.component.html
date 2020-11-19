@@ -154,7 +154,7 @@
     <tr
       mat-row
       [attr.tabindex]="0"
-      [attr.class]="rowClass(row)"
+      [ngClass]="rowClass(row)"
       *matRowDef="let row; columns: actualColumns"
       [class.expanded-detail]="expandedRow === row"
       (click)="onRowClick($event, row)"
