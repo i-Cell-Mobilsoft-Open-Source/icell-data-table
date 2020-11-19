@@ -134,6 +134,11 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @Input() public detailOpenIcon: string = 'chevron-down';
 
   /**
+   * Dynamically set per-row CSS class
+   */
+  @Input() public rowClass: (data: any) => string | null = () => null;
+
+  /**
    * Emitted row click event.
    * @emits (RowClickEvent)
    */
