@@ -160,6 +160,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | fixedHeader | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to have sticky header.
 | detailClosedIcon | `@Input` | `string` | &#10004;&#65039; | `chevron-right` | Icon to use for closed details.
 | detailOpenIcon | `@Input` | `string` | &#10004;&#65039; | `chevron-down` | Icon to use for opened details.
+| rowClass | `@Input` | `function` | &#10004;&#65039; | `() => null` | Dynamically set per-row CSS class.
 | rowClick | `@Output` | `RowClickEvent` | &#10004;&#65039; |  | Emitted row click event.
 | cellClick | `@Output` | `CellClickEvent` | &#10004;&#65039; |  | Emitted cell click event.
 | rowKeyDown | `@Output` | `RowKeyDownEvent` | &#10004;&#65039; |  | Emitted row onkeydown event.
