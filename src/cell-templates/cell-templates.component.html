@@ -1,17 +1,19 @@
 <!-- cell templates -->
 <!-- default cell -->
 <ng-template #labelTemplate [cellTemplate]="'labelTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  {{ getFieldData(row, col) || ' ' | translate }}
+  <div class="cell-content">
+    {{ getFieldData(row, col) || ' ' | translate }}
+  </div>
 </ng-template>
 
 <!-- strong cell -->
 <ng-template #labelBoldTemplate [cellTemplate]="'labelBoldTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <strong>{{ getFieldData(row, col) || ' ' | translate }}</strong>
+  <strong class="cell-content">{{ getFieldData(row, col) || ' ' | translate }}</strong>
 </ng-template>
 
 <!-- numeric cell -->
 <ng-template #numericTemplate [cellTemplate]="'numericTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <div [style.textAlign]="'right'">{{ asNumeric(getFieldData(row, col)) }}</div>
+  <div class="cell-content" [style.textAlign]="'right'">{{ asNumeric(getFieldData(row, col)) }}</div>
 </ng-template>
 
 <!-- icon cell -->
