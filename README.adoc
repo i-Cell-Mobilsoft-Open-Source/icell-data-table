@@ -141,6 +141,18 @@ this.columnSettings: DataTableColumnDefinition[] = [
     stickyEnd: true,
     template: 'componentTemplate',
     component: RowActionComponent,
+    componentOptions: {
+      inputs: {
+        // In RowActionComponent: `@Input() icon: string;`
+        icon: 'details'
+      },
+      outputs: {
+        // In RowActionComponent: `@Output() clicked = new EventEmitter<RowDataType>();`
+        clicked: (rowData: RowDataType) => {
+          // Do something
+        }
+      }
+    }
   },
 ];
 ...
