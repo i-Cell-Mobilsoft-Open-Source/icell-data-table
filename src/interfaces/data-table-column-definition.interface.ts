@@ -1,3 +1,5 @@
+import { ComponentOptions } from './component-options.interface';
+
 export interface DataTableColumnDefinition {
   /**
    * Path to field that should be rendered.
@@ -62,6 +64,13 @@ export interface DataTableColumnDefinition {
    * Use with `template = 'componentTemplate'`.
    */
   component?: any;
+
+  /**
+   * Provide input, output bindings for the component rendered in the cell
+   *
+   * Use with `template = 'componentTemplate'`.
+   */
+  componentOptions?: ComponentOptions;
 
   /**
    * Defines the context parent for the component.

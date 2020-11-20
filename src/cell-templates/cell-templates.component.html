@@ -22,6 +22,6 @@
 <!-- component cell -->
 <ng-template #componentTemplate [cellTemplate]="'componentTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
   <ng-container
-    *ngComponentOutlet="col.component; ndcDynamicInputs: { data: row, parent: col.parent }; ndcDynamicOutputs: col.outputs"
+    *ngComponentOutlet="col.component; ndcDynamicInputs: getComponentInputs(row, col); ndcDynamicOutputs: col.componentOptions?.outputs"
   ></ng-container>
 </ng-template>
