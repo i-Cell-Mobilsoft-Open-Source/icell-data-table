@@ -71,6 +71,9 @@ If `componentTemplate` is used you must define the `component` property as well.
 | component | any | &#10004;&#65039; |  | Defines what component to use to render the cell.
 
 Use with `template = 'componentTemplate'`.
+| componentOptions | ComponentOptions | &#10004;&#65039; |  | Provide input, output bindings for the component rendered in the cell.
+
+Use with `template = 'componentTemplate'`.
 | parent | any | &#10004;&#65039; |  | Defines what component to use to render the cell.
 
 Use with `template = 'componentTemplate'`.
@@ -138,6 +141,18 @@ this.columnSettings: DataTableColumnDefinition[] = [
     stickyEnd: true,
     template: 'componentTemplate',
     component: RowActionComponent,
+    componentOptions: {
+      inputs: {
+        // In RowActionComponent: `@Input() icon: string;`
+        icon: 'details'
+      },
+      outputs: {
+        // In RowActionComponent: `@Output() clicked = new EventEmitter<RowDataType>();`
+        clicked: (rowData: RowDataType) => {
+          // Do something
+        }
+      }
+    }
   },
 ];
 ...
