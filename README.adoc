@@ -58,7 +58,7 @@ export class Module {
 | field | `string` | &#10004;&#65039; |  | Path to field that should be rendered.
 | orderName | `string` | &#10004;&#65039; |  | Custom ordering parameter.
 | valueFormatter | `function` | &#10004;&#65039; |  | Callback to transform the cell's data.
-| valueGetter | `function` | &#10004;&#65039; |  | Callback to transform the row model to a displayable value.
+| valueGetter | `function` | &#10004;&#65039; |  | Callback to transform the row model.
 | label | `string` | &#10060; |  | Column label; can be a localization key.
 | hideable | `boolean` | &#10060; |  | Defines if the column dis hideable.
 | visible | `boolean` | &#10060; |  | Defines if the column is visible. If used with hideable, the column will be in the column menu unchecked.

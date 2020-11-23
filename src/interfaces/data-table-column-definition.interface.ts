@@ -17,9 +17,9 @@ export interface DataTableColumnDefinition {
   valueFormatter?: (data: any) => string;
 
   /**
-   * Callback to transform the row model to a displayable value
+   * Callback to transform the row model
    */
-  valueGetter?: (row: any) => string;
+  valueGetter?: (row: any) => any;
 
   /**
    * Column label; can be a localization key.
