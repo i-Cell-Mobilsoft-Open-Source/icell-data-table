@@ -38,7 +38,7 @@ export class CellTemplatesComponent implements OnInit {
     }
 
     if (_isFunction(colDef.valueGetter)) {
-      return colDef.valueGetter(rowData);
+      return colDef.valueGetter(rowData).toString();
     }
 
     let fieldData = '';
@@ -51,7 +51,7 @@ export class CellTemplatesComponent implements OnInit {
       fieldData = colDef.valueFormatter(fieldData);
     }
 
-    return fieldData;
+    return fieldData.toString();
   }
 
   /**
