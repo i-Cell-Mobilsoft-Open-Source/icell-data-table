@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { get as _get, isFunction as _isFunction, isString as _isString } from 'lodash-es';
+import { get as _get, isFunction as _isFunction, isString as _isString, isNumber as _isNumber } from 'lodash-es';
 import { InputsType } from 'ng-dynamic-component';
 import { CellTemplateDirective } from '../directives/cell-template.directive';
 import { DataTableColumnDefinition } from '../interfaces';
@@ -37,11 +37,12 @@ export class CellTemplatesComponent implements OnInit {
       return '';
     }
 
-    if (_isFunction(colDef.valueGetter)) {
-      return colDef.valueGetter(rowData).toString();
-    }
-
     let fieldData = '';
+
+    if (_isFunction(colDef.valueGetter)) {
+      fieldData = colDef.valueGetter(rowData);
+      return _isNumber(fieldData) ? String(fieldData) : fieldData;
+    }
 
     if (_isString(colDef.field)) {
       fieldData = _get(rowData, colDef.field) ?? '';
@@ -51,7 +52,7 @@ export class CellTemplatesComponent implements OnInit {
       fieldData = colDef.valueFormatter(fieldData);
     }
 
-    return fieldData.toString();
+    return _isNumber(fieldData) ? String(fieldData) : fieldData;
   }
 
   /**
