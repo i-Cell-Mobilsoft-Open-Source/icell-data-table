@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
@@ -28,6 +29,7 @@ import { TableDemoService } from './table-demo.service';
     MatMenuModule,
     MatTableModule,
     MatCheckboxModule,
+    MatCardModule,
   ],
   providers: [TableDemoService],
   bootstrap: [AppComponent],

@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  ClientSidePaginationHandler,
   DataTableColumnDefinition,
   DataTableComponent,
   DataWithQueryResponseDetails,
@@ -23,7 +26,7 @@ import { TableDemoService } from './table-demo.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public data: any;
+  public data: MatTableDataSource<any>;
   public withDetail = true;
   public columnDefs: DataTableColumnDefinition[];
   @ViewChild(DataTableComponent, { static: true })
@@ -76,6 +79,7 @@ export class AppComponent implements OnInit {
       row.description = null;
       return new Observable((observer) => {
         fetch(
+          // tslint:disable-next-line: max-line-length
           `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=10&exlimit=1&titles=${row.name}&explaintext=1&formatversion=2&origin=*&format=json`
         ).then((resp) =>
           resp.json().then((res) => {
@@ -89,20 +93,20 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data = new ServerSideDataSource(
-      this.getStaticData.bind(this),
-      'list',
-      this.paginationParams,
-      this.table.sort,
-      this.table.rowSelection,
-      this.paginatorIntl,
-      this.cdRef,
-      this.withDetail,
-      false
-    );
-    this.paginationHandler = new ServerSidePaginationHandler(this.data);
-    // this.data = new MatTableDataSource(this.ds.data);
-    // this.paginationHandler = new ClientSidePaginationHandler(this.data, this.paginatorIntl, this.cdRef, this.paginationParams);
+    // this.data = new ServerSideDataSource(
+    //   this.getStaticData.bind(this),
+    //   'list',
+    //   this.paginationParams,
+    //   this.table.sort,
+    //   this.table.rowSelection,
+    //   this.paginatorIntl,
+    //   this.cdRef,
+    //   this.withDetail,
+    //   false
+    // );
+    // this.paginationHandler = new ServerSidePaginationHandler(this.data);
+    this.data = new MatTableDataSource(this.ds.data);
+    this.paginationHandler = new ClientSidePaginationHandler(this.data, this.paginatorIntl, this.cdRef, this.paginationParams);
 
     this.columnDefs = [
       {
@@ -119,6 +123,7 @@ export class AppComponent implements OnInit {
         template: 'labelBoldTemplate',
         hideable: true,
         visible: true,
+        identifier: true
       },
       {
         field: 'atomicMass',
