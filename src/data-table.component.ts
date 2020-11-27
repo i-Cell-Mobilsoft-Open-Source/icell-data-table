@@ -108,10 +108,30 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    */
   @Input() public fixedHeader: boolean = false;
 
+  private _dataSource: any[] | MatTableDataSource<any> | ServerSideDataSource;
   /**
    * DataSource.
    */
-  @Input() public dataSource: any[] | MatTableDataSource<any> | ServerSideDataSource = null;
+  public get dataSource(): any[] | MatTableDataSource<any> | ServerSideDataSource {
+    return this._dataSource;
+  }
+  @Input() public set dataSource(value: any[] | MatTableDataSource<any> | ServerSideDataSource) {
+    // If simple array passed make it sortable datasource
+    if (Array.isArray(value)) {
+      const tmpDataSource = [...value];
+      this._dataSource = new MatTableDataSource(tmpDataSource);
+    } else {
+      this._dataSource = value;
+    }
+    if (this._dataSource instanceof MatTableDataSource) {
+      this._dataSource.sort = this.sort;
+      if (this.showDetails) {
+        this._dataSource.data.forEach((item: any) => {
+          if (item.$detail === undefined) item.$detail = true;
+        });
+      }
+    }
+  }
   /**
    * Name of the table.
    */
@@ -228,18 +248,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   ngOnInit() {
-    // If simple array passed make it sortable datasource
-    if (Array.isArray(this.dataSource)) {
-      const tmpDataSource = [...this.dataSource];
-      this.dataSource = new MatTableDataSource(tmpDataSource);
-    }
-    if (this.dataSource instanceof MatTableDataSource) {
-      this.dataSource.sort = this.sort;
-      if (this.showDetails) {
-        this.dataSource.data.forEach((item: any) => (item.$detail = true));
-      }
-    }
-
     this.setDisplayedColumns();
     this.onLangChange = this.trans.onLangChange.subscribe(() => this.matSortService.changes.next());
   }
