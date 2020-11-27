@@ -15,10 +15,11 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { MatSort, MatSortHeaderIntl } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
+import { MatColumnDef, MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { ResizeEvent } from 'angular-resizable-element';
 import { orderBy as _orderBy } from 'lodash-es';
@@ -61,6 +62,7 @@ let localeLabels = {};
       transition('expanded <=> collapsed', animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnChanges {
   // cell template holder
@@ -106,14 +108,38 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    */
   @Input() public fixedHeader: boolean = false;
 
+  private _dataSource: any[] | MatTableDataSource<any> | ServerSideDataSource;
   /**
    * DataSource.
    */
-  @Input() public dataSource: any[] | MatTableDataSource<any> | ServerSideDataSource = null;
+  public get dataSource(): any[] | MatTableDataSource<any> | ServerSideDataSource {
+    return this._dataSource;
+  }
+  @Input() public set dataSource(value: any[] | MatTableDataSource<any> | ServerSideDataSource) {
+    // If simple array passed make it sortable datasource
+    if (Array.isArray(value)) {
+      const tmpDataSource = [...value];
+      this._dataSource = new MatTableDataSource(tmpDataSource);
+    } else {
+      this._dataSource = value;
+    }
+    if (this._dataSource instanceof MatTableDataSource) {
+      this._dataSource.sort = this.sort;
+      if (this.showDetails) {
+        this._dataSource.data.forEach((item: any) => {
+          if (item.$detail === undefined) item.$detail = true;
+        });
+      }
+    }
+  }
   /**
    * Name of the table.
    */
   @Input() public name: string;
+  /**
+   * Caption of the table.
+   */
+  @Input() public caption: string;
   /**
    * Column settings.
    */
@@ -132,6 +158,19 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * Icon to use for opened details.
    */
   @Input() public detailOpenIcon: string = 'chevron-down';
+
+  /**
+   * Icon to use for no sort active.
+   */
+  @Input() public sortingNoSort: string = 'sort';
+  /**
+   * Icon to use for sort ascending.
+   */
+  @Input() public sortingAsc: string = 'sort-ascending';
+  /**
+   * Icon to use for sort descending.
+   */
+  @Input() public sortingDesc: string = 'sort-descending';
 
   /**
    * Dynamically set per-row CSS class
@@ -181,14 +220,18 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     public changeDetect: ChangeDetectorRef,
     public elementRef: ElementRef,
     private matSortService: MatSortHeaderIntl,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
-  private sortButtonLabel(id: string) {
+  public sortButtonLabel(id: string) {
     if (!localeLabels[id]) {
       return;
     }
-    return this.trans.instant('SORT_BUTTON_LABEL', { id: this.trans.instant(localeLabels[id]) });
+    return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
+      id: this.trans.instant(localeLabels[id]),
+      direction: `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`,
+    });
   }
 
   ngOnDestroy() {
@@ -199,8 +242,9 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   ngAfterViewInit() {
     this.matSortService.sortButtonLabel = this.sortButtonLabel.bind(this);
-    // this.trans.set('SORT_BUTTON_LABEL', 'Change sorting for {{id}}', 'en');
-    // this.trans.set('SORT_BUTTON_LABEL', '{{id}} oszlop sorrendjének megváltoztatása', 'hu');
+    // debug localization
+    // this.trans.set('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', 'Change sorting for {{id}}, {{direction}}', 'en');
+    // this.trans.set('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', '{{id}} oszlop sorrendjének megváltoztatása, {{direction}}', 'hu');
   }
 
   ngOnInit() {
@@ -288,6 +332,28 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   resetDefaultColumnSettings() {
     this.localStorage.clear(`table-settings-${this.name}`);
     this.saveColumnSettings();
+  }
+
+  // custom sorting
+  isSorted(id: string) {
+    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource).sort;
+    if (!sortInfo.sortables.has(id)) {
+      const sortHeader = new MatSortHeader(this.matSortService, this.cdRef, this.sort, <MatColumnDef>{ name: id });
+      sortHeader.id = id;
+      sortInfo.sortables.set(id, sortHeader);
+    }
+    return sortInfo.active === id && sortInfo.direction !== '';
+  }
+
+  getSortDirection(id: string) {
+    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource).sort;
+    return this.isSorted(id) ? sortInfo.direction : '';
+  }
+
+  applySort(id: string) {
+    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource).sort;
+    const sortable = sortInfo.sortables.get(id);
+    sortInfo.sort(sortable);
   }
 
   // cell template handling

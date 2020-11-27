@@ -1,4 +1,4 @@
-<ng-template #detailTemplate let-row="row" >
+<ng-template #detailTemplate let-row="row">
   <div class="element-detail">
     <div
       class="element-diagram"
@@ -16,16 +16,18 @@
   </div>
 </ng-template>
 
-<ic-data-table
-  class="mat-elevation-z4"
-  [columnSettings]="columnDefs"
-  [detailTemplate]="detailTemplate"
-  [dataSource]="data"
-  [showDetails]="true"
-  [useSelection]="true"
-  [showColumnMenu]="true"
-  [hasSorting]="true"
-  [fixedHeader]="true"
-  (rowClick)="rowClick($event)"
-  (cellClick)="cellClick($event)"
-></ic-data-table>
+<mat-card>
+  <ic-data-table
+    class="mat-elevation-z4"
+    [columnSettings]="columnDefs"
+    [detailTemplate]="detailTemplate"
+    [dataSource]="data"
+    [showDetails]="true"
+    [useSelection]="true"
+    [showColumnMenu]="true"
+    [hasSorting]="true"
+    [fixedHeader]="true"
+    (rowClick)="rowClick($event)"
+    (cellClick)="cellClick($event)"
+  ></ic-data-table>
+</mat-card>

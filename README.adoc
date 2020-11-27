@@ -77,6 +77,7 @@ Use with `template = 'componentTemplate'`.
 | parent | any | &#10004;&#65039; |  | Defines what component to use to render the cell.
 
 Use with `template = 'componentTemplate'`.
+| identifier | boolean | &#10004;&#65039; |  | Defines if the cell should render as header for a11y reasons.
 |===
 
 [NOTE]
@@ -116,6 +117,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
     template: 'labelBoldTemplate',
     hideable: true,
     visible: true,
+    identifier: true,
   },
   {
     label: 'weight',
@@ -164,6 +166,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | Attribute | Binding | Type | Optional | Default | Description
 
 | name | `@Input` | `string` | &#10004;&#65039; | `''` | Name of the table.
+| caption | `@Input` | `string` | &#10004;&#65039; | `''` | Caption of the table.
 | dataSource | `@Input` | `any[] \| ServerSideDataSource \| MatTableDataSource` | &#10060; | `[]` | DataSource.
 | columnSettings | `@Input` | `DataTableColumnDefinition[]` | &#10060; |  | Column settings.
 | detailTemplate | `@Input` | `ngTemplateRef` | &#10004;&#65039; | `#defaultTemplate` | Custom user defined *detail* view
@@ -175,6 +178,9 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | fixedHeader | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to have sticky header.
 | detailClosedIcon | `@Input` | `string` | &#10004;&#65039; | `chevron-right` | Icon to use for closed details.
 | detailOpenIcon | `@Input` | `string` | &#10004;&#65039; | `chevron-down` | Icon to use for opened details.
+| sortingNoSort | `@Input` | `string` | &#10004;&#65039; | `sort` | Icon to use for no sort active.
+| sortingAsc | `@Input` | `string` | &#10004;&#65039; | `sort-ascending` | Icon to use for sort ascending.
+| sortingDesc | `@Input` | `string` | &#10004;&#65039; | `sort-descending` | Icon to use for sort descending.
 | rowClass | `@Input` | `function` | &#10004;&#65039; | `() => ''` | Dynamically set per-row CSS class.
 | rowClick | `@Output` | `RowClickEvent` | &#10004;&#65039; |  | Emitted row click event.
 | cellClick | `@Output` | `CellClickEvent` | &#10004;&#65039; |  | Emitted cell click event.
@@ -225,6 +231,32 @@ this.data = new ServerSideDataSource(
 ...
 this.data = new MatTableDataSource([]);
 ...
+----
+
+=== Localization
+
+For translation we utilize `@ngx-translate`.
+
+* `ICELL_DATA_TABLE.SORT_BUTTON_LABEL` used for localizing
+  ** uses 2 input properties:
+    *** `id` represents the columns locale_key
+    *** `direction`:
+      **** `ICELL_DATA_TABLE.SORT_NONE` used if no sort is set
+      **** `ICELL_DATA_TABLE.SORT_ASC` used if sort is ascending
+      **** `ICELL_DATA_TABLE.SORT_DESC` used if sort is descending
+
+[source, json]
+----
+{
+  ...
+  "ICELL_DATA_TABLE": {
+    "SORT_BUTTON_LABEL": "Change sorting for {{id}}, {{direction}}.",
+    "SORT_NONE": "no sorting",
+    "SORT_ASC": "sorting ascending",
+    "SORT_DESC": "sorting descending"
+  }
+  ...
+}
 ----
 
 === Examples
