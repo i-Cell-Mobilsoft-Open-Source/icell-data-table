@@ -253,7 +253,7 @@ For translation we utilize `@ngx-translate`.
     "SORT_BUTTON_LABEL": "Change sorting for {{id}}, {{direction}}.",
     "SORT_NONE": "no sorting",
     "SORT_ASC": "sorting ascending",
-    "SORT_DESC": "soirting descending"
+    "SORT_DESC": "sorting descending"
   }
   ...
 }
