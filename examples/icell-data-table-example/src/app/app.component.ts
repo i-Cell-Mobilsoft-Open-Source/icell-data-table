@@ -93,6 +93,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Use this to emulate server-side datasource
     // this.data = new ServerSideDataSource(
     //   this.getStaticData.bind(this),
     //   'list',
@@ -105,6 +106,8 @@ export class AppComponent implements OnInit {
     //   false
     // );
     // this.paginationHandler = new ServerSidePaginationHandler(this.data);
+
+    // Use this to handle client-side datasource
     this.data = new MatTableDataSource(this.ds.data);
     this.paginationHandler = new ClientSidePaginationHandler(this.data, this.paginatorIntl, this.cdRef, this.paginationParams);
 
