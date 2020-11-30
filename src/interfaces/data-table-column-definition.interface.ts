@@ -78,4 +78,9 @@ export interface DataTableColumnDefinition {
    * Use with `template = 'componentTemplate'`.
    */
   parent?: any;
+
+  /**
+   * Defines if the cell should render as header for a11y reasons.
+   */
+  identifier?: boolean;
 }

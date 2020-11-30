@@ -46,7 +46,7 @@ export class ServerSideDataSource implements DataSource<any> {
     private dataSourceEndpoint: QueryFunction,
     private dataHolder: string | symbol,
     public paginationParams: PaginationParams,
-    private sort: MatSort,
+    public sort: MatSort,
     public rowSelection: SelectionModel<any>,
     private paginatorIntl: MatPaginatorIntl,
     private cdRef: ChangeDetectorRef,
