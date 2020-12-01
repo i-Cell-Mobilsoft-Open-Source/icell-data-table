@@ -336,7 +336,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   // custom sorting
   isSorted(id: string) {
-    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource).sort;
+    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
+    if (!sortInfo) {
+      return;
+    }
     if (!sortInfo.sortables.has(id)) {
       const sortHeader = new MatSortHeader(this.matSortService, this.cdRef, this.sort, <MatColumnDef>{ name: id });
       sortHeader.id = id;
@@ -346,14 +349,16 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   getSortDirection(id: string) {
-    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource).sort;
-    return this.isSorted(id) ? sortInfo.direction : '';
+    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
+    return this.isSorted(id) ? sortInfo?.direction : '';
   }
 
   applySort(id: string) {
-    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource).sort;
-    const sortable = sortInfo.sortables.get(id);
-    sortInfo.sort(sortable);
+    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
+    const sortable = sortInfo?.sortables.get(id);
+    if (sortInfo) {
+      sortInfo.sort(sortable);
+    }
   }
 
   // cell template handling
