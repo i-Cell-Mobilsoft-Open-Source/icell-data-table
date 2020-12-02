@@ -230,7 +230,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     }
     return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
       id: this.trans.instant(localeLabels[id]),
-      direction: `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`,
+      direction: this.trans.instant(`ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`),
     });
   }
 
