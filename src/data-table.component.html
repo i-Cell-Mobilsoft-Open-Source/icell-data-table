@@ -187,7 +187,6 @@
     <!-- row render -->
     <tr
       mat-row
-      [attr.tabindex]="0"
       [ngClass]="rowClass(row)"
       *matRowDef="let row; columns: actualColumns"
       [class.expanded-detail]="expandedRow === row"
