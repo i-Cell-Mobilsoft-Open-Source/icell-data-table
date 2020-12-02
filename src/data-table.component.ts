@@ -173,6 +173,11 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @Input() public sortingDesc: string = 'sort-descending';
 
   /**
+   * Row tabIndex, default 0.
+   */
+  @Input() public tabIndex: number = 0;
+
+  /**
    * Dynamically set per-row CSS class
    */
   @Input() public rowClass: (data: any) => string = () => '';
