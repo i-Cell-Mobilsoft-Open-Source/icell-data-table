@@ -343,7 +343,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   isSorted(id: string) {
     const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
     if (!sortInfo) {
-      return;
+      return false;
     }
     if (!sortInfo.sortables.has(id)) {
       const sortHeader = new MatSortHeader(this.matSortService, this.cdRef, this.sort, <MatColumnDef>{ name: id });
