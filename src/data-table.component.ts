@@ -1,4 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { coerceCssPixelValue } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   AfterViewInit,
@@ -218,7 +219,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   constructor(
     public trans: TranslateService,
     public changeDetect: ChangeDetectorRef,
-    public elementRef: ElementRef,
+    public elementRef: ElementRef<HTMLElement>,
     private matSortService: MatSortHeaderIntl,
     private localStorage: LocalStorageService,
     private cdRef: ChangeDetectorRef
@@ -397,10 +398,14 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   onResizeEnd(event: ResizeEvent, column: any): void {
     if (event.edges.right) {
-      const cssValue = event.rectangle.width + 'px';
-      const col = document.getElementsByClassName(`mat-column-${column.field}`);
+      const cssValue = coerceCssPixelValue(event.rectangle.width);
+      // `matColumnDef` converts its input (col.field) to CSS friendly mat-column-* class name
+      const columnClass = `mat-column-${column.field.replace(/[^a-z0-9_-]/ig, '-')}`;
+      const col = this.elementRef.nativeElement.getElementsByClassName(columnClass) as HTMLCollectionOf<HTMLElement>;
+
+      // Apply new width to all cells in the column
       for (let i = 0; i < col.length; i++) {
-        const cur = col[i] as any;
+        const cur = col[i];
         cur.style.width = cssValue;
       }
     }
@@ -439,5 +444,9 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   onCellClick(event: MouseEvent, cellData: any) {
     this.cellClick.emit({ ...event, cell: cellData });
+  }
+
+  private getElementWidth(element: HTMLElement | null | undefined): number {
+    return Number(element?.style.width.match(/(\d+)px/)?.[1]) || element?.offsetWidth || 0;
   }
 }
