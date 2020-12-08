@@ -55,7 +55,7 @@ export class Module {
 |===
 | Property | Type | Optional | Default | Description
 
-| field | `string` | &#10004;&#65039; |  | Path to field that should be rendered.
+| field | `string` | &#10060; |  | Path to field that should be rendered.
 | orderName | `string` | &#10004;&#65039; |  | Custom ordering parameter.
 | valueFormatter | `function` | &#10004;&#65039; |  | Callback to transform the cell's data.
 | valueGetter | `function` | &#10004;&#65039; |  | Callback to transform the row model.

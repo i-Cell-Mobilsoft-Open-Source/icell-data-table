@@ -4,7 +4,7 @@ export interface DataTableColumnDefinition {
   /**
    * Path to field that should be rendered.
    */
-  field?: string;
+  field: string;
 
   /**
    * Custom ordering parameter
