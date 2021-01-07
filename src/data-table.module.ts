@@ -24,6 +24,7 @@ import { CellTemplatesComponent } from './cell-templates/cell-templates.componen
 import { DataTableComponent } from './data-table.component';
 import { CellTemplateDirective } from './directives/cell-template.directive';
 import { NgxMultiLineEllipsisDirective } from './directives/ngx-multi-line-ellipsis.directive';
+import { SanitizeTranformPipe } from './pipes/sanitize.pipe';
 
 export interface DataTableConfig {
   mdiSvgResourcePath: string;
@@ -63,8 +64,8 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
     HttpClientModule,
     DragDropModule,
   ],
-  declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective],
-  exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective],
+  declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective, SanitizeTranformPipe],
+  exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective, SanitizeTranformPipe],
   providers: [MatSortHeaderIntl],
   schemas: [NO_ERRORS_SCHEMA],
 })
