@@ -178,6 +178,8 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    */
   @Input() public rowClass: (data: any) => string = () => '';
 
+  @Input() public headerClass: string = '';
+
   /**
    * Emitted row click event.
    * @emits (RowClickEvent)

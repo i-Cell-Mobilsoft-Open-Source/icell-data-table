@@ -2,13 +2,13 @@
 <!-- default cell -->
 <ng-template #labelTemplate [cellTemplate]="'labelTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
   <div class="cell-content">
-    {{ getFieldData(row, col) || ' ' | translate }}
+    {{ getFieldData(row, col) || ' ' | translate | sanitize }}
   </div>
 </ng-template>
 
 <!-- strong cell -->
 <ng-template #labelBoldTemplate [cellTemplate]="'labelBoldTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <strong class="cell-content">{{ getFieldData(row, col) || ' ' | translate }}</strong>
+  <strong class="cell-content">{{ getFieldData(row, col) || ' ' | translate | sanitize }}</strong>
 </ng-template>
 
 <!-- numeric cell -->
