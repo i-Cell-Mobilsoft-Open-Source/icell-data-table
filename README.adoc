@@ -78,6 +78,7 @@ Use with `template = 'componentTemplate'`.
 
 Use with `template = 'componentTemplate'`.
 | identifier | boolean | &#10004;&#65039; |  | Defines if the cell should render as header for a11y reasons.
+| columnClass | boolean | &#10004;&#65039; |  | Defines custom `CSS` class for the column it self.
 |===
 
 [NOTE]
@@ -102,6 +103,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
     sortable: true,
     hideable: true,
     visible: true,
+    columnClass: 'table__atomic-numbers_bold',
   },
   {
     field: 'type',

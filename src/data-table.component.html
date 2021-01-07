@@ -120,6 +120,7 @@
           *matHeaderCellDef
           mat-header-cell
           mwlResizable
+          [class]="col.columnClass || ''"
           [enableGhostResize]="false"
           (resizeStart)="onResizeStart($event)"
           (resizeEnd)="onResizeEnd($event, col)"
@@ -148,6 +149,7 @@
           mat-header-cell
           *matHeaderCellDef
           mwlResizable
+          [class]="col.columnClass || ''"
           [enableGhostResize]="false"
           (resizeEnd)="onResizeEnd($event, col)"
           [resizeEdges]="{ bottom: false, right: true, top: false, left: true }"

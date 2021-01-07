@@ -83,4 +83,9 @@ export interface DataTableColumnDefinition {
    * Defines if the cell should render as header for a11y reasons.
    */
   identifier?: boolean;
+
+  /**
+   * Defines custom `CSS` class for the column it self.
+   */
+  columnClass?: string;
 }
