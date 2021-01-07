@@ -87,5 +87,10 @@ export interface DataTableColumnDefinition {
   /**
    * Defines custom `CSS` class for the column it self.
    */
-  columnClass?: string;
+  columnClasses?: string;
+
+  /**
+   * Defines custom `CSS` class for the column cells.
+   */
+  cellClasses?: string;
 }

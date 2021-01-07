@@ -78,7 +78,8 @@ Use with `template = 'componentTemplate'`.
 
 Use with `template = 'componentTemplate'`.
 | identifier | boolean | &#10004;&#65039; |  | Defines if the cell should render as header for a11y reasons.
-| columnClass | boolean | &#10004;&#65039; |  | Defines custom `CSS` class for the column it self.
+| columnClasses | boolean | &#10004;&#65039; |  | Defines custom `CSS` class for the column it self.
+| cellClasses | boolean | &#10004;&#65039; |  | Defines custom `CSS` class for the column cells.
 |===
 
 [NOTE]
@@ -184,6 +185,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | sortingAsc | `@Input` | `string` | &#10004;&#65039; | `sort-ascending` | Icon to use for sort ascending.
 | sortingDesc | `@Input` | `string` | &#10004;&#65039; | `sort-descending` | Icon to use for sort descending.
 | rowClass | `@Input` | `function` | &#10004;&#65039; | `() => ''` | Dynamically set per-row CSS class.
+| headerClass | `@Input` | `srting` | &#10004;&#65039; | | Defines the class used by `thead > tr`.
 | rowClick | `@Output` | `RowClickEvent` | &#10004;&#65039; |  | Emitted row click event.
 | cellClick | `@Output` | `CellClickEvent` | &#10004;&#65039; |  | Emitted cell click event.
 | rowKeyDown | `@Output` | `RowKeyDownEvent` | &#10004;&#65039; |  | Emitted row onkeydown event.
