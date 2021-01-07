@@ -24,7 +24,7 @@
         (change)="$event ? columnSelection.toggle(col) : null"
         [checked]="columnSelection.isSelected(col)"
       >
-        {{ col.label | translate | sanitize }}
+        <span [innerHTML]="col.label | translate | sanitize"></span>
       </mat-checkbox>
     </button>
   </mat-menu>
@@ -35,11 +35,7 @@
     <mat-spinner [diameter]="50" [color]="color"></mat-spinner>
   </div>
   <table mat-table [id]="customId" [dataSource]="dataSource" multiTemplateDataRows cdkDropListGroup matSort>
-    <caption>
-      {{
-        caption | translate | sanitize
-      }}
-    </caption>
+    <caption [innerHTML]="caption | translate | sanitize"></caption>
     <!-- multiselect -->
     <ng-container matColumnDef="$selectBoxes" sticky>
       <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header">
@@ -74,9 +70,13 @@
           <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item *ngFor="let act of row.actions" color="accent" (click)="act.callBack(row)">
-            {{ act.label | translate | sanitize }}
-          </button>
+          <button
+            mat-menu-item
+            *ngFor="let act of row.actions"
+            color="accent"
+            (click)="act.callBack(row)"
+            [innerHTML]="act.label | translate | sanitize"
+          ></button>
         </mat-menu>
       </td>
     </ng-container>
@@ -128,7 +128,7 @@
           [id]="customId + '-header-' + col.field"
           scope="col"
         >
-          <span>{{ col.label | translate | sanitize }}</span>
+          <span [innerHTML]="col.label | translate | sanitize"></span>
           <button
             mat-icon-button
             type="button"
@@ -155,9 +155,8 @@
           [resizeEdges]="{ bottom: false, right: true, top: false, left: true }"
           [id]="customId + '-header-' + col.field"
           scope="col"
-        >
-          {{ col.label | translate | sanitize }}
-        </th>
+          [innerHTML]="col.label | translate | sanitize"
+        ></th>
       </ng-container>
       <ng-container *ngIf="!col?.identifier">
         <td
@@ -176,7 +175,7 @@
         <th
           mat-cell
           role="gridcell"
-          class="mat-cell cdk-cell cdk-column-{{ col.field }} mat-column-{{ col.field }} {{col.cellClasses || ''}}"
+          class="mat-cell cdk-cell cdk-column-{{ col.field }} mat-column-{{ col.field }} {{ col.cellClasses || '' }}"
           scope="row"
           *matCellDef="let row; let idx = index"
           (click)="onCellClick($event, { row: row, col: col })"
