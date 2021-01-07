@@ -24,7 +24,7 @@
         (change)="$event ? columnSelection.toggle(col) : null"
         [checked]="columnSelection.isSelected(col)"
       >
-        {{ col.label | translate }}
+        {{ col.label | translate | sanitize }}
       </mat-checkbox>
     </button>
   </mat-menu>
@@ -37,7 +37,7 @@
   <table mat-table [id]="customId" [dataSource]="dataSource" multiTemplateDataRows cdkDropListGroup matSort>
     <caption>
       {{
-        caption | translate
+        caption | translate | sanitize
       }}
     </caption>
     <!-- multiselect -->
@@ -75,7 +75,7 @@
         </button>
         <mat-menu #menu="matMenu">
           <button mat-menu-item *ngFor="let act of row.actions" color="accent" (click)="act.callBack(row)">
-            {{ act.label | translate }}
+            {{ act.label | translate | sanitize }}
           </button>
         </mat-menu>
       </td>
@@ -88,7 +88,7 @@
         <button *ngIf="hasDetailRow(idx, row)" mat-icon-button [class.master-detail]="hasDetailRow(idx, row)" (click)="expandRow(row)">
           <mat-icon
             aria-hidden="false"
-            [attr.aria-label]="(row.$expanded ? 'MASTER_DETAIL.COLLAPSE' : 'MASTER_DETAIL.EXPAND') | translate"
+            [attr.aria-label]="(row.$expanded ? 'MASTER_DETAIL.COLLAPSE' : 'MASTER_DETAIL.EXPAND') | translate | sanitize"
             [svgIcon]="row.$expanded ? detailOpenIcon : detailClosedIcon"
           ></mat-icon>
         </button>
@@ -120,6 +120,7 @@
           *matHeaderCellDef
           mat-header-cell
           mwlResizable
+          [class]="col.columnClasses || ''"
           [enableGhostResize]="false"
           (resizeStart)="onResizeStart($event)"
           (resizeEnd)="onResizeEnd($event, col)"
@@ -127,7 +128,7 @@
           [id]="customId + '-header-' + col.field"
           scope="col"
         >
-          <span>{{ col.label | translate }}</span>
+          <span>{{ col.label | translate | sanitize }}</span>
           <button
             mat-icon-button
             type="button"
@@ -148,17 +149,23 @@
           mat-header-cell
           *matHeaderCellDef
           mwlResizable
+          [class]="col.columnClasses || ''"
           [enableGhostResize]="false"
           (resizeEnd)="onResizeEnd($event, col)"
           [resizeEdges]="{ bottom: false, right: true, top: false, left: true }"
           [id]="customId + '-header-' + col.field"
           scope="col"
         >
-          {{ col.label | translate }}
+          {{ col.label | translate | sanitize }}
         </th>
       </ng-container>
       <ng-container *ngIf="!col?.identifier">
-        <td mat-cell *matCellDef="let row; let idx = index" (click)="onCellClick($event, { row: row, col: col })">
+        <td
+          mat-cell
+          *matCellDef="let row; let idx = index"
+          (click)="onCellClick($event, { row: row, col: col })"
+          [class]="col.cellClasses || ''"
+        >
           <ng-container
             *ngTemplateOutlet="getTemplate(col.template ? col.template : 'labelTemplate'); context: { row: row, col: col, rowIdx: idx }"
           >
@@ -172,6 +179,7 @@
           class="mat-cell cdk-cell cdk-column-{{ col.field }} mat-column-{{ col.field }}"
           scope="row"
           *matCellDef="let row; let idx = index"
+          [class]="col.cellClasses || ''"
           (click)="onCellClick($event, { row: row, col: col })"
         >
           <ng-container
@@ -183,7 +191,7 @@
     </ng-container>
 
     <!-- header row render -->
-    <tr mat-header-row *matHeaderRowDef="actualColumns; sticky: fixedHeader"></tr>
+    <tr [class]="headerClass" mat-header-row *matHeaderRowDef="actualColumns; sticky: fixedHeader"></tr>
     <!-- row render -->
     <tr
       mat-row
@@ -199,6 +207,6 @@
     </ng-container>
   </table>
   <div *ngIf="rowCount === 0">
-    <span class="noRowsToShowOverlay">{{ 'ICELL_DATA_TABLE.NOROWSTOSHOW' | translate }}</span>
+    <span class="noRowsToShowOverlay">{{ 'ICELL_DATA_TABLE.NOROWSTOSHOW' | translate | sanitize }}</span>
   </div>
 </div>
