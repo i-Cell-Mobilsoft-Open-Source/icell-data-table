@@ -176,10 +176,9 @@
         <th
           mat-cell
           role="gridcell"
-          class="mat-cell cdk-cell cdk-column-{{ col.field }} mat-column-{{ col.field }}"
+          class="mat-cell cdk-cell cdk-column-{{ col.field }} mat-column-{{ col.field }} {{col.cellClasses || ''}}"
           scope="row"
           *matCellDef="let row; let idx = index"
-          [class]="col.cellClasses || ''"
           (click)="onCellClick($event, { row: row, col: col })"
         >
           <ng-container
