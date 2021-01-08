@@ -16,7 +16,7 @@
     <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item *ngFor="let col of columnSettings" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
+    <button mat-menu-item *ngFor="let col of columnDefinitions" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
       <mat-checkbox
         [color]="color"
         name="column-checkbox--{{ col.label }}"
@@ -108,9 +108,16 @@
       </td>
     </ng-container>
 
+    <!-- setup grouping headers -->
+    <ng-container *ngFor="let col of groupingHeaders; let colIndex = index; let isLast = last" matColumnDef="{{ col.name }}">
+      <th *matHeaderCellDef mat-header-cell [colSpan]="col.colspan" [class]="col.classes || ''">
+        <span [innerHTML]="col.label | translate | sanitize"></span>
+      </th>
+    </ng-container>
+
     <!-- setup columns -->
     <ng-container
-      *ngFor="let col of columnSettings; let colIndex = index; let isLast = last"
+      *ngFor="let col of columnDefinitions; let colIndex = index; let isLast = last"
       matColumnDef="{{ col.field }}"
       [sticky]="col.sticky && !col.stickyEnd"
       [stickyEnd]="col.stickyEnd && !col.sticky"
@@ -189,6 +196,9 @@
     </ng-container>
 
     <!-- header row render -->
+    <ng-container *ngIf="hasGroupingHeaders()">
+      <tr mat-header-row *matHeaderRowDef="groupingColumns"></tr>
+    </ng-container>
     <tr [class]="headerClass" mat-header-row *matHeaderRowDef="actualColumns; sticky: fixedHeader"></tr>
     <!-- row render -->
     <tr
