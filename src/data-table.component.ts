@@ -29,6 +29,8 @@ import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
 import { CellClickEvent } from './interfaces/cell-click-event.interface';
 import { DataTableColumnDefinition } from './interfaces/data-table-column-definition.interface';
+import { DataTableColumnSettings } from './interfaces/data-table-column-settings.interface';
+import { DataTableGroupingHeader } from './interfaces/data-table-grouping-header.interface';
 import { RowClickEvent } from './interfaces/row-click-event.interface';
 import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
 import { ServerSideDataSource } from './server-side/server-side-data-source';
@@ -141,10 +143,34 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * Caption of the table.
    */
   @Input() public caption: string;
+
+  private _colDef: DataTableColumnDefinition[] = [];
+  private _groupingHeaders: DataTableGroupingHeader[] = [];
+
+  /**
+   * Column Definitions.
+   */
+  public get columnDefinitions() {
+    return this._colDef;
+  }
+  public set columnDefinitions(value: DataTableColumnDefinition[]) {
+    this._colDef = value;
+  }
+
+  /**
+   * Grouping Header definitions.
+   */
+  public get groupingHeaders() {
+    return this._groupingHeaders;
+  }
+  public set groupingHeaders(value: DataTableGroupingHeader[]) {
+    this._groupingHeaders = value;
+  }
+
   /**
    * Column settings.
    */
-  @Input() public columnSettings: DataTableColumnDefinition[] = [];
+  @Input() public columnSettings: DataTableColumnDefinition[] | DataTableColumnSettings = [];
 
   /**
    * Custom user defined *detail* view.
@@ -208,6 +234,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   public parsedColumnSettings: any[];
   public originalColumnSettings: DataTableColumnDefinition[];
   public actualColumns: string[];
+  public groupingColumns: string[];
   public isResizing: boolean;
 
   private destroyedSignal: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -233,7 +260,9 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     }
     return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
       id: this.trans.instant(localeLabels[id]),
-      direction: this.trans.instant(`ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`),
+      direction: this.trans.instant(
+        `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
+      ),
     });
   }
 
@@ -251,6 +280,12 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   ngOnInit() {
+    if (Array.isArray(this.columnSettings)) {
+      this.columnDefinitions = this.columnSettings;
+    } else {
+      this.columnDefinitions = this.columnSettings.columnDefinitions;
+      this.groupingHeaders = this.columnSettings.groupingHeaders;
+    }
     this.setDisplayedColumns();
     this.onLangChange = this.trans.onLangChange.subscribe(() => this.matSortService.changes.next());
   }
@@ -261,17 +296,17 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
       if (!changes.columnSettings.previousValue) {
         localeLabels = {
           ...localeLabels,
-          ...this.columnSettings.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
+          ...this.columnDefinitions.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
         };
-        this.originalColumnSettings = [...this.columnSettings];
+        this.originalColumnSettings = [...this.columnDefinitions];
       }
       this.columnSelection = new SelectionModel<any>(
         true,
-        this.columnSettings.filter((c) => c.visible),
+        this.columnDefinitions.filter((c) => c.visible),
         true
       );
       this.columnSelection.changed.subscribe((chg) => {
-        const origCols = [...this.columnSettings];
+        const origCols = [...this.columnDefinitions];
         if (chg.added.length > 0) {
           chg.added.forEach((added) => {
             origCols.find((col) => col.field === added.field).visible = true;
@@ -282,15 +317,20 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
             origCols.find((col) => col.field === removed.field).visible = false;
           });
         }
-        this.columnSettings = origCols;
+        this.columnDefinitions = origCols;
         this.saveColumnSettings();
         this.setDisplayedColumns();
       });
     }
   }
 
+  hasGroupingHeaders() {
+    return this.groupingColumns.length > 0;
+  }
+
   setDisplayedColumns() {
-    this.actualColumns = _orderBy(this.columnSettings, ['sticky', 'stickyEnd'], ['asc', 'desc'])
+    this.groupingColumns = this.groupingHeaders.map((h) => h.name);
+    this.actualColumns = _orderBy(this.columnDefinitions, ['sticky', 'stickyEnd'], ['asc', 'desc'])
       .filter((c) => c.visible)
       .map((c) => c.field);
     if (this.showDetails) {
@@ -314,21 +354,21 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     }
 
     if (this.parsedColumnSettings) {
-      const currentSettings = [...this.columnSettings];
+      const currentSettings = [...this.columnDefinitions];
       currentSettings.forEach((cs) => {
         cs = Object.assign(
           cs,
           this.parsedColumnSettings.find((pcs) => pcs.field === cs.field)
         );
       });
-      this.columnSettings = currentSettings;
+      this.columnDefinitions = currentSettings;
     }
   }
 
   saveColumnSettings() {
     this.localStorage.store(
       `table-settings-${this.name}`,
-      JSON.stringify(this.columnSettings.map((cs) => ({ field: cs.field, visible: cs.visible })))
+      JSON.stringify(this.columnDefinitions.map((cs) => ({ field: cs.field, visible: cs.visible })))
     );
   }
 
@@ -402,7 +442,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     if (event.edges.right) {
       const cssValue = coerceCssPixelValue(event.rectangle.width);
       // `matColumnDef` converts its input (col.field) to CSS friendly mat-column-* class name
-      const columnClass = `mat-column-${column.field.replace(/[^a-z0-9_-]/ig, '-')}`;
+      const columnClass = `mat-column-${column.field.replace(/[^a-z0-9_-]/gi, '-')}`;
       const col = this.elementRef.nativeElement.getElementsByClassName(columnClass) as HTMLCollectionOf<HTMLElement>;
 
       // Apply new width to all cells in the column
