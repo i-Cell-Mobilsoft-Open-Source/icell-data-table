@@ -7,6 +7,8 @@ export * from './directives/ngx-multi-line-ellipsis.directive';
 export * from './interfaces/cell-click-event.interface';
 export * from './interfaces/component-options.interface';
 export * from './interfaces/data-table-column-definition.interface';
+export * from './interfaces/data-table-column-settings.interface';
+export * from './interfaces/data-table-grouping-header.interface';
 export * from './interfaces/data-with-query-response-details.interface';
 export * from './interfaces/query-function';
 export * from './interfaces/query-request-details.interface';
