@@ -1,4 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceCssPixelValue } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
@@ -251,7 +252,8 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     public elementRef: ElementRef<HTMLElement>,
     private matSortService: MatSortHeaderIntl,
     private localStorage: LocalStorageService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private focusMonitor: FocusMonitor
   ) {}
 
   public sortButtonLabel(id: string) {
@@ -384,7 +386,14 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
       return false;
     }
     if (!sortInfo.sortables.has(id)) {
-      const sortHeader = new MatSortHeader(this.matSortService, this.cdRef, this.sort, <MatColumnDef>{ name: id });
+      const sortHeader = new MatSortHeader(
+        this.matSortService,
+        this.cdRef,
+        this.sort,
+        <MatColumnDef>{ name: id },
+        this.focusMonitor,
+        this.elementRef
+      );
       sortHeader.id = id;
       sortInfo.sortables.set(id, sortHeader);
     }
