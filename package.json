@@ -1,6 +1,6 @@
 {
   "name": "@i-cell/data-table",
-  "version": "1.0.27-ng11-beta.0",
+  "version": "2.0.0-beta.0",
   "scripts": {
     "ng": "ng",
     "build": "ng build",
@@ -16,7 +16,7 @@
     "version:prepatch": "npm --no-git-tag-version version prepatch --preid=beta"
   },
   "private": false,
-  "description": "Data table component for Angular 9 projects @ i-Cell",
+  "description": "Data table component for Angular projects @ i-Cell",
   "main": "src/index.ts",
   "contributors": [
     "Egry Csaba",
