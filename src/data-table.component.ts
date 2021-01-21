@@ -23,7 +23,7 @@ import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sor
 import { MatColumnDef, MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { ResizeEvent } from 'angular-resizable-element';
-import { orderBy as _orderBy } from 'lodash-es';
+import { cloneDeep, orderBy as _orderBy } from 'lodash-es';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
@@ -477,7 +477,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   // click events
   onRowClick(event: MouseEvent, rowData: any) {
-    this.rowClick.emit({ ...event, row: rowData });
+    this.rowClick.emit(Object.assign({}, cloneDeep(event), { row: rowData, originalEvent: event }));
   }
 
   onRowKeyDown(event: KeyboardEvent, rowData: any) {
@@ -485,7 +485,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   onCellClick(event: MouseEvent, cellData: any) {
-    this.cellClick.emit({ ...event, cell: cellData });
+    this.cellClick.emit(Object.assign({}, cloneDeep(event), { cell: cellData, originalEvent: event }));
   }
 
   private getElementWidth(element: HTMLElement | null | undefined): number {
