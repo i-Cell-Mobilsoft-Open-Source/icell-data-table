@@ -16,6 +16,7 @@
   },
   "whitelistedNonPeerDependencies": [
     "tslib",
+    "@angular-devkit/core",
     "@angular/animations",
     "@angular/cdk",
     "@angular/common",
