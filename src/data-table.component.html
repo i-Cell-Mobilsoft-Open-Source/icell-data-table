@@ -215,6 +215,6 @@
     </ng-container>
   </table>
   <div *ngIf="rowCount === 0">
-    <span class="noRowsToShowOverlay">{{ 'ICELL_DATA_TABLE.NOROWSTOSHOW' | translate | sanitize }}</span>
+    <span class="noRowsToShowOverlay" [innerHTML]="'ICELL_DATA_TABLE.NOROWSTOSHOW' | translate | sanitize"></span>
   </div>
 </div>
