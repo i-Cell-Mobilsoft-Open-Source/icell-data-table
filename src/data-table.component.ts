@@ -142,7 +142,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    * Caption of the table.
    */
-  @Input() public caption: string;
+  @Input() public caption: string = '';
 
   private _colDef: DataTableColumnDefinition[] = [];
   private _groupingHeaders: DataTableGroupingHeader[] = [];
