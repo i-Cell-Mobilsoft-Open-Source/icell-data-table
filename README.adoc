@@ -13,6 +13,20 @@ image:https://img.shields.io/github/license/i-Cell-Mobilsoft-Open-Source/icell-d
 npm i _@i-cell/data-table_
 ----
 
+## Requirements
+
+The table supports `Angular v11.1.0` currently. 
+
+In order to use the table, you need to install these dependencies: 
+|===
+| Package | Command to install | Current version |
+| Angular material |  `npm i @angular/material` |   11.1.0 |
+| Angular CDK | `npm i @angular/cdk`  | 11.1.0 |
+| ngx-trasnalte | `npm i ngx-translate` | 13.0.0 |
+| ngx-webstorage | `npm i ngx-webstorage` | 6.0.0 |
+|===
+
+
 == Usage
 
 === Configuration
