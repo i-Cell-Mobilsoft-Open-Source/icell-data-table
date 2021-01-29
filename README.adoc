@@ -37,6 +37,7 @@ NOTE: If you structure your `assets/` folder in a specific way, you have the opt
 
 [source, typescript, subs="verbatim,quotes"]
 ----
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DataTableModule } from '@icell/widget-data-table';
 import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
@@ -49,6 +50,7 @@ const pathToSvg: string = 'assets/path-to-svg/mdi.svg';
   ...
   imports: [
     ...
+    BrowserAnimationsModule
     *DataTableModule.forRoot(pathToSvg),*
     MatTableModule,
     TranslateModule.forRoot(),
