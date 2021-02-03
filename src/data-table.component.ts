@@ -295,35 +295,48 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   ngOnChanges(changes: SimpleChanges) {
     if (changes.columnSettings) {
       this.loadColumnSettings();
-      if (!changes.columnSettings.previousValue) {
-        localeLabels = {
-          ...localeLabels,
-          ...this.columnDefinitions.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
-        };
-        this.originalColumnSettings = [...this.columnDefinitions];
+      if (changes.columnSettings?.firstChange) {
+        this.initializeColumnSettings();
       }
-      this.columnSelection = new SelectionModel<any>(
-        true,
-        this.columnDefinitions.filter((c) => c.visible),
-        true
-      );
-      this.columnSelection.changed.subscribe((chg) => {
-        const origCols = [...this.columnDefinitions];
-        if (chg.added.length > 0) {
-          chg.added.forEach((added) => {
-            origCols.find((col) => col.field === added.field).visible = true;
-          });
-        }
-        if (chg.removed.length > 0) {
-          chg.removed.forEach((removed) => {
-            origCols.find((col) => col.field === removed.field).visible = false;
-          });
-        }
-        this.columnDefinitions = origCols;
-        this.saveColumnSettings();
-        this.setDisplayedColumns();
-      });
+      this.createColumnSelectionModel(changes);
+      this.createColumnSelectionChangeSubscription();
     }
+    this.setDisplayedColumns();
+  }
+
+  private createColumnSelectionModel(changes: SimpleChanges) {
+    this.columnSelection = new SelectionModel<any>(
+      true,
+      changes.columnSettings.currentValue.filter(entry => entry.visible),
+      true,
+    );
+  }
+
+  private initializeColumnSettings() {
+    localeLabels = {
+      ...localeLabels,
+      ...this.columnDefinitions.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
+    };
+    this.originalColumnSettings = [...this.columnDefinitions];
+  }
+
+  private createColumnSelectionChangeSubscription() {
+    this.columnSelection.changed.subscribe((chg) => {
+      const origCols = [...this.columnDefinitions];
+      if (chg.added.length > 0) {
+        chg.added.forEach((added) => {
+          origCols.find((col) => col.field === added.field).visible = true;
+        });
+      }
+      if (chg.removed.length > 0) {
+        chg.removed.forEach((removed) => {
+          origCols.find((col) => col.field === removed.field).visible = false;
+        });
+      }
+      this.columnDefinitions = origCols;
+      this.saveColumnSettings();
+      this.setDisplayedColumns();
+    });
   }
 
   hasGroupingHeaders() {
