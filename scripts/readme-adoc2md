@@ -2,11 +2,11 @@
 ASCIIDOCTOR_BIN=`command -v asciidoctor`
 PANDOC_BIN=`command -v pandoc`
 
-if ! [ -x $ASCIIDOCTOR_BIN ]; then
+if ! [ -x "$ASCIIDOCTOR_BIN" ]; then
   sudo apt install asciidoctor
   ASCIIDOCTOR_BIN=`command -v asciidoctor`
 fi
-if ! [ -x $PANDOC_BIN ]; then
+if ! [ -x "$PANDOC_BIN" ]; then
   sudo wget https://github.com/jgm/pandoc/releases/download/2.0.0.1/pandoc-2.0.0.1-1-amd64.deb
   sudo dpkg -i pandoc-2.0.0.1-1-amd64.deb
   PANDOC_BIN=`command -v pandoc`
