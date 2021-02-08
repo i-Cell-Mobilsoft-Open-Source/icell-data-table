@@ -16,7 +16,7 @@
 
 <!-- icon cell -->
 <ng-template #iconTemplate [cellTemplate]="'iconTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <mat-icon aria-hidden="false" aria-label="row[col.altText]" [svgIcon]="getFieldData(row, col)"></mat-icon>
+  <mat-icon aria-hidden="false" aria-label="{{row[col.altText]}}" [svgIcon]="getFieldData(row, col)"></mat-icon>
 </ng-template>
 
 <!-- component cell -->
