@@ -300,6 +300,8 @@ For translation we utilize `@ngx-translate`.
 
 ==== Run example project
 
+Delete the one line (`//registry.npmjs.org/:_authToken=${NPM_TOKEN}`) from `.npmrc` file in your project, if you want to build on a local environment.
+
 [source, bash]
 ----
 # Build a local version
