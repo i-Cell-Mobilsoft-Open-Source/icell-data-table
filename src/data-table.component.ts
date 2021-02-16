@@ -100,6 +100,16 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    */
   @Input() public useSelection: boolean = false;
   /**
+   * This parameter should point to a boolean attribute in the table rows.
+   * The said row[hideSelectParameter] value will hide / enable the select checkbox if used with useSelection.
+   *
+   * @example
+   * data: [{foo:1, hide: false}, {foo:2, hide: true}, {foo:3, hide:false}]
+   * <ic-data-table [useSelection]=true, [hideSelectParameter]="hide" ... >
+   *   this will result in {a,2} not having a select box in the first column.
+   */
+  @Input() public hideSelectParameter: string = null;
+  /**
    * Use this palette for mat elements
    */
   @Input() public color: ThemePalette = 'primary';
