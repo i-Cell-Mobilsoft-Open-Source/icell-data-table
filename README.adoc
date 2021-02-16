@@ -310,8 +310,7 @@ Delete the one line (`//registry.npmjs.org/:_authToken=${NPM_TOKEN}`) from `.npm
 
 [source, bash]
 ----
-# Build a local version
-npm run build:prod
+# Build and pack a local version
 npm run pack
 # Switch directories
 cd ./examples/icell-data-table-example/
