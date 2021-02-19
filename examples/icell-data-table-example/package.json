@@ -22,7 +22,6 @@
     "@angular/platform-browser": "^11.1.0",
     "@angular/platform-browser-dynamic": "^11.1.0",
     "@angular/router": "^11.1.0",
-    "@i-cell/data-table": "file:../../i-cell-data-table-2.0.3-beta.0.tgz",
     "@ngx-translate/core": "^13.0.0",
     "ngx-webstorage": "^6.0.0",
     "rxjs": "~6.5.4",

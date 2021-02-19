@@ -28,11 +28,24 @@
       </mat-checkbox>
     </button>
   </mat-menu>
+
+  <mat-form-field>
+    <mat-label>{{columnMenuPlaceholder}}</mat-label>
+    <mat-select [formControl]="columnSelectorFormControl" multiple
+                (selectionChange)="handleColumnSelectionChange($event)">
+      <mat-option *ngFor="let colEntry of columnDefinitions"
+                  [value]="colEntry">
+        {{colEntry.label}}</mat-option>
+    </mat-select>
+  </mat-form-field>
 </ng-template>
 
-<div class="">
+<div>
   <div *ngIf="isLoading() | async" [class.loadOverlay]="true">
     <mat-spinner [diameter]="50" [color]="color"></mat-spinner>
+  </div>
+  <div *ngIf="columnMenu">
+    <ng-container [ngTemplateOutlet]="columnMenu"></ng-container>
   </div>
   <table mat-table [id]="customId" [dataSource]="dataSource" multiTemplateDataRows cdkDropListGroup matSort>
     <caption [innerHTML]="caption | translate | sanitize"></caption>
@@ -62,9 +75,6 @@
 
     <!-- column menu -->
     <ng-container matColumnDef="$columnMenu" stickyEnd>
-      <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header">
-        <ng-container [ngTemplateOutlet]="columnMenu"></ng-container>
-      </th>
       <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
         <button *ngIf="row.actions?.length" mat-icon-button [matMenuTriggerFor]="menu" aria-label="">
           <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
