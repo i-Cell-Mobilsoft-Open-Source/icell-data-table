@@ -49,7 +49,7 @@
   <div *ngIf="isLoading() | async" [class.loadOverlay]="true">
     <mat-spinner [diameter]="50" [color]="color"></mat-spinner>
   </div>
-  <div *ngIf="columnMenu">
+  <div *ngIf="showColumnMenu">
     <ng-container [ngTemplateOutlet]="columnMenu"></ng-container>
   </div>
   <table mat-table [id]="customId" [dataSource]="dataSource" multiTemplateDataRows cdkDropListGroup matSort>

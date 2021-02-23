@@ -210,6 +210,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | detailTemplate | `@Input` | `ngTemplateRef` | &#10004;&#65039; | `#defaultTemplate` | Custom user defined *detail* view
 | showDetails |`@Input`  | `boolean` | &#10004;&#65039; | `false` | Flag indicating to render with *detail* rows.
 | useSelection | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to render with checkboxes for multiselect rows.
+| hideSelectParameter | '@Input' | 'string' | &#10004;&#65039; | | Parameter name, a row[hideSelectParameter] value will hide / enable the select checkbox on the given row, if used with useSelection.
 | color | `@Input` | `ThemePalette` | &#10004;&#65039; | `primary` | Use this palette for mat elements.
 | showColumnMenu | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to render column menu.
 | hasSorting | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to enable sorting.
