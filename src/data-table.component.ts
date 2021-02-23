@@ -28,13 +28,12 @@ import { cloneDeep, orderBy as _orderBy } from 'lodash-es';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
-import { CellClickEvent } from './interfaces/cell-click-event.interface';
-import { DataTableColumnDefinition } from './interfaces/data-table-column-definition.interface';
+import { CellClickEvent, DataTableColumnDefinition , RowClickEvent} from './interfaces';
 import { DataTableColumnSettings } from './interfaces/data-table-column-settings.interface';
 import { DataTableGroupingHeader } from './interfaces/data-table-grouping-header.interface';
-import { RowClickEvent } from './interfaces/row-click-event.interface';
 import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
 import { ServerSideDataSource } from './server-side/server-side-data-source';
+import { FormControl } from '@angular/forms';
 
 /**
  *
@@ -95,6 +94,14 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * Flag to render column menu.
    */
   @Input() public showColumnMenu: boolean = true;
+  /**
+   *  Display options for showColumnMenu column selector.
+   */
+  @Input() public columnMenuStyle: 'selectField' | 'dotsMenu' = 'selectField'
+  /**
+   * Default placeholder text for column menu select.
+   */
+  @Input() public columnMenuPlaceholder: string = "Columns";
   /**
    * Flag to render with checkboxes for multiselect rows.
    */
@@ -242,6 +249,8 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     return of(false);
   }
 
+  public columnSelectorFormControl = new FormControl();
+
   public parsedColumnSettings: any[];
   public originalColumnSettings: DataTableColumnDefinition[];
   public actualColumns: string[];
@@ -276,6 +285,11 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
         `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
       ),
     });
+  }
+
+  public handleColumnSelectionChange($event){
+    this.columnSelection.clear();
+    this.columnSelection.select($event.value);
   }
 
   ngOnDestroy() {
@@ -317,9 +331,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   private createColumnSelectionModel(changes: SimpleChanges) {
     this.columnSelection = new SelectionModel<any>(
       true,
-      changes.columnSettings.currentValue.filter(entry => entry.visible),
+      changes.columnSettings.currentValue.filter(entry => entry?.visible),
       true,
     );
+    this.columnSelectorFormControl.patchValue(changes.columnSettings.currentValue.filter(entry => entry?.visible));
   }
 
   private initializeColumnSettings() {
@@ -334,12 +349,12 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     this.columnSelection.changed.subscribe((chg) => {
       const origCols = [...this.columnDefinitions];
       if (chg.added.length > 0) {
-        chg.added.forEach((added) => {
+        chg.added.flat().forEach((added) => {
           origCols.find((col) => col.field === added.field).visible = true;
         });
       }
       if (chg.removed.length > 0) {
-        chg.removed.forEach((removed) => {
+        chg.removed.flat().forEach((removed) => {
           origCols.find((col) => col.field === removed.field).visible = false;
         });
       }
@@ -363,9 +378,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     }
     if (this.useSelection) {
       this.actualColumns.unshift('$selectBoxes'); // elso
-    }
-    if (this.showColumnMenu) {
-      this.actualColumns.push('$columnMenu'); // utolso
     }
   }
 

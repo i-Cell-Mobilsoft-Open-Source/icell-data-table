@@ -2,7 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Inject, InjectionToken, ModuleWithProviders, NgModule, NO_ERRORS_SCHEMA, Optional } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -44,6 +44,7 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatCheckboxModule,
     MatDividerModule,
     MatInputModule,

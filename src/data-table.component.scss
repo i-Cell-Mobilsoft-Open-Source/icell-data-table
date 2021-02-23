@@ -11,6 +11,10 @@ ic-data-table {
   $tablet-width: 720px;
   $app-blue: rgba(48, 153, 197, 255);
 
+  .align-items-right {
+    float: right;
+  }
+
   table {
     width: 100%;
 
@@ -27,6 +31,7 @@ ic-data-table {
 
     tr.detail-row {
       height: 0px;
+
       td,
       th {
         border-bottom-width: 0;
@@ -52,6 +57,7 @@ ic-data-table {
       width: 2.5em;
       border-left-width: 0px !important;
     }
+
     th {
       text-align: left;
       font-weight: normal;
@@ -63,6 +69,7 @@ ic-data-table {
       border-left: 1px solid #efefef;
       padding-left: 8px;
       padding-right: 8px;
+
       &:first-child {
         border-left: none;
       }
