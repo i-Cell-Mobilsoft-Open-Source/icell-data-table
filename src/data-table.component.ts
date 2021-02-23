@@ -93,7 +93,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    * Flag to render column menu.
    */
-  @Input() public showColumnMenu: boolean = true;
+  @Input() public showColumnMenu: boolean = false;
   /**
    *  Display options for showColumnMenu column selector.
    */
