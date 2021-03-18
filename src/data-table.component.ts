@@ -28,7 +28,7 @@ import { cloneDeep, orderBy as _orderBy } from 'lodash-es';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
-import { CellClickEvent, DataTableColumnDefinition , RowClickEvent} from './interfaces';
+import { CellClickEvent, DataTableColumnDefinition, RowClickEvent } from './interfaces';
 import { DataTableColumnSettings } from './interfaces/data-table-column-settings.interface';
 import { DataTableGroupingHeader } from './interfaces/data-table-grouping-header.interface';
 import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
@@ -273,7 +273,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     private localStorage: LocalStorageService,
     private cdRef: ChangeDetectorRef,
     private focusMonitor: FocusMonitor
-  ) {}
+  ) { }
 
   public sortButtonLabel(id: string) {
     if (!localeLabels[id]) {
@@ -287,7 +287,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     });
   }
 
-  public handleColumnSelectionChange($event){
+  public handleColumnSelectionChange($event) {
     this.columnSelection.clear();
     this.columnSelection.select($event.value);
   }
@@ -306,12 +306,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   ngOnInit() {
-    if (Array.isArray(this.columnSettings)) {
-      this.columnDefinitions = this.columnSettings;
-    } else {
-      this.columnDefinitions = this.columnSettings.columnDefinitions;
-      this.groupingHeaders = this.columnSettings.groupingHeaders;
-    }
     this.setDisplayedColumns();
     this.onLangChange = this.trans.onLangChange.subscribe(() => this.matSortService.changes.next());
   }
@@ -338,9 +332,15 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   private initializeColumnSettings() {
+    if (Array.isArray(this.columnSettings)) {
+      this.columnDefinitions = this.columnSettings;
+    } else {
+      this.columnDefinitions = this.columnSettings.columnDefinitions;
+      this.groupingHeaders = this.columnSettings.groupingHeaders;
+    }
     localeLabels = {
       ...localeLabels,
-      ...this.columnDefinitions.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
+      ...this.columnDefinitions?.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
     };
     this.originalColumnSettings = [...this.columnDefinitions];
   }
@@ -508,8 +508,8 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     this.isAllSelected()
       ? this.rowSelection.clear()
       : Array.isArray(this.dataSource)
-      ? this.dataSource.forEach((row) => this.rowSelection.select(row))
-      : this.dataSource.data.forEach((row) => this.rowSelection.select(row));
+        ? this.dataSource.forEach((row) => this.rowSelection.select(row))
+        : this.dataSource.data.forEach((row) => this.rowSelection.select(row));
   }
 
   checkboxLabel(row?: any): string {
