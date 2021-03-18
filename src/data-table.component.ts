@@ -306,12 +306,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   ngOnInit() {
-    if (Array.isArray(this.columnSettings)) {
-      this.columnDefinitions = this.columnSettings;
-    } else {
-      this.columnDefinitions = this.columnSettings.columnDefinitions;
-      this.groupingHeaders = this.columnSettings.groupingHeaders;
-    }
     this.setDisplayedColumns();
     this.onLangChange = this.trans.onLangChange.subscribe(() => this.matSortService.changes.next());
   }
@@ -338,9 +332,15 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   private initializeColumnSettings() {
+    if (Array.isArray(this.columnSettings)) {
+      this.columnDefinitions = this.columnSettings;
+    } else {
+      this.columnDefinitions = this.columnSettings.columnDefinitions;
+      this.groupingHeaders = this.columnSettings.groupingHeaders;
+    }
     localeLabels = {
       ...localeLabels,
-      ...this.columnDefinitions.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
+      ...this.columnDefinitions?.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
     };
     this.originalColumnSettings = [...this.columnDefinitions];
   }
