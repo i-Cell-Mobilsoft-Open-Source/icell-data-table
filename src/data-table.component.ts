@@ -134,7 +134,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * DataSource.
    */
   public get dataSource(): any[] | MatTableDataSource<any> | ServerSideDataSource {
-    return this._dataSource;
+    return this._dataSource ?? new MatTableDataSource([]);
   }
   @Input() public set dataSource(value: any[] | MatTableDataSource<any> | ServerSideDataSource) {
     // If simple array passed make it sortable datasource
