@@ -56,7 +56,7 @@
     <caption [innerHTML]="caption | translate | sanitize"></caption>
     <!-- multiselect -->
     <ng-container matColumnDef="$selectBoxes" sticky>
-      <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header">
+      <th mat-header-cell *matHeaderCellDef scope="col" role="cell" class="master-detail-header">
         <mat-checkbox
           [color]="color"
           (change)="$event ? masterToggle() : null"
