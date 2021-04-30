@@ -15,17 +15,17 @@ npm i _@i-cell/data-table_
 
 ## Requirements
 
-The table supports `Angular v11.1.0` currently. 
+The table supports `Angular v11.1.0` currently.
 
-In order to use the table, you need to install these dependencies: 
+In order to use the table, you need to install these dependencies:
 
 |===
-| Package | Command to install | Current version 
+| Package | Command to install | Current version
 
-| Angular material * |  `npm i @angular/material` |   11.1.0 
-| Angular CDK | `npm i @angular/cdk`  | 11.1.0 
-| ngx-translate | `npm i ngx-translate` | 13.0.0 
-| ngx-webstorage | `npm i ngx-webstorage` | 6.0.0 
+| Angular material * |  `npm i @angular/material` |   11.1.0
+| Angular CDK | `npm i @angular/cdk`  | 11.1.0
+| ngx-translate | `npm i ngx-translate` | 13.0.0
+| ngx-webstorage | `npm i ngx-webstorage` | 6.0.0
 |===
 
 *if you need to add Angular Material to an existing project, make sure to load the required material palettes in your `styles.scss` for the Material theme as well. For example:
@@ -222,6 +222,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | sortingDesc | `@Input` | `string` | &#10004;&#65039; | `sort-descending` | Icon to use for sort descending.
 | rowClass | `@Input` | `function` | &#10004;&#65039; | `() => ''` | Dynamically set per-row CSS class.
 | headerClass | `@Input` | `srting` | &#10004;&#65039; | | Defines the class used by `thead > tr`.
+| useCustomSort | `@Input` | `boolean` | &#10004;&#65039; | | if "true", exposes an output event `sortEvent()` which you can listen to upon the sort trigger - default sorting is prevented in that case."`.
 | rowClick | `@Output` | `RowClickEvent` | &#10004;&#65039; |  | Emitted row click event.
 | cellClick | `@Output` | `CellClickEvent` | &#10004;&#65039; |  | Emitted cell click event.
 | rowKeyDown | `@Output` | `RowKeyDownEvent` | &#10004;&#65039; |  | Emitted row onkeydown event.

@@ -34,6 +34,7 @@ import { DataTableGroupingHeader } from './interfaces/data-table-grouping-header
 import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
 import { ServerSideDataSource } from './server-side/server-side-data-source';
 import { FormControl } from '@angular/forms';
+import { SortEvent } from './interfaces/sort-event.interface';
 
 /**
  *
@@ -225,6 +226,11 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @Input() public headerClass: string = '';
 
   /**
+   * Allows the use of a custom sorting event instead of the built-in one.
+   */
+  @Input() public useCustomSort: boolean = false;
+
+  /**
    * Emitted row click event.
    * @emits (RowClickEvent)
    */
@@ -248,6 +254,13 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     }
     return of(false);
   }
+
+  /**
+   * Emits an event if the `useCustomSort` flag is set true upon clicking
+   * sort on any column header.
+   * @emits (SortEvent)
+   */
+  @Output() public sortEvent: EventEmitter<SortEvent>
 
   public columnSelectorFormControl = new FormControl();
 
@@ -440,11 +453,18 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     return this.isSorted(id) ? sortInfo?.direction : '';
   }
 
-  applySort(id: string) {
-    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
-    const sortable = sortInfo?.sortables.get(id);
-    if (sortInfo) {
-      sortInfo.sort(sortable);
+  sortClickEvent(id: string, col?:DataTableColumnDefinition) {
+    if(this.useCustomSort){
+      this.sortEvent.emit({
+        order: col.orderName,
+        col: col
+      })
+    } else {
+      const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
+      const sortable = sortInfo?.sortables.get(id);
+      if (sortInfo) {
+        sortInfo.sort(sortable);
+      }
     }
   }
 
