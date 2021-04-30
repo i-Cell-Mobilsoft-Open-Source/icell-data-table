@@ -16,12 +16,12 @@
   </div>
 </ng-template>
 
+
 <mat-card>
   <ic-data-table
     class="mat-elevation-z4"
     [columnSettings]="columnDefs"
     [detailTemplate]="detailTemplate"
-    [dataSource]="data"
     [showDetails]="true"
     [useSelection]="true"
     [hideSelectParameter]="'disableSelection'"
@@ -29,7 +29,10 @@
     [showColumnMenu]="true"
     [hasSorting]="true"
     [fixedHeader]="true"
+    [dataSource]="data"
     (rowClick)="rowClick($event)"
     (cellClick)="cellClick($event)"
   ></ic-data-table>
+  <button mat-flat-button (click)="openAll()">Open every detail</button>
+  <button mat-flat-button (click)="closeAll()">Close every detail</button>
 </mat-card>
