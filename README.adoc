@@ -228,12 +228,17 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | rowKeyDown | `@Output` | `RowKeyDownEvent` | &#10004;&#65039; |  | Emitted row onkeydown event.
 |===
 
+
+
+Important: since Ivy, the order of the properties matter.
+Try to set up flags first, and more complex parameters later.
+(e.g. `showDetails` before `dataSource`)
+
 [source, xml]
 .some.html
 ----
 <ic-data-table
   [name]="'table'"
-  [dataSource]="dataSource"
   [columnSettings]="columnSettings"
   [detailTemplate]="detailTemplate"
   [showDetails]="showDetails"
@@ -241,10 +246,17 @@ this.columnSettings: DataTableColumnDefinition[] = [
   [showColumnMenu]="showColumnMenu"
   [hasSorting]="hasSorting"
   [fixedHeader]="fixedHeader"
+  [dataSource]="dataSource"
   (rowClick)="rowClick($event)"
   (cellClick)="cellClick($event)"
 ></ic-data-table>
 ----
+
+==== Table functions
+You can call the following functions directly after selecting the table with `@ViewChild(DataTableComponent, { static: true })`:
+
+* `expandAll()` : Opens up all details, if provided
+* `collapseAll()`: Closes every opened detail view
 
 ==== DataSource configuration
 

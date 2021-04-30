@@ -112,7 +112,7 @@
 
     <ng-container matColumnDef="$expandedDetail">
       <td mat-cell *matCellDef="let row; let idx = index" [attr.colspan]="actualColumns.length">
-        <div class="detail" [@detailExpand]="row.$expanded ? 'expanded' : 'collapsed'">
+        <div class="detail" [@detailExpand]="(row.$expanded || allRowsExpanded) ? 'expanded' : 'collapsed'">
           <ng-container *ngIf="detailTemplate">
             <ng-container *ngTemplateOutlet="detailTemplate; context: { row: row, idx: idx }"></ng-container>
           </ng-container>
@@ -220,7 +220,7 @@
       mat-row
       [ngClass]="rowClass(row)"
       *matRowDef="let row; columns: actualColumns"
-      [class.expanded-detail]="expandedRow === row"
+      [class.expanded-detail]="(expandedRow === row) || allRowsExpanded"
       (click)="onRowClick($event, row)"
       (keydown)="onRowKeyDown($event, row)"
     ></tr>
