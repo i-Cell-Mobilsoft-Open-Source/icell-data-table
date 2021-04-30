@@ -262,6 +262,23 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    */
   @Output() public sortEvent: EventEmitter<SortEvent>
 
+  allRowsExpanded = false;
+
+  /**
+   * Opens up all row details. Use @ViewChild('table') to call this function.
+   */
+  public expandAll(){
+    this.allRowsExpanded = true;
+  }
+
+  /**
+   * closes all opened row details. Use @ViewChild('table') to call this function.
+   */
+  public collapseAll(){
+    this.allRowsExpanded = false;
+    this.expandedRow = null;
+  }
+
   public columnSelectorFormControl = new FormControl();
 
   public parsedColumnSettings: any[];

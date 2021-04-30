@@ -187,4 +187,12 @@ export class AppComponent implements OnInit {
   cellClick(event) {
     console.log('cellClick', event.cell);
   }
+
+  openAll(){
+    this.table.expandAll();
+  }
+
+  closeAll(){
+    this.table.collapseAll();
+  }
 }
