@@ -155,7 +155,7 @@
             mat-icon-button
             type="button"
             [class.grey]="!isSorted(col?.orderName || col?.field)"
-            (click)="applySort(col?.orderName || col?.field)"
+            (click)="sortClickEvent(col?.orderName || col?.field, col)"
             [attr.aria-label]="sortButtonLabel(col?.orderName || col?.field)"
           >
             <ng-container [ngSwitch]="getSortDirection(col?.orderName || col?.field)">
