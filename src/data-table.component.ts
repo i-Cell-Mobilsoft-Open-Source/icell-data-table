@@ -260,7 +260,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * sort on any column header.
    * @emits (SortEvent)
    */
-  @Output() public sortEvent: EventEmitter<SortEvent>
+  @Output() public sortEvent: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
 
   allRowsExpanded = false;
 
