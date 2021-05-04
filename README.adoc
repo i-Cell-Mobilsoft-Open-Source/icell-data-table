@@ -259,11 +259,12 @@ You can call the following functions directly after selecting the table with `@V
 
 ===== Custom Sorting
 The table contains a built-in, custom, MatSort-based sorting for client- and serverside as well.
-If you wish to overwrite this (for instance, use your own `DataSource` and a query-based sorting), you can use the
-following code to overwrite the default sorting mechanism:
+It's plugged in onto the `datasource` of the table (which you can provide).
+If you wish to overwrite it (for instance, use your own `DataSource` and a query-based sorting), you can use the
+following code to modify or remove the default sorting mechanism:
 
 ```
-this.data.sortData = (data: any[], sort: MatSort) => {
+this.yourCustomDatasource.sortData = (data: any[], sort: MatSort) => {
       console.log("sort information: ", sort);
       // implement your sort logic here
     };
