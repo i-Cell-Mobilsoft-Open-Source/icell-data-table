@@ -222,7 +222,6 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | sortingDesc | `@Input` | `string` | &#10004;&#65039; | `sort-descending` | Icon to use for sort descending.
 | rowClass | `@Input` | `function` | &#10004;&#65039; | `() => ''` | Dynamically set per-row CSS class.
 | headerClass | `@Input` | `srting` | &#10004;&#65039; | | Defines the class used by `thead > tr`.
-| useCustomSort | `@Input` | `boolean` | &#10004;&#65039; | | if "true", exposes an output event `sortEvent()` which you can listen to upon the sort trigger - default sorting is prevented in that case."`.
 | rowClick | `@Output` | `RowClickEvent` | &#10004;&#65039; |  | Emitted row click event.
 | cellClick | `@Output` | `CellClickEvent` | &#10004;&#65039; |  | Emitted cell click event.
 | rowKeyDown | `@Output` | `RowKeyDownEvent` | &#10004;&#65039; |  | Emitted row onkeydown event.
@@ -257,6 +256,19 @@ You can call the following functions directly after selecting the table with `@V
 
 * `expandAll()` : Opens up all details, if provided
 * `collapseAll()`: Closes every opened detail view
+
+===== Custom Sorting
+The table contains a built-in, custom, MatSort-based sorting for client- and serverside as well.
+It's plugged in onto the `datasource` of the table (which you can provide).
+If you wish to overwrite it (for instance, use your own `DataSource` and a query-based sorting), you can use the
+following code to modify or remove the default sorting mechanism:
+
+```
+this.yourCustomDatasource.sortData = (data: any[], sort: MatSort) => {
+      console.log("sort information: ", sort);
+      // implement your sort logic here
+    };
+```
 
 ==== DataSource configuration
 
