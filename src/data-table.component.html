@@ -1,5 +1,4 @@
 <cell-templates #cellTemplates></cell-templates>
-
 <ng-template #default let-row="row" let-cols="cols">
   <table [id]="customId" mat-table [dataSource]="row">
     <ng-container *ngFor="let col of generateDefaultColDefs(cols); let colIndex = index" matColumnDef="{{ col.field }}">
