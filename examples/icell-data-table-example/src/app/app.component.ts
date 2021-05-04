@@ -214,8 +214,4 @@ export class AppComponent implements OnInit {
   closeAll(){
     this.table.collapseAll();
   }
-
-  handleSortEvent($event: any) {
-    console.log("sortevent:", $event);
-  }
 }
