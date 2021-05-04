@@ -129,7 +129,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * Flag to have sticky header.
    */
   @Input() public fixedHeader: boolean = false;
-
   private _dataSource: any[] | MatTableDataSource<any> | ServerSideDataSource;
   /**
    * DataSource.
@@ -226,11 +225,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @Input() public headerClass: string = '';
 
   /**
-   * Allows the use of a custom sorting event instead of the built-in one.
-   */
-  @Input() public useCustomSort: boolean = false;
-
-  /**
    * Emitted row click event.
    * @emits (RowClickEvent)
    */
@@ -254,13 +248,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     }
     return of(false);
   }
-
-  /**
-   * Emits an event if the `useCustomSort` flag is set true upon clicking
-   * sort on any column header.
-   * @emits (SortEvent)
-   */
-  @Output() public sortEvent: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
 
   allRowsExpanded = false;
 
@@ -471,17 +458,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   sortClickEvent(id: string, col?:DataTableColumnDefinition) {
-    if(this.useCustomSort){
-      this.sortEvent.emit({
-        order: col.orderName,
-        col: col
-      })
-    } else {
-      const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
-      const sortable = sortInfo?.sortables.get(id);
-      if (sortInfo) {
-        sortInfo.sort(sortable);
-      }
+    const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
+    const sortable = sortInfo?.sortables.get(id);
+    if (sortInfo) {
+      sortInfo.sort(sortable);
     }
   }
 

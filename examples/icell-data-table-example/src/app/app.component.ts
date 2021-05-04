@@ -156,6 +156,25 @@ export class AppComponent implements OnInit {
         parent: this,
       },
     ];
+
+    /**
+     * CUSTOM SORT implementation
+     * * * * * * * * * * * * * * *
+     * @param data: current data in the DataSource
+     * @param sort: MatSort, with information about the requested sort.
+     * Use this, to get the result of a "sort click" and overwrite the sort.
+     * The icon is updated automatically, between undefined - desc - asc
+     * Get the direction from the MatSort object.
+     * You can implement a sort method for client-side sorting,
+     * or do a query and replace the datasource.
+     * Current `return 0` will result in no sorting at all.
+     */
+    this.data.sortData = (data: any[], sort: MatSort) => {
+      console.log('sort information: ', sort);
+      return data.sort((a: any, b: any) => {
+        return 0; // this will return the data without any changes for example.
+      });
+    };
   }
 
   getStaticData(
