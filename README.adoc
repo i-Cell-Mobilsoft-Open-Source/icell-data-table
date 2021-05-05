@@ -159,7 +159,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
   },
   {
     label: 'weight',
-    valueGetter: (item) => (item.type === 'NET' ? item.netWeight : item.grossWeight)
+    valueGetter: (item) => (item.data.type === 'NET' ? item.netWeight : item.grossWeight)
     template: 'numericTemplate',
     sortable: true,
     hideable: true,
