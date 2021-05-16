@@ -11,33 +11,35 @@
 </ng-template>
 
 <ng-template #columnMenu>
-  <div *ngIf="columnMenuStyle==='dotsMenu';else longMenu" class="align-items-right">
+  <div *ngIf="columnMenuStyle === 'dotsMenu'; else longMenu" class="align-items-right">
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="" role="menu">
       <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item *ngFor="let col of columnDefinitions" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
-        <mat-checkbox
-          [color]="color"
-          name="column-checkbox--{{ col.label }}"
-          (click)="$event.stopPropagation()"
-          (change)="$event ? columnSelection.toggle(col) : null"
-          [checked]="columnSelection.isSelected(col)">
-          <span [innerHTML]="col.label | translate | sanitize"></span>
-        </mat-checkbox>
-      </button>
+      <ng-container *ngFor="let col of columnDefinitions">
+        <button mat-menu-item *ngIf="col.hideable" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
+          <mat-checkbox
+            [color]="color"
+            name="column-checkbox--{{ col.label }}"
+            (click)="$event.stopPropagation()"
+            (change)="$event ? columnSelection.toggle(col) : null"
+            [checked]="columnSelection.isSelected(col)"
+          >
+            <span [innerHTML]="col.label | translate | sanitize"></span>
+          </mat-checkbox>
+        </button>
+      </ng-container>
     </mat-menu>
   </div>
 
   <ng-template #longMenu>
     <div class="align-items-right">
       <mat-form-field>
-        <mat-label>{{columnMenuPlaceholder}}</mat-label>
-        <mat-select [formControl]="columnSelectorFormControl" multiple
-                    (selectionChange)="handleColumnSelectionChange($event)">
-          <mat-option *ngFor="let colEntry of columnDefinitions"
-                      [value]="colEntry">
-            {{colEntry.label}}</mat-option>
+        <mat-label>{{ columnMenuPlaceholder }}</mat-label>
+        <mat-select [formControl]="columnSelectorFormControl" multiple (selectionChange)="handleColumnSelectionChange($event)">
+          <ng-container *ngFor="let colEntry of columnDefinitions">
+            <mat-option *ngIf="colEntry.hideable" [value]="colEntry"> {{ colEntry.label }}</mat-option>
+          </ng-container>
         </mat-select>
       </mat-form-field>
     </div>
@@ -66,7 +68,8 @@
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
-        <mat-checkbox *ngIf="hideSelectParameter?!row[hideSelectParameter]:true"
+        <mat-checkbox
+          *ngIf="hideSelectParameter ? !row[hideSelectParameter] : true"
           [color]="color"
           (click)="$event.stopPropagation()"
           (change)="$event ? rowSelection.toggle(row) : null"
@@ -111,7 +114,7 @@
 
     <ng-container matColumnDef="$expandedDetail">
       <td mat-cell *matCellDef="let row; let idx = index" [attr.colspan]="actualColumns.length">
-        <div class="detail" [@detailExpand]="(row.$expanded || allRowsExpanded) ? 'expanded' : 'collapsed'">
+        <div class="detail" [@detailExpand]="row.$expanded || allRowsExpanded ? 'expanded' : 'collapsed'">
           <ng-container *ngIf="detailTemplate">
             <ng-container *ngTemplateOutlet="detailTemplate; context: { row: row, idx: idx }"></ng-container>
           </ng-container>
@@ -219,7 +222,7 @@
       mat-row
       [ngClass]="rowClass(row)"
       *matRowDef="let row; columns: actualColumns"
-      [class.expanded-detail]="(expandedRow === row) || allRowsExpanded"
+      [class.expanded-detail]="expandedRow === row || allRowsExpanded"
       (click)="onRowClick($event, row)"
       (keydown)="onRowKeyDown($event, row)"
     ></tr>
