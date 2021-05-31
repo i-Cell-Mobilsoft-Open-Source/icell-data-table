@@ -98,11 +98,11 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    *  Display options for showColumnMenu column selector.
    */
-  @Input() public columnMenuStyle: 'selectField' | 'dotsMenu' = 'selectField'
+  @Input() public columnMenuStyle: 'selectField' | 'dotsMenu' = 'selectField';
   /**
    * Default placeholder text for column menu select.
    */
-  @Input() public columnMenuPlaceholder: string = "Columns";
+  @Input() public columnMenuPlaceholder: string = 'Columns';
   /**
    * Flag to render with checkboxes for multiselect rows.
    */
@@ -186,6 +186,13 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   }
 
   /**
+   * @expoerimental
+   */
+  public get context() {
+    return this;
+  }
+
+  /**
    * Column settings.
    */
   @Input() public columnSettings: DataTableColumnDefinition[] | DataTableColumnSettings = [];
@@ -225,6 +232,11 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @Input() public headerClass: string = '';
 
   /**
+   * @experimental
+   */
+  @Input() public extensions: TemplateRef<any>[] = [];
+
+  /**
    * Emitted row click event.
    * @emits (RowClickEvent)
    */
@@ -254,14 +266,14 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    * Opens up all row details. Use @ViewChild('table') to call this function.
    */
-  public expandAll(){
+  public expandAll() {
     this.allRowsExpanded = true;
   }
 
   /**
    * closes all opened row details. Use @ViewChild('table') to call this function.
    */
-  public collapseAll(){
+  public collapseAll() {
     this.allRowsExpanded = false;
     this.expandedRow = null;
   }
@@ -290,7 +302,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     private localStorage: LocalStorageService,
     private cdRef: ChangeDetectorRef,
     private focusMonitor: FocusMonitor
-  ) { }
+  ) {}
 
   public sortButtonLabel(id: string) {
     if (!localeLabels[id]) {
@@ -306,7 +318,15 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   public handleColumnSelectionChange($event) {
     this.columnSelection.clear();
-    this.columnSelection.select($event.value);
+    const selectedColumnsWithAlwaysVisibleColumns = [
+      ...new Set([
+        ...$event.value,
+        ...(Array.isArray(this.columnSettings)
+          ? (this.columnSettings as DataTableColumnDefinition[]).filter((i) => !i.hideable && i.visible)
+          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter((i) => !i.hideable && i.visible)),
+      ]),
+    ];
+    this.columnSelection.select(selectedColumnsWithAlwaysVisibleColumns);
   }
 
   ngOnDestroy() {
@@ -342,10 +362,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   private createColumnSelectionModel(changes: SimpleChanges) {
     this.columnSelection = new SelectionModel<any>(
       true,
-      changes.columnSettings.currentValue.filter(entry => entry?.visible),
-      true,
+      changes.columnSettings.currentValue.filter((entry) => entry?.visible),
+      true
     );
-    this.columnSelectorFormControl.patchValue(changes.columnSettings.currentValue.filter(entry => entry?.visible));
+    this.columnSelectorFormControl.patchValue(changes.columnSettings.currentValue.filter((entry) => entry?.visible));
   }
 
   private initializeColumnSettings() {
@@ -367,12 +387,18 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
       const origCols = [...this.columnDefinitions];
       if (chg.added.length > 0) {
         chg.added.flat().forEach((added) => {
-          origCols.find((col) => col.field === added.field).visible = true;
+          const column = origCols.find((col) => col.field === added.field);
+          if (column.hideable) {
+            column.visible = true;
+          }
         });
       }
       if (chg.removed.length > 0) {
         chg.removed.flat().forEach((removed) => {
-          origCols.find((col) => col.field === removed.field).visible = false;
+          const column = origCols.find((col) => col.field === removed.field);
+          if (column.hideable) {
+            column.visible = false;
+          }
         });
       }
       this.columnDefinitions = origCols;
@@ -457,7 +483,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     return this.isSorted(id) ? sortInfo?.direction : '';
   }
 
-  sortClickEvent(id: string, col?:DataTableColumnDefinition) {
+  sortClickEvent(id: string, col?: DataTableColumnDefinition) {
     const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
     const sortable = sortInfo?.sortables.get(id);
     if (sortInfo) {
@@ -525,8 +551,8 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     this.isAllSelected()
       ? this.rowSelection.clear()
       : Array.isArray(this.dataSource)
-        ? this.dataSource.forEach((row) => this.rowSelection.select(row))
-        : this.dataSource.data.forEach((row) => this.rowSelection.select(row));
+      ? this.dataSource.forEach((row) => this.rowSelection.select(row))
+      : this.dataSource.data.forEach((row) => this.rowSelection.select(row));
   }
 
   checkboxLabel(row?: any): string {
