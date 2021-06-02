@@ -1,7 +1,7 @@
 <!-- cell templates -->
 <!-- default cell -->
 <ng-template #labelTemplate [cellTemplate]="'labelTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <div class="cell-content" [innerHTML]="getFieldData(row, col) || ' ' | translate | sanitize"></div>
+  <span class="cell-content" [innerHTML]="getFieldData(row, col) || ' ' | translate | sanitize"></span>
 </ng-template>
 
 <!-- strong cell -->
