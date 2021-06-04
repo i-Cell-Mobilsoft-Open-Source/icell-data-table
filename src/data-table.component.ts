@@ -92,6 +92,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    */
   @Input() public showDetails: boolean = false;
   /**
+   * Flag indicating to render a column header for the *detail* arrows.
+   */
+  @Input() public showDetailHeader: boolean = false;
+  /**
    * Flag to render column menu.
    */
   @Input() public showColumnMenu: boolean = false;
