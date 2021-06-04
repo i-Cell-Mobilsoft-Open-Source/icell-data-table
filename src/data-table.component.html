@@ -104,12 +104,12 @@
       </ng-container>
       <!-- master-detail row definition -->
       <ng-container matColumnDef="$masterDetail" sticky>
-        <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header" [class.master-detail-header--shrink]="!showDetailHeader" [class.master-detail-header--expand]="showDetailHeader">
+        <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header" [class.master-detail-header--expand]="showDetailHeader">
           <span *ngIf="showDetailHeader">
             {{ 'MASTER_DETAIL.HEADER' | translate }}
           </span>
         </th>
-        <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell" [class.master-detail-cell--shrink]="!showDetailHeader" [class.master-detail-cell--expand]="showDetailHeader">
+        <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell" [class.master-detail-cell--expand]="showDetailHeader">
           <button *ngIf="hasDetailRow(idx, row)" mat-icon-button [class.master-detail]="hasDetailRow(idx, row)" (click)="expandRow(row)">
             <mat-icon
               aria-hidden="false"
