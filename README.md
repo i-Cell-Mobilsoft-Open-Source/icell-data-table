@@ -57,7 +57,8 @@ Material theme as well. For example:
 > **Note**
 > 
 > If you structure your `assets/` folder in a specific way, you have the
-> option to set the path of the svg, while you import the module.
+> option to set the path of the svg, while you import the
+module.
 
 ``` typescript
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -321,38 +322,40 @@ this.columnSettings: DataTableColumnDefinition[] = [
 
 ### Table settings
 
-| Attribute           | Binding   | Type                                                  | Optional | Default            | Description                                                                                                                                     |
-| ------------------- | --------- | ----------------------------------------------------- | -------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| name                | `@Input`  | `string`                                              | ✔️       | `''`               | Name of the table.                                                                                                                              |
-| caption             | `@Input`  | `string`                                              | ✔️       | `''`               | Caption of the table.                                                                                                                           |
-| dataSource          | `@Input`  | `any[] \| ServerSideDataSource \| MatTableDataSource` | ❌        | `[]`               | DataSource.                                                                                                                                     |
-| columnSettings      | `@Input`  | `DataTableColumnDefinition[]`                         | ❌        |                    | Column settings.                                                                                                                                |
-| detailTemplate      | `@Input`  | `ngTemplateRef`                                       | ✔️       | `#defaultTemplate` | Custom user defined **detail** view                                                                                                             |
-| showDetails         | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag indicating to render with **detail** rows.                                                                                                 |
-| useSelection        | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to render with checkboxes for multiselect rows.                                                                                            |
-| hideSelectParameter | '@Input'  | 'string'                                              | ✔️       |                    | Parameter name, a row\[hideSelectParameter\] value will hide / enable the select checkbox on the given row, if used with useSelection.          |
-| color               | `@Input`  | `ThemePalette`                                        | ✔️       | `primary`          | Use this palette for mat elements.                                                                                                              |
-| showColumnMenu      | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to render column menu.                                                                                                                     |
-| hasSorting          | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to enable sorting.                                                                                                                         |
-| fixedHeader         | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to have sticky header.                                                                                                                     |
-| detailClosedIcon    | `@Input`  | `string`                                              | ✔️       | `chevron-right`    | Icon to use for closed details.                                                                                                                 |
-| detailOpenIcon      | `@Input`  | `string`                                              | ✔️       | `chevron-down`     | Icon to use for opened details.                                                                                                                 |
-| sortingNoSort       | `@Input`  | `string`                                              | ✔️       | `sort`             | Icon to use for no sort active.                                                                                                                 |
-| sortingAsc          | `@Input`  | `string`                                              | ✔️       | `sort-ascending`   | Icon to use for sort ascending.                                                                                                                 |
-| sortingDesc         | `@Input`  | `string`                                              | ✔️       | `sort-descending`  | Icon to use for sort descending.                                                                                                                |
-| rowClass            | `@Input`  | `function`                                            | ✔️       | `() ⇒ ''`          | Dynamically set per-row CSS class.                                                                                                              |
-| headerClass         | `@Input`  | `srting`                                              | ✔️       |                    | Defines the class used by `thead > tr`.                                                                                                         |
-| useCustomSort       | `@Input`  | `boolean`                                             | ✔️       |                    | if "true", exposes an output event `sortEvent()` which you can listen to upon the sort trigger - default sorting is prevented in that case."\`. |
-| rowClick            | `@Output` | `RowClickEvent`                                       | ✔️       |                    | Emitted row click event.                                                                                                                        |
-| cellClick           | `@Output` | `CellClickEvent`                                      | ✔️       |                    | Emitted cell click event.                                                                                                                       |
-| rowKeyDown          | `@Output` | `RowKeyDownEvent`                                     | ✔️       |                    | Emitted row onkeydown event.                                                                                                                    |
+| Attribute           | Binding   | Type                                                  | Optional | Default            | Description                                                                                                                            |
+| ------------------- | --------- | ----------------------------------------------------- | -------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| name                | `@Input`  | `string`                                              | ✔️       | `''`               | Name of the table.                                                                                                                     |
+| caption             | `@Input`  | `string`                                              | ✔️       | `''`               | Caption of the table.                                                                                                                  |
+| dataSource          | `@Input`  | `any[] \| ServerSideDataSource \| MatTableDataSource` | ❌        | `[]`               | DataSource.                                                                                                                            |
+| columnSettings      | `@Input`  | `DataTableColumnDefinition[]`                         | ❌        |                    | Column settings.                                                                                                                       |
+| detailTemplate      | `@Input`  | `ngTemplateRef`                                       | ✔️       | `#defaultTemplate` | Custom user defined **detail** view                                                                                                    |
+| showDetails         | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag indicating to render with **detail** rows.                                                                                        |
+| useSelection        | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to render with checkboxes for multiselect rows.                                                                                   |
+| hideSelectParameter | '@Input'  | 'string'                                              | ✔️       |                    | Parameter name, a row\[hideSelectParameter\] value will hide / enable the select checkbox on the given row, if used with useSelection. |
+| color               | `@Input`  | `ThemePalette`                                        | ✔️       | `primary`          | Use this palette for mat elements.                                                                                                     |
+| showColumnMenu      | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to render column menu.                                                                                                            |
+| hasSorting          | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to enable sorting.                                                                                                                |
+| fixedHeader         | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to have sticky header.                                                                                                            |
+| detailClosedIcon    | `@Input`  | `string`                                              | ✔️       | `chevron-right`    | Icon to use for closed details.                                                                                                        |
+| detailOpenIcon      | `@Input`  | `string`                                              | ✔️       | `chevron-down`     | Icon to use for opened details.                                                                                                        |
+| sortingNoSort       | `@Input`  | `string`                                              | ✔️       | `sort`             | Icon to use for no sort active.                                                                                                        |
+| sortingAsc          | `@Input`  | `string`                                              | ✔️       | `sort-ascending`   | Icon to use for sort ascending.                                                                                                        |
+| sortingDesc         | `@Input`  | `string`                                              | ✔️       | `sort-descending`  | Icon to use for sort descending.                                                                                                       |
+| rowClass            | `@Input`  | `function`                                            | ✔️       | `() ⇒ ''`          | Dynamically set per-row CSS class.                                                                                                     |
+| headerClass         | `@Input`  | `srting`                                              | ✔️       |                    | Defines the class used by `thead > tr`.                                                                                                |
+| rowClick            | `@Output` | `RowClickEvent`                                       | ✔️       |                    | Emitted row click event.                                                                                                               |
+| cellClick           | `@Output` | `CellClickEvent`                                      | ✔️       |                    | Emitted cell click event.                                                                                                              |
+| rowKeyDown          | `@Output` | `RowKeyDownEvent`                                     | ✔️       |                    | Emitted row onkeydown event.                                                                                                           |
+
+Important: since Ivy, the order of the properties matter. Try to set up
+flags first, and more complex parameters later. (e.g. `showDetails`
+before `dataSource`)
 
 **some.html.**
 
 ``` xml
 <ic-data-table
   [name]="'table'"
-  [dataSource]="dataSource"
   [columnSettings]="columnSettings"
   [detailTemplate]="detailTemplate"
   [showDetails]="showDetails"
@@ -360,10 +363,34 @@ this.columnSettings: DataTableColumnDefinition[] = [
   [showColumnMenu]="showColumnMenu"
   [hasSorting]="hasSorting"
   [fixedHeader]="fixedHeader"
+  [dataSource]="dataSource"
   (rowClick)="rowClick($event)"
   (cellClick)="cellClick($event)"
 ></ic-data-table>
 ```
+
+### Table functions
+
+You can call the following functions directly after selecting the table
+with `@ViewChild(DataTableComponent, { static: true })`:
+
+  - `expandAll()` : Opens up all details, if provided
+
+  - `collapseAll()`: Closes every opened detail view
+
+#### Custom Sorting
+
+The table contains a built-in, custom, MatSort-based sorting for client-
+and serverside as well. It’s plugged in onto the `datasource` of the
+table (which you can provide). If you wish to overwrite it (for
+instance, use your own `DataSource` and a query-based sorting), you can
+use the following code to modify or remove the default sorting
+mechanism:
+
+    this.yourCustomDatasource.sortData = (data: any[], sort: MatSort) => {
+          console.log("sort information: ", sort);
+          // implement your sort logic here
+        };
 
 ### DataSource configuration
 
@@ -420,7 +447,8 @@ For translation we utilize `@ngx-translate`.
     "SORT_BUTTON_LABEL": "Change sorting for {{id}}, {{direction}}.",
     "SORT_NONE": "no sorting",
     "SORT_ASC": "sorting ascending",
-    "SORT_DESC": "sorting descending"
+    "SORT_DESC": "sorting descending",
+    "NOROWSTOSHOW": "No data present."
   }
   ...
 }

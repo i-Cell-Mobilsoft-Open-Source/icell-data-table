@@ -1,18 +1,22 @@
+@import '~@angular/material/theming';
+:host {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  max-width: 100%;
+}
 ic-data-table {
-  :host {
-    position: relative;
-    box-sizing: border-box;
-    display: block;
-    max-width: 100%;
-  }
-
-  @import '~@angular/material/theming';
-
   $tablet-width: 720px;
   $app-blue: rgba(48, 153, 197, 255);
 
   .align-items-right {
     float: right;
+  }
+
+  .horizontal-scroll {
+    position: relative;
+    overflow: auto;
+    width: 100%;
   }
 
   table {
@@ -52,10 +56,17 @@ ic-data-table {
 
     .master-detail-header,
     .master-detail-cell {
-      min-width: 2.5rem;
-      max-width: 2.5rem;
-      width: 2.5em;
       border-left-width: 0px !important;
+      &--expand {
+        padding-left: 8px !important;
+        padding-right: 8px;
+        text-align: center;
+      }
+      &--shrink {
+        min-width: 2.5rem;
+        max-width: 2.5rem;
+        width: 2.5em;
+      }
     }
 
     th {
