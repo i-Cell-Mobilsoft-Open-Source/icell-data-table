@@ -57,15 +57,16 @@ ic-data-table {
     .master-detail-header,
     .master-detail-cell {
       border-left-width: 0px !important;
+      min-width: 2.5rem;
+      max-width: 2.5rem;
+      width: 2.5em;
       &--expand {
         padding-left: 8px !important;
         padding-right: 8px;
         text-align: center;
-      }
-      &--shrink {
-        min-width: 2.5rem;
-        max-width: 2.5rem;
-        width: 2.5em;
+        min-width: unset;
+        max-width: unset;
+        width: unset;
       }
     }
 
