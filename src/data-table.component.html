@@ -113,7 +113,7 @@
           <button *ngIf="hasDetailRow(idx, row)" mat-icon-button [class.master-detail]="hasDetailRow(idx, row)" (click)="expandRow(row)">
             <mat-icon
               aria-hidden="false"
-              [attr.aria-label]="(row.$expanded ? 'MASTER_DETAIL.COLLAPSE' : 'MASTER_DETAIL.EXPAND') | translate | sanitize"
+              [attr.aria-label]="(row.$expanded ? 'MASTER_DETAIL.COLLAPSE' : 'MASTER_DETAIL.EXPAND') | translate"
               [svgIcon]="row.$expanded ? detailOpenIcon : detailClosedIcon"
             ></mat-icon>
           </button>
