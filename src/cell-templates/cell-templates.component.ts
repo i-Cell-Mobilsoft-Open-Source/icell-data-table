@@ -32,6 +32,23 @@ export class CellTemplatesComponent implements OnInit {
     return this.templates.toArray().find((x) => x.name.toLowerCase() === templateName.toLowerCase()).template;
   }
 
+  private preSanitize(input: string) {
+    // Convert & to &amp;, Convert < to &lt;, Convert > to &gt;, Convert " to &quot;, Convert ' to &#x27;, Convert / to &#x2F;
+    const entities = [
+      { rx: '&', entity: '&amp;' },
+      { rx: '<', entity: '&lt;' },
+      { rx: '>', entity: '&gt;' },
+      { rx: '"', entity: '&quot;' },
+      { rx: '\'', entity: '&#x27;' },
+      { rx: '/', entity: '&#x2F;' },
+    ];
+    entities.forEach((item) => {
+      const reg = new RegExp(item.rx, 'g');
+      input = input.replace(reg, item.entity);
+    });
+    return input;
+  }
+
   getFieldData(rowData: any, colDef: DataTableColumnDefinition) {
     if (!colDef) {
       return '';
@@ -40,8 +57,8 @@ export class CellTemplatesComponent implements OnInit {
     let fieldData = '';
 
     if (_isFunction(colDef.valueGetter)) {
-      fieldData = colDef.valueGetter(rowData);
-      return _isNumber(fieldData) ? String(fieldData) : fieldData;
+      fieldData = colDef.valueGetter(rowData) || '';
+      return this.preSanitize(_isNumber(fieldData) ? String(fieldData) : fieldData);
     }
 
     if (_isString(colDef.field)) {
@@ -52,7 +69,7 @@ export class CellTemplatesComponent implements OnInit {
       fieldData = colDef.valueFormatter(fieldData);
     }
 
-    return _isNumber(fieldData) ? String(fieldData) : fieldData;
+    return this.preSanitize(_isNumber(fieldData) ? String(fieldData) : fieldData);
   }
 
   /**
