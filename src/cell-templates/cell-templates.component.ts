@@ -42,10 +42,10 @@ export class CellTemplatesComponent implements OnInit {
       { rx: '\'', entity: '&#x27;' },
       { rx: '/', entity: '&#x2F;' },
     ];
-    for (const v in entities) {
-      const reg = new RegExp(entities[v].rx, 'g');
-      input = input.replace(reg, entities[v].entity);
-    }
+    entities.forEach((item)=> {
+      const reg = new RegExp(item.rx, 'g');
+      input = input.replace(reg, item.entity);
+    });
     return input;
   }
 
