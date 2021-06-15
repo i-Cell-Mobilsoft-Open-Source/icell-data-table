@@ -39,15 +39,14 @@ export class CellTemplatesComponent implements OnInit {
       { rx: '<', entity: '&lt;' },
       { rx: '>', entity: '&gt;' },
       { rx: '"', entity: '&quot;' },
-      { rx: "'", entity: '&#x27;' },
+      { rx: '\'', entity: '&#x27;' },
       { rx: '/', entity: '&#x2F;' },
     ];
-    let result: string = '';
     for (const v in entities) {
       const reg = new RegExp(entities[v].rx, 'g');
-      result = result.replace(reg, entities[v].entity);
+      input = input.replace(reg, entities[v].entity);
     }
-    return result;
+    return input;
   }
 
   getFieldData(rowData: any, colDef: DataTableColumnDefinition) {
