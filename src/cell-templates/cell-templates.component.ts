@@ -57,8 +57,8 @@ export class CellTemplatesComponent implements OnInit {
     let fieldData = '';
 
     if (_isFunction(colDef.valueGetter)) {
-      fieldData = colDef.valueGetter(rowData) || '';
-      return this.preSanitize(_isNumber(fieldData) ? String(fieldData) : fieldData);
+      fieldData = colDef.valueGetter(rowData);
+      return this.preSanitize(_isNumber(fieldData) ? String(fieldData) : fieldData || '');
     }
 
     if (_isString(colDef.field)) {
