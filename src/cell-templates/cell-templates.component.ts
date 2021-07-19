@@ -69,7 +69,7 @@ export class CellTemplatesComponent implements OnInit {
       fieldData = colDef.valueFormatter(fieldData);
     }
 
-    return this.preSanitize(_isNumber(fieldData) ? String(fieldData) : fieldData);
+    return this.preSanitize(_isNumber(fieldData) ? String(fieldData) : fieldData || '');
   }
 
   /**

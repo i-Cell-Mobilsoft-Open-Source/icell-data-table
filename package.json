@@ -1,6 +1,6 @@
 {
   "name": "@i-cell/data-table",
-  "version": "2.0.30",
+  "version": "2.0.31",
   "scripts": {
     "ng": "ng",
     "build": "ng build",
