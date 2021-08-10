@@ -3,7 +3,7 @@ import { DataSource } from '@angular/cdk/table';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { get as _get, isFunction as _isFunction } from 'lodash-es';
+import { get as _get, identity, isFunction as _isFunction } from 'lodash-es';
 import { BehaviorSubject, merge, Observable, of, Subscription } from 'rxjs';
 import { catchError, debounceTime, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { PaginationParams } from '../interfaces';
@@ -41,6 +41,7 @@ export class ServerSideDataSource implements DataSource<any> {
    * @param cdRef Needed to factory a `mat-paginator` component.
    * @param withDetail Flag to extend the response for master-detail representation.
    * @param clearSelectionOnPageChange Flag if set the selection will be cleared on paging.
+   * @param mappingFn A function that maps the requested data from the server to a [DataWithQueryResponseDetails]{@link ServerSideDataSource#DataWithQueryResponseDetails} type.
    */
   constructor(
     private dataSourceEndpoint: QueryFunction,
@@ -51,7 +52,8 @@ export class ServerSideDataSource implements DataSource<any> {
     private paginatorIntl: MatPaginatorIntl,
     private cdRef: ChangeDetectorRef,
     public withDetail: boolean = false,
-    public clearSelectionOnPageChange: boolean = false
+    public clearSelectionOnPageChange: boolean = false,
+    public mappingFn: (resp: any) => DataWithQueryResponseDetails = identity,
   ) {
     if (!_isFunction(this.dataSourceEndpoint)) {
       throw new Error('The `dataSourceEndpoint` argument should be a function!');
@@ -111,6 +113,7 @@ export class ServerSideDataSource implements DataSource<any> {
           }
 
           return request$.pipe(
+            map(this.mappingFn),
             map((data: DataWithQueryResponseDetails) => {
               this.paginator.length = data.paginationParams.totalRows;
               this.paginationParams = {
