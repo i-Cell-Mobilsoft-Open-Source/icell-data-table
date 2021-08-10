@@ -41,7 +41,7 @@ export class ServerSideDataSource implements DataSource<any> {
    * @param cdRef Needed to factory a `mat-paginator` component.
    * @param withDetail Flag to extend the response for master-detail representation.
    * @param clearSelectionOnPageChange Flag if set the selection will be cleared on paging.
-   * @param mappingFn A function that maps the requested data from the server to a [DataWithQueryResponseDetails]{@link ServerSideDataSource#DataWithQueryResponseDetails} type.
+   * @param mappingFn A function that maps the response data from the server to a [DataWithQueryResponseDetails]{@link ServerSideDataSource#DataWithQueryResponseDetails} type.
    */
   constructor(
     private dataSourceEndpoint: QueryFunction,
