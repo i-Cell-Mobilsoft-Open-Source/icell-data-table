@@ -1,6 +1,6 @@
 {
   "name": "@i-cell/data-table",
-  "version": "2.0.32",
+  "version": "2.0.33",
   "scripts": {
     "ng": "ng",
     "build": "ng build",
@@ -25,7 +25,8 @@
     "Onofer Dávid",
     "Szabó Nándor",
     "Szalai József",
-    "Kiss Balázs"
+    "Kiss Balázs",
+    "Süveges Sándor"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",

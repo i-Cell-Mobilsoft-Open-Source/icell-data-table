@@ -35,6 +35,7 @@ import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
 import { ServerSideDataSource } from './server-side/server-side-data-source';
 import { FormControl } from '@angular/forms';
 import { SortEvent } from './interfaces/sort-event.interface';
+import { ColumnSelectionEvent } from './interfaces/column-selection-event.interface';
 
 /**
  *
@@ -255,6 +256,12 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * @emits (RowKeyDownEvent)
    */
   @Output() public rowKeyDown: EventEmitter<RowKeyDownEvent> = new EventEmitter<RowKeyDownEvent>();
+  /**
+   * Emitted column selection event.
+   * @emits (ColumnSelectionEvent)
+   */
+  @Output() public columnSelectionChange: EventEmitter<ColumnSelectionEvent> = new EventEmitter<ColumnSelectionEvent>();
+
   /**
    * @returns True if table is loading data.
    */
@@ -577,6 +584,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   onCellClick(event: MouseEvent, cellData: any) {
     this.cellClick.emit(Object.assign({}, cloneDeep(event), { cell: cellData, originalEvent: event }));
+  }
+
+  onColumnSelectionChange(event: MouseEvent, columnDef: any) {
+    this.columnSelectionChange.emit(Object.assign({}, cloneDeep(event), { column: columnDef, originalEvent: event }));
   }
 
   private getElementWidth(element: HTMLElement | null | undefined): number {
