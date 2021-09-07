@@ -210,7 +210,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | detailTemplate | `@Input` | `ngTemplateRef` | &#10004;&#65039; | `#defaultTemplate` | Custom user defined *detail* view
 | showDetails |`@Input`  | `boolean` | &#10004;&#65039; | `false` | Flag indicating to render with *detail* rows.
 | useSelection | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to render with checkboxes for multiselect rows.
-| hideSelectParameter | '@Input' | 'string' | &#10004;&#65039; | | Parameter name, a row[hideSelectParameter] value will hide / enable the select checkbox on the given row, if used with useSelection.
+| hideSelectParameter | `@Input` | `string` | &#10004;&#65039; |  | Parameter name, a row[hideSelectParameter] value will hide / enable the select checkbox on the given row, if used with useSelection.
 | color | `@Input` | `ThemePalette` | &#10004;&#65039; | `primary` | Use this palette for mat elements.
 | showColumnMenu | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to render column menu.
 | hasSorting | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to enable sorting.
@@ -221,10 +221,11 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | sortingAsc | `@Input` | `string` | &#10004;&#65039; | `sort-ascending` | Icon to use for sort ascending.
 | sortingDesc | `@Input` | `string` | &#10004;&#65039; | `sort-descending` | Icon to use for sort descending.
 | rowClass | `@Input` | `function` | &#10004;&#65039; | `() => ''` | Dynamically set per-row CSS class.
-| headerClass | `@Input` | `srting` | &#10004;&#65039; | | Defines the class used by `thead > tr`.
+| headerClass | `@Input` | `srting` | &#10004;&#65039; |  | Defines the class used by `thead > tr`.
 | rowClick | `@Output` | `RowClickEvent` | &#10004;&#65039; |  | Emitted row click event.
 | cellClick | `@Output` | `CellClickEvent` | &#10004;&#65039; |  | Emitted cell click event.
 | rowKeyDown | `@Output` | `RowKeyDownEvent` | &#10004;&#65039; |  | Emitted row onkeydown event.
+| columnSelectionChange | `@Output` | `ColumnSelectionEvent` | &#10004;&#65039; |  | Emitted column selection event.     
 |===
 
 
@@ -248,6 +249,7 @@ Try to set up flags first, and more complex parameters later.
   [dataSource]="dataSource"
   (rowClick)="rowClick($event)"
   (cellClick)="cellClick($event)"
+  (columnSelectionChange)="columnSelectionChange($event)"
 ></ic-data-table>
 ----
 

@@ -22,7 +22,7 @@
             [color]="color"
             name="column-checkbox--{{ col.label }}"
             (click)="$event.stopPropagation()"
-            (change)="$event ? columnSelection.toggle(col) : null"
+            (change)="$event ? columnSelection.toggle(col) : null; onColumnSelectionChange($event, col)"
             [checked]="columnSelection.isSelected(col)"
           >
             <span [innerHTML]="col.label | translate | sanitize"></span>
@@ -38,7 +38,7 @@
         <mat-label>{{ columnMenuPlaceholder }}</mat-label>
         <mat-select [formControl]="columnSelectorFormControl" multiple (selectionChange)="handleColumnSelectionChange($event)">
           <ng-container *ngFor="let colEntry of columnDefinitions">
-            <mat-option *ngIf="colEntry.hideable" [value]="colEntry"> {{ colEntry.label | translate }}</mat-option>
+            <mat-option *ngIf="colEntry.hideable" [value]="colEntry" (onSelectionChange)="onColumnSelectionChange($event, colEntry)"> {{ colEntry.label | translate }}</mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>
