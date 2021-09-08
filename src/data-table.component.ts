@@ -19,7 +19,8 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
+import { MatOptionSelectionChange, ThemePalette } from '@angular/material/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
 import { MatColumnDef, MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -34,7 +35,6 @@ import { DataTableGroupingHeader } from './interfaces/data-table-grouping-header
 import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
 import { ServerSideDataSource } from './server-side/server-side-data-source';
 import { FormControl } from '@angular/forms';
-import { SortEvent } from './interfaces/sort-event.interface';
 import { ColumnSelectionEvent } from './interfaces/column-selection-event.interface';
 
 /**
@@ -586,8 +586,11 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     this.cellClick.emit(Object.assign({}, cloneDeep(event), { cell: cellData, originalEvent: event }));
   }
 
-  onColumnSelectionChange(event: MouseEvent, columnDef: any) {
-    this.columnSelectionChange.emit(Object.assign({}, cloneDeep(event), { column: columnDef, originalEvent: event }));
+  onColumnSelectionChange(event: MatOptionSelectionChange | MatCheckboxChange, columnDef: DataTableColumnDefinition) {
+    // longMenu and dotsMenu events are slightly different, emit only user triggered events
+    if (('isUserInput' in event && event.isUserInput) || 'checked' in event) {
+      this.columnSelectionChange.emit({ column: columnDef });
+    }
   }
 
   private getElementWidth(element: HTMLElement | null | undefined): number {

@@ -1,4 +1,3 @@
-export interface ColumnSelectionEvent extends MouseEvent {
+export interface ColumnSelectionEvent {
   column: any;
-  originalEvent: any;
 }
