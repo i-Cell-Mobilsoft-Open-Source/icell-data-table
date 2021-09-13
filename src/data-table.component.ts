@@ -211,17 +211,18 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
         ...colDef,
       }
     }
- 
+
     if (columnSetts.hasOwnProperty('length')) {
       this._columnSettings = [
         ...(columnSetts as DataTableColumnDefinition[]).map(setColumndDefsDefaultValues)
       ] as DataTableColumnDefinition[];
     } else {
+      const settings = columnSetts as DataTableColumnSettings;
       this._columnSettings = {
         columnDefinitions: [
-          ...(columnSetts as DataTableColumnSettings).columnDefinitions.map(setColumndDefsDefaultValues)
+          ...settings.columnDefinitions.map(setColumndDefsDefaultValues)
         ],
-        ...((columnSetts as DataTableColumnSettings).groupingHeaders && { groupingHeaders: (columnSetts as DataTableColumnSettings).groupingHeaders })
+        ...(settings.groupingHeaders && { groupingHeaders: settings.groupingHeaders })
       } as DataTableColumnSettings;
     }
   }
