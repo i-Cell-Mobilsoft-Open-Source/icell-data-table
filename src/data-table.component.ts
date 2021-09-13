@@ -197,10 +197,39 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     return this;
   }
 
+  private _columnSettings: DataTableColumnDefinition[] | DataTableColumnSettings = [];
+
   /**
    * Column settings.
    */
-  @Input() public columnSettings: DataTableColumnDefinition[] | DataTableColumnSettings = [];
+  @Input() public set columnSettings(columnSetts: DataTableColumnDefinition[] | DataTableColumnSettings) {
+    const setColumndDefsDefaultValues = (colDef: DataTableColumnDefinition) => {
+      return {
+        label: '',
+        hideable: false,
+        visible: true,
+        ...colDef,
+      }
+    }
+
+    if (columnSetts.hasOwnProperty('length')) {
+      this._columnSettings = [
+        ...(columnSetts as DataTableColumnDefinition[]).map(setColumndDefsDefaultValues)
+      ] as DataTableColumnDefinition[];
+    } else {
+      const settings = columnSetts as DataTableColumnSettings;
+      this._columnSettings = {
+        columnDefinitions: [
+          ...settings.columnDefinitions.map(setColumndDefsDefaultValues)
+        ],
+        ...(settings.groupingHeaders && { groupingHeaders: settings.groupingHeaders })
+      } as DataTableColumnSettings;
+    }
+  }
+
+  public get columnSettings(): DataTableColumnDefinition[] | DataTableColumnSettings {
+    return this._columnSettings;
+  }
 
   /**
    * Custom user defined *detail* view.

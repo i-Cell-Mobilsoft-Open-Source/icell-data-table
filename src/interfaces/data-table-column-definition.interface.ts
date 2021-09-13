@@ -24,17 +24,17 @@ export interface DataTableColumnDefinition {
   /**
    * Column label; can be a localization key.
    */
-  label: string;
+  label?: string;
 
   /**
    * Defines if the column dis hideable.
    */
-  hideable: boolean;
+  hideable?: boolean;
 
   /**
    * Defines if the column is visible. If used with hideable, the column will be in the column menu unchecked.
    */
-  visible: boolean;
+  visible?: boolean;
 
   /**
    * Defines if the column should be sortable.
