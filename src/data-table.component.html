@@ -38,7 +38,9 @@
         <mat-label>{{ columnMenuPlaceholder }}</mat-label>
         <mat-select [formControl]="columnSelectorFormControl" multiple (selectionChange)="handleColumnSelectionChange($event)">
           <ng-container *ngFor="let colEntry of columnDefinitions">
-            <mat-option *ngIf="colEntry.hideable" [value]="colEntry" (onSelectionChange)="onColumnSelectionChange($event, colEntry)"> {{ colEntry.label | translate }}</mat-option>
+            <mat-option *ngIf="colEntry.hideable" [value]="colEntry" (onSelectionChange)="onColumnSelectionChange($event, colEntry)">
+              {{ colEntry.label | translate }}</mat-option
+            >
           </ng-container>
         </mat-select>
       </mat-form-field>
@@ -104,12 +106,23 @@
       </ng-container>
       <!-- master-detail row definition -->
       <ng-container matColumnDef="$masterDetail" sticky>
-        <th mat-header-cell *matHeaderCellDef scope="col" class="master-detail-header" [class.master-detail-header--expand]="showDetailHeader">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="master-detail-header"
+          [class.master-detail-header--expand]="showDetailHeader"
+        >
           <span *ngIf="showDetailHeader">
             {{ 'MASTER_DETAIL.HEADER' | translate }}
           </span>
         </th>
-        <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell" [class.master-detail-cell--expand]="showDetailHeader">
+        <td
+          mat-cell
+          *matCellDef="let row; let idx = index"
+          class="master-detail-cell"
+          [class.master-detail-cell--expand]="showDetailHeader"
+        >
           <button
             *ngIf="hasDetailRow(idx, row)"
             mat-icon-button
@@ -227,15 +240,28 @@
       <!-- row render -->
       <tr
         mat-row
-        [ngClass]="rowClass(row)"
-        *matRowDef="let row; columns: actualColumns"
+        *matRowDef="let row; columns: actualColumns; let idx = dataIndex"
+        [ngClass]="[rowClass(row), idx % 2 === 0 ? evenRowClass : oddRowClass]"
         [class.expanded-detail]="expandedRow === row || allRowsExpanded"
         (click)="onRowClick($event, row)"
         (keydown)="onRowKeyDown($event, row)"
       ></tr>
+      <!-- noDataRow -->
+      <ng-container *ngIf="hasNoRowsToShowOverlayNoBelow">
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="actualColumns.length">
+            <span class="noRowsToShowOverlay" [innerHTML]="'ICELL_DATA_TABLE.NOROWSTOSHOW' | translate | sanitize"></span>
+          </td>
+        </tr>
+      </ng-container>
       <!-- detail row render -->
       <ng-container *ngIf="showDetails">
-        <tr mat-row *matRowDef="let row; columns: ['$expandedDetail']; when: hasDetailRow" class="detail-row"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['$expandedDetail']; let i = dataIndex; when: hasDetailRow"
+          [ngClass]="i % 2 === 0 ? evenRowClass : oddRowClass"
+          class="detail-row"
+        ></tr>
       </ng-container>
     </table>
   </div>
@@ -244,7 +270,7 @@
       <ng-container *ngTemplateOutlet="extension; context: { table: context }"></ng-container>
     </ng-container>
   </div>
-  <div *ngIf="rowCount === 0">
+  <div *ngIf="!hasNoRowsToShowOverlayNoBelow && rowCount === 0">
     <span class="noRowsToShowOverlay" [innerHTML]="'ICELL_DATA_TABLE.NOROWSTOSHOW' | translate | sanitize"></span>
   </div>
 </div>

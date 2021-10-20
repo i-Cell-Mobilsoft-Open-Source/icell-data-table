@@ -5,7 +5,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { get as _get, identity as _identity, isFunction as _isFunction } from 'lodash-es';
 import { BehaviorSubject, merge, Observable, of, Subscription } from 'rxjs';
-import { catchError, debounceTime, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, filter, finalize, first, map, switchMap, tap } from 'rxjs/operators';
 import { PaginationParams } from '../interfaces';
 import { DataWithQueryResponseDetails } from '../interfaces/data-with-query-response-details.interface';
 import { QueryFunction } from '../interfaces/query-function';
@@ -53,7 +53,7 @@ export class ServerSideDataSource implements DataSource<any> {
     private cdRef: ChangeDetectorRef,
     public withDetail: boolean = false,
     public clearSelectionOnPageChange: boolean = false,
-    public mappingFn: (resp: any) => DataWithQueryResponseDetails = _identity,
+    public mappingFn: (resp: any) => DataWithQueryResponseDetails = _identity
   ) {
     if (!_isFunction(this.dataSourceEndpoint)) {
       throw new Error('The `dataSourceEndpoint` argument should be a function!');
@@ -87,6 +87,10 @@ export class ServerSideDataSource implements DataSource<any> {
    */
   public loadData() {
     this.loadDataTriggerSubject.next();
+  }
+
+  public getData() {
+    return this.dataSubject.asObservable()
   }
 
   private initDataLoading() {
