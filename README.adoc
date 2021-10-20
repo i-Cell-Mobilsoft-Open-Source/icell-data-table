@@ -209,6 +209,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | columnSettings | `@Input` | `DataTableColumnDefinition[]` | &#10060; |  | Column settings.
 | detailTemplate | `@Input` | `ngTemplateRef` | &#10004;&#65039; | `#defaultTemplate` | Custom user defined *detail* view
 | showDetails |`@Input`  | `boolean` | &#10004;&#65039; | `false` | Flag indicating to render with *detail* rows.
+| hasNoRowsToShowOverlayNoBelow |`@Input`  | `boolean` | &#10004;&#65039; | `false` | Flag indicating to render no data row in the table or below the table.
 | useSelection | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to render with checkboxes for multiselect rows.
 | hideSelectParameter | `@Input` | `string` | &#10004;&#65039; |  | Parameter name, a row[hideSelectParameter] value will hide / enable the select checkbox on the given row, if used with useSelection.
 | color | `@Input` | `ThemePalette` | &#10004;&#65039; | `primary` | Use this palette for mat elements.
@@ -221,6 +222,8 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | sortingAsc | `@Input` | `string` | &#10004;&#65039; | `sort-ascending` | Icon to use for sort ascending.
 | sortingDesc | `@Input` | `string` | &#10004;&#65039; | `sort-descending` | Icon to use for sort descending.
 | rowClass | `@Input` | `function` | &#10004;&#65039; | `() => ''` | Dynamically set per-row CSS class.
+| evenRowClass | `@Input` | `string` | &#10004;&#65039; |  | Dynamically set even row CSS class.
+| oddRowClass | `@Input` | `string` | &#10004;&#65039; |  | Dynamically set odd row CSS class.
 | headerClass | `@Input` | `srting` | &#10004;&#65039; |  | Defines the class used by `thead > tr`.
 | rowClick | `@Output` | `RowClickEvent` | &#10004;&#65039; |  | Emitted row click event.
 | cellClick | `@Output` | `CellClickEvent` | &#10004;&#65039; |  | Emitted cell click event.
