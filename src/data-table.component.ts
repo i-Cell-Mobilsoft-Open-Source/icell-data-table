@@ -93,6 +93,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    */
   @Input() public showDetails: boolean = false;
   /**
+   * Flag indicating to render no data row in the table or below the table
+   */
+  @Input() public hasNoRowsToShowOverlayNoBelow: boolean = false;
+  /**
    * Flag indicating to render a column header for the *detail* arrows.
    */
   @Input() public showDetailHeader: boolean = false;
@@ -209,20 +213,18 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
         hideable: false,
         visible: true,
         ...colDef,
-      }
-    }
+      };
+    };
 
     if (columnSetts.hasOwnProperty('length')) {
       this._columnSettings = [
-        ...(columnSetts as DataTableColumnDefinition[]).map(setColumndDefsDefaultValues)
+        ...(columnSetts as DataTableColumnDefinition[]).map(setColumndDefsDefaultValues),
       ] as DataTableColumnDefinition[];
     } else {
       const settings = columnSetts as DataTableColumnSettings;
       this._columnSettings = {
-        columnDefinitions: [
-          ...settings.columnDefinitions.map(setColumndDefsDefaultValues)
-        ],
-        ...(settings.groupingHeaders && { groupingHeaders: settings.groupingHeaders })
+        columnDefinitions: [...settings.columnDefinitions.map(setColumndDefsDefaultValues)],
+        ...(settings.groupingHeaders && { groupingHeaders: settings.groupingHeaders }),
       } as DataTableColumnSettings;
     }
   }
@@ -262,6 +264,16 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * Dynamically set per-row CSS class
    */
   @Input() public rowClass: (data: any) => string = () => '';
+
+  /**
+   * Dynamically set even row CSS class
+   */
+  @Input() public evenRowClass: string = '';
+
+  /**
+   * Dynamically set odd row CSS class
+   */
+  @Input() public oddRowClass: string = '';
 
   @Input() public headerClass: string = '';
 

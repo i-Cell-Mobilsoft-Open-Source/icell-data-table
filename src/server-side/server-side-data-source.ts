@@ -53,7 +53,7 @@ export class ServerSideDataSource implements DataSource<any> {
     private cdRef: ChangeDetectorRef,
     public withDetail: boolean = false,
     public clearSelectionOnPageChange: boolean = false,
-    public mappingFn: (resp: any) => DataWithQueryResponseDetails = _identity,
+    public mappingFn: (resp: any) => DataWithQueryResponseDetails = _identity
   ) {
     if (!_isFunction(this.dataSourceEndpoint)) {
       throw new Error('The `dataSourceEndpoint` argument should be a function!');
@@ -87,6 +87,10 @@ export class ServerSideDataSource implements DataSource<any> {
    */
   public loadData() {
     this.loadDataTriggerSubject.next();
+  }
+
+  public getData() {
+    return this.dataSubject.asObservable();
   }
 
   private initDataLoading() {
