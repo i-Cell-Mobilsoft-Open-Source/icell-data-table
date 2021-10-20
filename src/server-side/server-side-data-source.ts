@@ -90,7 +90,7 @@ export class ServerSideDataSource implements DataSource<any> {
   }
 
   public getData() {
-    return this.dataSubject.asObservable()
+    return this.dataSubject.asObservable();
   }
 
   private initDataLoading() {
