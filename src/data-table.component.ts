@@ -206,14 +206,22 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    * Column settings.
    */
+
   @Input() public set columnSettings(columnSetts: DataTableColumnDefinition[] | DataTableColumnSettings) {
+    
+    const setDefaultValue = (colDef, colDefParam, defaultValue) => {
+      if (colDef[colDefParam] === undefined) {
+        colDef[colDefParam] = defaultValue;
+      }
+      return colDef;
+    };
+
     const setColumndDefsDefaultValues = (colDef: DataTableColumnDefinition) => {
-      return {
-        label: '',
-        hideable: false,
-        visible: true,
-        ...colDef,
-      };
+      colDef = setDefaultValue(colDef, 'visible', true);
+      colDef = setDefaultValue(colDef, 'hideable', false);
+      colDef = setDefaultValue(colDef, 'label', '');
+
+      return colDef;
     };
 
     if (columnSetts.hasOwnProperty('length')) {
