@@ -115,6 +115,7 @@ Use with `template = 'componentTemplate'`.
 | identifier | boolean | &#10004;&#65039; |  | Defines if the cell should render as header for a11y reasons.
 | columnClasses | boolean | &#10004;&#65039; |  | Defines custom `CSS` class for the column it self.
 | cellClasses | boolean | &#10004;&#65039; |  | Defines custom `CSS` class for the column cells.
+| sortButtonAriaLabel | string | &#10004;&#65039; |  | Custom aria label for sort button.
 |===
 
 [NOTE]
