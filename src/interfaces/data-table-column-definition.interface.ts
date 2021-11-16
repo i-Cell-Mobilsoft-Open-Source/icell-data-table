@@ -12,6 +12,11 @@ export interface DataTableColumnDefinition {
   orderName?: string;
 
   /**
+   * Custom aria label for sort button
+   */
+  sortButtonAriaLabel?: string;
+
+  /**
    * Callback to transform the cell's data
    */
   valueFormatter?: (data: any) => string;

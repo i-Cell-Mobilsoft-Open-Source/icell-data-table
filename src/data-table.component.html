@@ -179,7 +179,7 @@
               type="button"
               [class.grey]="!isSorted(col?.orderName || col?.field)"
               (click)="sortClickEvent(col?.orderName || col?.field, col)"
-              [attr.aria-label]="sortButtonLabel(col?.orderName || col?.field)"
+              [attr.aria-label]="sortButtonLabel(col)"
             >
               <ng-container [ngSwitch]="getSortDirection(col?.orderName || col?.field)">
                 <mat-icon *ngSwitchCase="''" [svgIcon]="sortingNoSort"></mat-icon>
