@@ -53,8 +53,6 @@ import { ColumnSelectionEvent } from './interfaces/column-selection-event.interf
  * ```
  */
 
-let localeLabels = {};
-
 @Component({
   selector: 'ic-data-table',
   templateUrl: 'data-table.component.html',
@@ -364,12 +362,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     private focusMonitor: FocusMonitor
   ) {}
 
-  public sortButtonLabel(id: string) {
-    if (!localeLabels[id]) {
-      return;
-    }
+  public sortButtonLabel(col: DataTableColumnDefinition) {
+    const id = col.orderName || col.field;
     return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
-      id: this.trans.instant(localeLabels[id]),
+      id: this.trans.instant(col.sortButtonAriaLabel || col.label),
       direction: this.trans.instant(
         `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
       ),
@@ -435,10 +431,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
       this.columnDefinitions = this.columnSettings.columnDefinitions;
       this.groupingHeaders = this.columnSettings.groupingHeaders;
     }
-    localeLabels = {
-      ...localeLabels,
-      ...this.columnDefinitions?.reduce((prev, curr) => ({ ...prev, [curr.orderName || curr.field]: curr.label }), {}),
-    };
     this.originalColumnSettings = [...this.columnDefinitions];
   }
 
