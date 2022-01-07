@@ -226,10 +226,11 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | evenRowClass | `@Input` | `string` | &#10004;&#65039; |  | Dynamically set even row CSS class.
 | oddRowClass | `@Input` | `string` | &#10004;&#65039; |  | Dynamically set odd row CSS class.
 | headerClass | `@Input` | `srting` | &#10004;&#65039; |  | Defines the class used by `thead > tr`.
+| detailStickyColumns | `@Input` | `boolean` | &#10004;&#65039; |  | If set true the detail row will reflect the same sticky column structure.
 | rowClick | `@Output` | `RowClickEvent` | &#10004;&#65039; |  | Emitted row click event.
 | cellClick | `@Output` | `CellClickEvent` | &#10004;&#65039; |  | Emitted cell click event.
 | rowKeyDown | `@Output` | `RowKeyDownEvent` | &#10004;&#65039; |  | Emitted row onkeydown event.
-| columnSelectionChange | `@Output` | `ColumnSelectionEvent` | &#10004;&#65039; |  | Emitted column selection event.     
+| columnSelectionChange | `@Output` | `ColumnSelectionEvent` | &#10004;&#65039; |  | Emitted column selection event.
 |===
 
 
