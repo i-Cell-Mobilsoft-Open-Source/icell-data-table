@@ -206,7 +206,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    */
 
   @Input() public set columnSettings(columnSetts: DataTableColumnDefinition[] | DataTableColumnSettings) {
-    
     const setDefaultValue = (colDef, colDefParam, defaultValue) => {
       if (colDef[colDefParam] === undefined) {
         colDef[colDefParam] = defaultValue;
@@ -283,6 +282,8 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   @Input() public headerClass: string = '';
 
+  @Input() public detailStickyColumns: boolean = false;
+
   /**
    * @experimental
    */
@@ -351,6 +352,8 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   public columnSelection: SelectionModel<any> = new SelectionModel<any>(true, [], true);
   public rowSelection: SelectionModel<any> = new SelectionModel<any>(true, [], true);
+
+  public detailColSpan: number;
 
   constructor(
     public trans: TranslateService,
@@ -474,6 +477,24 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     if (this.useSelection) {
       this.actualColumns.unshift('$selectBoxes'); // elso
     }
+    this.detailColSpan = this.detailStickyColumns
+      ? this.columnDefinitions.filter((c) => !c.sticky && !c.stickyEnd && c.visible).length
+      : this.actualColumns.length;
+  }
+
+  getDetailRowTemplates() {
+    const detailRowTemplates = ['$expandedDetail'];
+    if (this.detailStickyColumns) {
+      detailRowTemplates.unshift(...this.columnDefinitions.filter((c) => c.sticky).map((_) => '$empty'));
+      if (this.showDetails) {
+        detailRowTemplates.unshift('$empty');
+      }
+      if (this.useSelection) {
+        detailRowTemplates.unshift('$empty');
+      }
+      detailRowTemplates.push(...this.columnDefinitions.filter((c) => c.stickyEnd).map((_) => '$emptyEnd'));
+    }
+    return detailRowTemplates;
   }
 
   loadColumnSettings() {
