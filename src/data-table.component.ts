@@ -3,7 +3,6 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceCssPixelValue } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -67,7 +66,7 @@ import { ColumnSelectionEvent } from './interfaces/column-selection-event.interf
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnChanges {
+export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   // cell template holder
   @ViewChild('cellTemplates', { static: true }) public cellTemplates: CellTemplatesComponent;
   @ViewChild(MatSort, { static: true }) public sort: MatSort;
@@ -392,13 +391,6 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     this.destroyedSignal.next(true);
     this.destroyedSignal.complete();
     this.onLangChange.unsubscribe();
-  }
-
-  ngAfterViewInit() {
-    this.matSortService.sortButtonLabel = this.sortButtonLabel.bind(this);
-    // debug localization
-    // this.trans.set('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', 'Change sorting for {{id}}, {{direction}}', 'en');
-    // this.trans.set('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', '{{id}} oszlop sorrendjének megváltoztatása, {{direction}}', 'hu');
   }
 
   ngOnInit() {
