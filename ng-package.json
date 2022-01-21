@@ -3,38 +3,7 @@
   "dest": "./dist",
   "lib": {
     "cssUrl": "none",
-    "entryFile": "src/index.ts",
-    "umdModuleIds": {
-      "@ngx-translate/core": "ngxTranslateCore",
-      "lodash": "lodash",
-      "lodash-es": "lodashEs",
-      "ngx-webstorage": "ngxWebstorage",
-      "angular-resizable-element": "angularResizableElement",
-      "ng-dynamic-component": "ngDynamicComponent",
-      "ngx-multi-line-ellipsis": "ngxMultiLineEllipsis"
-    }
+    "entryFile": "src/index.ts"
   },
-  "whitelistedNonPeerDependencies": [
-    "tslib",
-    "@angular-devkit/core",
-    "@angular/animations",
-    "@angular/cdk",
-    "@angular/common",
-    "@angular/compiler",
-    "@angular/core",
-    "@angular/forms",
-    "@angular/material",
-    "@angular/platform-browser",
-    "@angular/platform-browser-dynamic",
-    "@angular/router",
-    "@mdi/angular-material",
-    "@ngx-translate/core",
-    "angular-resizable-element",
-    "lodash-es",
-    "ng-dynamic-component",
-    "ngx-multi-line-ellipsis",
-    "ngx-webstorage",
-    "rxjs",
-    "zone.js"
-  ]
+  "allowedNonPeerDependencies": ["."]
 }

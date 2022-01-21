@@ -12,16 +12,16 @@ npm i @i-cell/data-table
 
 # Requirements
 
-The table supports `Angular v11.1.0` currently.
+The table supports `Angular v13.1.3` currently.
 
 In order to use the table, you need to install these dependencies:
 
 | Package             | Command to install        | Current version |
 | ------------------- | ------------------------- | --------------- |
-| Angular material \* | `npm i @angular/material` | 11.1.0          |
-| Angular CDK         | `npm i @angular/cdk`      | 11.1.0          |
-| ngx-translate       | `npm i ngx-translate`     | 13.0.0          |
-| ngx-webstorage      | `npm i ngx-webstorage`    | 6.0.0           |
+| Angular material \* | `npm i @angular/material` | 13.1.3          |
+| Angular CDK         | `npm i @angular/cdk`      | 13.1.3          |
+| ngx-translate       | `npm i ngx-translate`     | 14.0.0          |
+| ngx-webstorage      | `npm i ngx-webstorage`    | 9.0.0           |
 
 \*if you need to add Angular Material to an existing project, make sure
 to load the required material palettes in your `styles.scss` for the
