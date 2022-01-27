@@ -17,12 +17,10 @@ import { DataTableColumnDefinition } from '../interfaces';
   selector: 'cell-templates',
   templateUrl: './cell-templates.component.html',
 })
-export class CellTemplatesComponent implements OnInit {
+export class CellTemplatesComponent {
   @ViewChildren(CellTemplateDirective) templates: QueryList<CellTemplateDirective>;
 
   constructor(public translate: TranslateService) {}
-
-  ngOnInit(): void {}
 
   /**
    * @returns The specified template.
