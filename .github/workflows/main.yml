@@ -26,10 +26,10 @@ jobs:
     - name: Install pandoc
       run: sudo wget https://github.com/jgm/pandoc/releases/download/2.0.0.1/pandoc-2.0.0.1-1-amd64.deb; sudo dpkg -i pandoc-2.0.0.1-1-amd64.deb
     - uses: actions/checkout@v1
-    - name: Use Node.js 12.8
+    - name: Use Node.js 16.13
       uses: actions/setup-node@v1
       with:
-        node-version: 12.8
+        node-version: 16.13
     - name: Install dependencies
       run: npm i
       env:
