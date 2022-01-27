@@ -83,7 +83,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * Native table indentifier.
    */
-  /* tslint:disable */
+  /* eslint-disable */
   @Input('id') public customId: string;
   /**
    * Flag indicating to render with *detail* rows.
