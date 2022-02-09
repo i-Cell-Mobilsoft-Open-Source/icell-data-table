@@ -38,7 +38,7 @@
   },
   "peerDependencies": {
     "@mdi/angular-material": "^6.5.95",
-    "angular-resizable-element": "^4.0.0",
+    "angular-resizable-element": "^5.0.0",
     "lodash-es": "^4.17.21",
     "ng-dynamic-component": "^10.1.0"
   },
