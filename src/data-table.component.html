@@ -61,7 +61,7 @@
     </ng-container>
   </div>
   <div class="horizontal-scroll">
-    <table mat-table [id]="customId" [dataSource]="dataSource" multiTemplateDataRows cdkDropListGroup matSort>
+    <table mat-table [id]="customId" [dataSource]="dataSource" (contentChanged)="tableContentChanged()" multiTemplateDataRows cdkDropListGroup matSort>
       <caption [innerHTML]="caption | translate | sanitize"></caption>
       <!-- multiselect -->
       <ng-container matColumnDef="$selectBoxes" sticky>
@@ -72,6 +72,7 @@
             [checked]="rowSelection.hasValue() && isAllSelected()"
             [indeterminate]="rowSelection.hasValue() && !isAllSelected()"
             [aria-label]="checkboxLabel()"
+            [disabled]="isHeaderCheckboxDisabled()"
           >
           </mat-checkbox>
         </th>
@@ -83,6 +84,7 @@
             (change)="$event ? rowSelection.toggle(row) : null"
             [checked]="rowSelection.isSelected(row)"
             [aria-label]="checkboxLabel(row)"
+            [disabled]="rowSelectionDisabledStates.get(row)"
           >
           </mat-checkbox>
         </td>
