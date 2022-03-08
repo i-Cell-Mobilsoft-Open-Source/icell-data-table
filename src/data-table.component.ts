@@ -18,8 +18,9 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { MatOptionSelectionChange, ThemePalette } from '@angular/material/core';
+import { FormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatOptionSelectionChange, ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
 import { MatColumnDef, MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -29,12 +30,11 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
 import { CellClickEvent, DataTableColumnDefinition, RowClickEvent } from './interfaces';
+import { ColumnSelectionEvent } from './interfaces/column-selection-event.interface';
 import { DataTableColumnSettings } from './interfaces/data-table-column-settings.interface';
 import { DataTableGroupingHeader } from './interfaces/data-table-grouping-header.interface';
 import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
 import { ServerSideDataSource } from './server-side/server-side-data-source';
-import { FormControl } from '@angular/forms';
-import { ColumnSelectionEvent } from './interfaces/column-selection-event.interface';
 
 /**
  *
@@ -114,6 +114,10 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
    */
   @Input() public useSelection: boolean = false;
   /**
+   * Function to set row checkbox disabled status.
+   */
+  @Input() public isSelectionDisabledForRow: (row: any) => boolean;
+  /**
    * This parameter should point to a boolean attribute in the table rows.
    * The said row[hideSelectParameter] value will hide / enable the select checkbox if used with useSelection.
    *
@@ -170,6 +174,8 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
   private _colDef: DataTableColumnDefinition[] = [];
   private _groupingHeaders: DataTableGroupingHeader[] = [];
+
+  public rowSelectionDisabledStates = new Map<any, boolean>();
 
   /**
    * Column Definitions.
@@ -609,15 +615,24 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   // selection checkboxes
   isAllSelected() {
     const numSelected = this.rowSelection.selected.length;
-    return numSelected === this.rowCount;
+    const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data
+    const activeRowCount = data.reduce((count, row) => {
+      return this.rowSelectionDisabledStates.get(row) ? count : count + 1;
+    }, 0)
+    return numSelected === activeRowCount;
   }
 
   masterToggle() {
-    this.isAllSelected()
-      ? this.rowSelection.clear()
-      : Array.isArray(this.dataSource)
-      ? this.dataSource.forEach((row) => this.rowSelection.select(row))
-      : this.dataSource.data.forEach((row) => this.rowSelection.select(row));
+    if (this.isAllSelected()) {
+      this.rowSelection.clear();
+      return;
+    }
+    const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data
+    data.forEach((row) => {
+      if (!this.rowSelectionDisabledStates.get(row)) {
+        this.rowSelection.select(row);
+      }
+    })
   }
 
   checkboxLabel(row?: any): string {
@@ -644,6 +659,19 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     // longMenu and dotsMenu events are slightly different, emit only user triggered events
     if (('isUserInput' in event && event.isUserInput) || 'checked' in event) {
       this.columnSelectionChange.emit({ column: columnDef });
+    }
+  }
+
+  isHeaderCheckboxDisabled() {
+    return Array.from(this.rowSelectionDisabledStates.values()).every((disabledState) => disabledState === true);
+  }
+
+  tableContentChanged() {
+    this.rowSelectionDisabledStates.clear();
+    if (this._dataSource instanceof MatTableDataSource || this._dataSource instanceof ServerSideDataSource) {
+      this._dataSource.data?.forEach((row) => {
+        this.rowSelectionDisabledStates.set(row, this.isSelectionDisabledForRow?.(row) ?? false);
+      })
     }
   }
 
