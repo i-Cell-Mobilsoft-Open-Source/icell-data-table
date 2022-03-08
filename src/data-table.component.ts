@@ -118,6 +118,10 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
    */
   @Input() public isSelectionDisabledForRow: (row: any) => boolean;
   /**
+   * Function to provide custom functionality when contentchanged event happened.
+   */
+  @Input() public tablecontentChangedCallback: (value?: any) => any;
+  /**
    * This parameter should point to a boolean attribute in the table rows.
    * The said row[hideSelectParameter] value will hide / enable the select checkbox if used with useSelection.
    *
@@ -616,7 +620,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   isAllSelected() {
     const numSelected = this.rowSelection.selected.length;
     const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data
-    const activeRowCount = data.reduce((count, row) => {
+    const activeRowCount = data?.reduce((count, row) => {
       return this.rowSelectionDisabledStates.get(row) ? count : count + 1;
     }, 0)
     return numSelected === activeRowCount;
@@ -667,6 +671,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   tableContentChanged() {
+    this.tablecontentChangedCallback?.();
     this.rowSelectionDisabledStates.clear();
     if (this._dataSource instanceof MatTableDataSource || this._dataSource instanceof ServerSideDataSource) {
       this._dataSource.data?.forEach((row) => {
