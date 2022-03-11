@@ -672,6 +672,10 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
   tableContentChanged() {
     this.tablecontentChangedCallback?.();
+    this.updateSelectionDisabledStates();
+  }
+
+  updateSelectionDisabledStates() {
     this.rowSelectionDisabledStates.clear();
     if (this._dataSource instanceof MatTableDataSource || this._dataSource instanceof ServerSideDataSource) {
       this._dataSource.data?.forEach((row) => {
