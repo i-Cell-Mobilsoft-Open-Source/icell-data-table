@@ -9,8 +9,10 @@ ic-data-table {
   $tablet-width: 720px;
   $app-blue: rgba(48, 153, 197, 255);
 
-  .align-items-right {
-    float: right;
+  .align-items-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .horizontal-scroll {
@@ -123,4 +125,185 @@ ic-data-table {
     justify-content: center;
     text-align: center;
   }
+}
+
+.drag-menu {
+  border: solid 1px #e2e2e2;
+  border-radius: 4px;
+  background: white;
+
+  .mat-slide-toggle.cdk-focused .mat-ripple {
+    border: 1px solid rgb(42, 105, 178);
+    background-color: rgba(42, 105, 178, 0.12);
+    border-radius: 100%;
+  }
+
+  &__button {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+
+    &-disabled {
+      color: #a7a7a7;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: rgba(42, 105, 178, 0.12);
+
+    &_left-wrapper,
+    &_right-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    &_left-wrapper {
+      gap: 8px;
+    }
+
+    &_right-wrapper {
+      gap: 16px;
+    }
+
+    &_title {
+      margin: 0 !important;
+      font-size: 14px !important;
+      line-height: 24px !important;
+    }
+
+    &_switch-all-col-on-button,
+    &_switch-all-col-off-button {
+      line-height: 24px;
+      padding: 0 8px;
+
+      &:focus {
+        outline: 1px solid rgb(42, 105, 178);
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-top: solid 1px #e2e2e2;
+    
+    &_left-wrapper,
+    &_right-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    &_right-wrapper {
+      gap: 16px;
+    }
+
+    &_switch-to-default-button {
+      line-height: 24px;
+      padding: 0 8px;
+
+      &:focus {
+        outline: 1px solid rgb(42, 105, 178);
+      }
+    }
+
+    &_cancel-button,
+    &_save-button {
+      line-height: 44px;
+      font-size: 16px;
+    }
+
+    &_cancel-button {
+      &:focus {
+        outline: 1px solid rgb(42, 105, 178);
+      }
+    }
+
+    &_save-button {
+      &:focus {
+        outline: 1px solid black;
+      }
+    }
+  }
+
+  &__list {
+    min-width: 500px;
+    min-height: 50px;
+    max-height: 300px;
+    overflow: scroll;
+    /* Hide scrollbar for IE, Edge and Firefox */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+
+    &_item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: solid 1px #e2e2e2;
+      border-radius: 4px;
+      margin: 4px;
+      padding: 8px;
+      box-sizing: border-box;
+      background: white;
+      font-size: 14px;
+      word-break: break-all;
+
+      &-left-wrapper,
+      &-right-wrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      &-left-wrapper {
+        gap: 8px;
+      }
+
+      &-label {
+        padding-top: 2px;
+      }
+  
+      &-placeholder {
+        max-width: calc(100% - 8px);
+        min-height: 42px;
+        margin-top: 4px;
+        margin-left: 4px;
+        border: dashed 2px rgb(42, 105, 178);
+        border-radius: 4px;
+        background: rgba(42, 105, 178, 0.12);
+        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+      }
+  
+      &-handle {
+        display: flex;
+        cursor: move;
+      }
+  
+      .cdk-drag-disabled {
+        background: rgba(128, 128, 128, 0.15);
+        cursor: default;
+      }
+    }
+
+    .cdk-drop-list-dragging .drag-menu__list_item:not(.cdk-drag-placeholder) {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

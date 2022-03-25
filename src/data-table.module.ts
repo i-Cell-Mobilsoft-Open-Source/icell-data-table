@@ -1,4 +1,6 @@
+import { A11yModule } from '@angular/cdk/a11y'
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Inject, InjectionToken, ModuleWithProviders, NgModule, NO_ERRORS_SCHEMA, Optional } from '@angular/core';
@@ -15,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortHeaderIntl, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
@@ -42,6 +45,7 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
  */
 @NgModule({
   imports: [
+    A11yModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -52,6 +56,7 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
     MatTableModule,
     MatTooltipModule,
     MatSortModule,
+    MatSlideToggleModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatButtonModule,
@@ -64,6 +69,7 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
     // DynamicIoModule,
     HttpClientModule,
     DragDropModule,
+    OverlayModule,
   ],
   declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective, SanitizeTranformPipe],
   exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective, SanitizeTranformPipe],

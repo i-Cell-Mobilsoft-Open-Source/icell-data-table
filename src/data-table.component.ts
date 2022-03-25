@@ -2,6 +2,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceCssPixelValue } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
+import { hasModifierKey } from '@angular/cdk/keycodes';
+import { ConnectionPositionPair } from '@angular/cdk/overlay';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -25,7 +28,7 @@ import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sor
 import { MatColumnDef, MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { ResizeEvent } from 'angular-resizable-element';
-import { cloneDeep, orderBy as _orderBy } from 'lodash-es';
+import { clone, cloneDeep, orderBy as _orderBy } from 'lodash-es';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
@@ -104,7 +107,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   /**
    *  Display options for showColumnMenu column selector.
    */
-  @Input() public columnMenuStyle: 'selectField' | 'dotsMenu' = 'selectField';
+  @Input() public columnMenuStyle: 'selectField' | 'dotsMenu' | 'dragMenu' = 'selectField';
   /**
    * Default placeholder text for column menu select.
    */
@@ -350,6 +353,8 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
   public parsedColumnSettings: any[];
   public originalColumnSettings: DataTableColumnDefinition[];
+  private dragMenuOriginalColDefs: DataTableColumnDefinition[];
+  private remainingOriginalColDefs: DataTableColumnDefinition[] = [];
   public actualColumns: string[];
   public groupingColumns: string[];
   public isResizing: boolean;
@@ -363,6 +368,20 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   public rowSelection: SelectionModel<any> = new SelectionModel<any>(true, [], true);
 
   public detailColSpan: number;
+
+  public isDragMenuOpen: boolean = false;
+  public dragMenuPositions: ConnectionPositionPair[] = [
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetX: -48,
+      offsetY: -12,
+    },
+  ];
+  public dragMenuColDefs: DataTableColumnDefinition[] = [];
+  private previousDragMenuColDefs: DataTableColumnDefinition[] = [];
 
   constructor(
     public trans: TranslateService,
@@ -404,20 +423,25 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
+    if (this.columnMenuStyle === 'dragMenu') {
+      this.initializeDragMenuSettings();
+    }
     this.setDisplayedColumns();
     this.onLangChange = this.trans.onLangChange.subscribe(() => this.matSortService.changes.next());
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.columnSettings) {
-      this.loadColumnSettings();
-      if (changes.columnSettings?.firstChange) {
-        this.initializeColumnSettings();
+    if (this.columnMenuStyle !== 'dragMenu') {
+      if (changes.columnSettings ) {
+        this.loadColumnSettings();
+        if (changes.columnSettings?.firstChange) {
+          this.initializeColumnSettings();
+        }
+        this.createColumnSelectionModel(changes);
+        this.createColumnSelectionChangeSubscription();
       }
-      this.createColumnSelectionModel(changes);
-      this.createColumnSelectionChangeSubscription();
+      this.setDisplayedColumns();
     }
-    this.setDisplayedColumns();
   }
 
   private createColumnSelectionModel(changes: SimpleChanges) {
@@ -436,7 +460,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       this.columnDefinitions = this.columnSettings.columnDefinitions;
       this.groupingHeaders = this.columnSettings.groupingHeaders;
     }
-    this.originalColumnSettings = [...this.columnDefinitions];
+    this.originalColumnSettings = this.columnDefinitions;
   }
 
   private createColumnSelectionChangeSubscription() {
@@ -462,6 +486,14 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       this.saveColumnSettings();
       this.setDisplayedColumns();
     });
+  }
+
+  private initializeDragMenuSettings() {
+    if (Array.isArray(this.columnSettings)) {
+      this.dragMenuOriginalColDefs = this.columnSettings.filter((colDef) => !colDef['actionColumn'] && (colDef.visible || colDef.hideable));
+      this.remainingOriginalColDefs = this.columnSettings.filter((colDef) => colDef['actionColumn'] || (!colDef.visible && !colDef.hideable));
+      this.loadDragMenuColDefs(this.columnSettings);
+    }
   }
 
   hasGroupingHeaders() {
@@ -497,6 +529,36 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       detailRowTemplates.push(...this.columnDefinitions.filter((c) => c.stickyEnd).map((_) => '$emptyEnd'));
     }
     return detailRowTemplates;
+  }
+
+  loadDragMenuColDefs(columnSettings: DataTableColumnDefinition[]) {
+    const storedColumnSettings = this.localStorage.retrieve(`table-drag-menu-settings-${this.name}`);
+
+    if (storedColumnSettings) {
+      const dragMenuColDefs: DataTableColumnDefinition[] = [];
+      // the storedColumnSettings determine the order of the columns
+      storedColumnSettings.forEach((scs: DataTableColumnDefinition) => {
+        const colDefArray = columnSettings.filter(cd => cd.field === scs.field);
+        if (colDefArray.length) {
+          // shallow copy is enough due to performance reason
+          const colDef = clone(colDefArray[0]);
+          colDef.visible = scs.visible;
+          dragMenuColDefs.push(colDef);
+        }
+      });
+      this.dragMenuColDefs = dragMenuColDefs;
+      this.columnDefinitions = [...dragMenuColDefs, ...this.remainingOriginalColDefs];
+    } else {
+      // shallow copy is necessary on the array item not on the array
+      this.dragMenuColDefs = this.dragMenuOriginalColDefs.map((colDef) => clone(colDef));
+      this.columnDefinitions = [...this.dragMenuOriginalColDefs, ...this.remainingOriginalColDefs];
+    }
+  }
+
+  saveDragMenuColDefs() {
+    const storageName = `table-drag-menu-settings-${this.name}`;
+    const dragMenuColDefsToStore = this.dragMenuColDefs.map((dragMenuColDef) => ({ field: dragMenuColDef.field, visible: dragMenuColDef.visible }));
+    this.localStorage.store(storageName, dragMenuColDefsToStore);
   }
 
   loadColumnSettings() {
@@ -682,6 +744,57 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
         this.rowSelectionDisabledStates.set(row, this.isSelectionDisabledForRow?.(row) ?? false);
       })
     }
+  }
+
+  triggerDragMenu(open = true) {
+    if (open) {
+      this.previousDragMenuColDefs = this.dragMenuColDefs.map((colDef) => clone(colDef));
+    } else {
+      this.dragMenuColDefs = this.previousDragMenuColDefs.map((colDef) => clone(colDef));
+    }
+    this.isDragMenuOpen = open;
+    this.cdRef.markForCheck();
+  }
+
+  updateDragMenuOpen(event: KeyboardEvent) {
+    if (event.code === 'Escape' && !hasModifierKey(event)) {
+      this.triggerDragMenu(false);
+    }
+  }
+
+  drop(event: CdkDragDrop<any[]>) {
+    if (event.currentIndex !== event.previousIndex) {
+      moveItemInArray(this.dragMenuColDefs, event.previousIndex, event.currentIndex);
+    }
+  }
+
+  moveOnePosition(colEntry: DataTableColumnDefinition, direction: number) {
+    const previousIndex = this.dragMenuColDefs.indexOf(colEntry);
+    const currentIndex = previousIndex + direction;
+    if (currentIndex !== previousIndex && currentIndex >= 0 && currentIndex < this.dragMenuColDefs.length) {
+      moveItemInArray(this.dragMenuColDefs, previousIndex, currentIndex);
+    }
+  }
+
+  switchAllColTo(state: boolean) {
+    this.dragMenuColDefs.forEach((colDef) => {
+      if (colDef.hideable) {
+        colDef.visible = state;
+      }
+    });
+  }
+
+  switchColDefsToDefault() {
+    this.dragMenuColDefs = this.dragMenuOriginalColDefs.map((colDef) => clone(colDef));
+  }
+
+  saveColDefs() {
+    const dragMenuColDefs = this.dragMenuColDefs.map((colDef) => clone(colDef));
+    this.columnDefinitions = [...dragMenuColDefs, ...this.remainingOriginalColDefs];
+    this.saveDragMenuColDefs();
+    this.setDisplayedColumns();
+    this.isDragMenuOpen = false;
+    this.cdRef.markForCheck();
   }
 
   private getElementWidth(element: HTMLElement | null | undefined): number {
