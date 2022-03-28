@@ -47,6 +47,11 @@ export interface DataTableColumnDefinition {
   sortable?: boolean;
 
   /**
+   * Defines if the column is for actions.
+   */
+   actionColumn?: boolean;
+
+  /**
    * Defines if the column should be sticky at the begining of the table.
    */
   sticky?: boolean;
