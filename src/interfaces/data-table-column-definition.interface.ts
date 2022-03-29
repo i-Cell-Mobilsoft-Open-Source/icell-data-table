@@ -32,7 +32,7 @@ export interface DataTableColumnDefinition {
   label?: string;
 
   /**
-   * Defines if the column dis hideable.
+   * Defines if the column is hideable.
    */
   hideable?: boolean;
 
@@ -45,6 +45,11 @@ export interface DataTableColumnDefinition {
    * Defines if the column should be sortable.
    */
   sortable?: boolean;
+
+  /**
+   * Defines if the column is for actions.
+   */
+   actionColumn?: boolean;
 
   /**
    * Defines if the column should be sticky at the begining of the table.

@@ -351,10 +351,8 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
   public columnSelectorFormControl = new FormControl();
 
-  public parsedColumnSettings: any[];
-  public originalColumnSettings: DataTableColumnDefinition[];
-  private dragMenuOriginalColDefs: DataTableColumnDefinition[];
-  private remainingOriginalColDefs: DataTableColumnDefinition[] = [];
+  private originalHideableColDefs: DataTableColumnDefinition[];
+  private originalUnsetableColDefs: DataTableColumnDefinition[] = [];
   public actualColumns: string[];
   public groupingColumns: string[];
   public isResizing: boolean;
@@ -393,35 +391,6 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     private focusMonitor: FocusMonitor
   ) {}
 
-  public sortButtonLabel(col: DataTableColumnDefinition) {
-    const id = col.orderName || col.field;
-    return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
-      id: this.trans.instant(col.sortButtonAriaLabel || col.label),
-      direction: this.trans.instant(
-        `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
-      ),
-    });
-  }
-
-  public handleColumnSelectionChange($event) {
-    this.columnSelection.clear();
-    const selectedColumnsWithAlwaysVisibleColumns = [
-      ...new Set([
-        ...$event.value,
-        ...(Array.isArray(this.columnSettings)
-          ? (this.columnSettings as DataTableColumnDefinition[]).filter((i) => !i.hideable && i.visible)
-          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter((i) => !i.hideable && i.visible)),
-      ]),
-    ];
-    this.columnSelection.select(selectedColumnsWithAlwaysVisibleColumns);
-  }
-
-  ngOnDestroy() {
-    this.destroyedSignal.next(true);
-    this.destroyedSignal.complete();
-    this.onLangChange.unsubscribe();
-  }
-
   ngOnInit() {
     if (this.columnMenuStyle === 'dragMenu') {
       this.initializeDragMenuSettings();
@@ -431,16 +400,39 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.columnMenuStyle !== 'dragMenu') {
-      if (changes.columnSettings ) {
-        this.loadColumnSettings();
-        if (changes.columnSettings?.firstChange) {
-          this.initializeColumnSettings();
-        }
+    if (this.columnMenuStyle !== 'dragMenu' && changes.columnSettings) {
+      if (changes.columnSettings.firstChange) {
+        this.initializeColumnSettings();
+      }
+      if (this.showColumnMenu) {
+        this.loadColDefs();
         this.createColumnSelectionModel(changes);
         this.createColumnSelectionChangeSubscription();
       }
       this.setDisplayedColumns();
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroyedSignal.next(true);
+    this.destroyedSignal.complete();
+    this.onLangChange.unsubscribe();
+  }
+
+  private initializeDragMenuSettings() {
+    if (Array.isArray(this.columnSettings)) {
+      this.originalHideableColDefs = this.columnSettings.filter((colDef) => !colDef.actionColumn && (colDef.visible || colDef.hideable));
+      this.originalUnsetableColDefs = this.columnSettings.filter((colDef) => colDef.actionColumn || (!colDef.visible && !colDef.hideable));
+      this.loadDragMenuColDefs(this.columnSettings);
+    }
+  }
+
+  private initializeColumnSettings() {
+    if (Array.isArray(this.columnSettings)) {
+      this.columnDefinitions = this.columnSettings;
+    } else {
+      this.columnDefinitions = this.columnSettings.columnDefinitions;
+      this.groupingHeaders = this.columnSettings.groupingHeaders;
     }
   }
 
@@ -451,16 +443,6 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       true
     );
     this.columnSelectorFormControl.patchValue(changes.columnSettings.currentValue.filter((entry) => entry?.visible));
-  }
-
-  private initializeColumnSettings() {
-    if (Array.isArray(this.columnSettings)) {
-      this.columnDefinitions = this.columnSettings;
-    } else {
-      this.columnDefinitions = this.columnSettings.columnDefinitions;
-      this.groupingHeaders = this.columnSettings.groupingHeaders;
-    }
-    this.originalColumnSettings = this.columnDefinitions;
   }
 
   private createColumnSelectionChangeSubscription() {
@@ -483,17 +465,32 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
         });
       }
       this.columnDefinitions = origCols;
-      this.saveColumnSettings();
+      this.storeColDefs();
       this.setDisplayedColumns();
     });
   }
 
-  private initializeDragMenuSettings() {
-    if (Array.isArray(this.columnSettings)) {
-      this.dragMenuOriginalColDefs = this.columnSettings.filter((colDef) => !colDef['actionColumn'] && (colDef.visible || colDef.hideable));
-      this.remainingOriginalColDefs = this.columnSettings.filter((colDef) => colDef['actionColumn'] || (!colDef.visible && !colDef.hideable));
-      this.loadDragMenuColDefs(this.columnSettings);
-    }
+  public sortButtonLabel(col: DataTableColumnDefinition) {
+    const id = col.orderName || col.field;
+    return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
+      id: this.trans.instant(col.sortButtonAriaLabel || col.label),
+      direction: this.trans.instant(
+        `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
+      ),
+    });
+  }
+
+  public handleColumnSelectionChange($event) {
+    this.columnSelection.clear();
+    const selectedColumnsWithAlwaysVisibleColumns = [
+      ...new Set([
+        ...$event.value,
+        ...(Array.isArray(this.columnSettings)
+          ? (this.columnSettings as DataTableColumnDefinition[]).filter(colDef => !colDef.hideable && colDef.visible)
+          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter(colDef => !colDef.hideable && colDef.visible)),
+      ]),
+    ];
+    this.columnSelection.select(selectedColumnsWithAlwaysVisibleColumns);
   }
 
   hasGroupingHeaders() {
@@ -532,7 +529,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   loadDragMenuColDefs(columnSettings: DataTableColumnDefinition[]) {
-    const storedColumnSettings = this.localStorage.retrieve(`table-drag-menu-settings-${this.name}`);
+    const storedColumnSettings = this.localStorage.retrieve(`table-settings-${this.name}`);
 
     if (storedColumnSettings) {
       const dragMenuColDefs: DataTableColumnDefinition[] = [];
@@ -547,51 +544,37 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
         }
       });
       this.dragMenuColDefs = dragMenuColDefs;
-      this.columnDefinitions = [...dragMenuColDefs, ...this.remainingOriginalColDefs];
+      this.columnDefinitions = [...dragMenuColDefs, ...this.originalUnsetableColDefs];
     } else {
       // shallow copy is necessary on the array item not on the array
-      this.dragMenuColDefs = this.dragMenuOriginalColDefs.map((colDef) => clone(colDef));
-      this.columnDefinitions = [...this.dragMenuOriginalColDefs, ...this.remainingOriginalColDefs];
+      this.dragMenuColDefs = this.originalHideableColDefs.map((colDef) => clone(colDef));
+      this.columnDefinitions = [...this.originalHideableColDefs, ...this.originalUnsetableColDefs];
     }
   }
 
-  saveDragMenuColDefs() {
-    const storageName = `table-drag-menu-settings-${this.name}`;
-    const dragMenuColDefsToStore = this.dragMenuColDefs.map((dragMenuColDef) => ({ field: dragMenuColDef.field, visible: dragMenuColDef.visible }));
-    this.localStorage.store(storageName, dragMenuColDefsToStore);
-  }
+  loadColDefs() {
+    const storedColDefs = this.localStorage.retrieve(`table-settings-${this.name}`);
 
-  loadColumnSettings() {
-    const storedColumnSettings = this.localStorage.retrieve(`table-settings-${this.name}`);
-
-    try {
-      this.parsedColumnSettings = JSON.parse(storedColumnSettings);
-    } catch (e) {
-      console.error(`couldn't parse table settings`, e);
-    }
-
-    if (this.parsedColumnSettings) {
-      const currentSettings = [...this.columnDefinitions];
-      currentSettings.forEach((cs) => {
-        cs = Object.assign(
-          cs,
-          this.parsedColumnSettings.find((pcs) => pcs.field === cs.field)
-        );
-      });
-      this.columnDefinitions = currentSettings;
+    if (storedColDefs) {
+      this.columnDefinitions.forEach((colDef) => {
+        const storedColDefArray = storedColDefs.filter(scs => scs.field === colDef.field);
+        if (storedColDefArray.length) {
+          colDef.visible = storedColDefArray[0].visible;
+        }
+      })
     }
   }
-
-  saveColumnSettings() {
-    this.localStorage.store(
-      `table-settings-${this.name}`,
-      JSON.stringify(this.columnDefinitions.map((cs) => ({ field: cs.field, visible: cs.visible })))
-    );
-  }
-
-  resetDefaultColumnSettings() {
-    this.localStorage.clear(`table-settings-${this.name}`);
-    this.saveColumnSettings();
+  
+  storeColDefs() {
+    const storageName = `table-settings-${this.name}`;
+    let colDefsToStore: { field: string, visible: boolean }[] = [];
+    if (this.columnMenuStyle === 'dragMenu') {
+      colDefsToStore = this.dragMenuColDefs.map((colDef) => ({ field: colDef.field, visible: colDef.visible }));
+    } else {
+      const hideableColDefsToStore = this.columnDefinitions.filter((colDef) => !colDef.actionColumn && (colDef.visible || colDef.hideable));
+      colDefsToStore = hideableColDefsToStore.map((colDef) => ({ field: colDef.field, visible: colDef.visible }));
+    }
+    this.localStorage.store(storageName, colDefsToStore);
   }
 
   // custom sorting
@@ -721,7 +704,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     this.cellClick.emit(Object.assign({}, cloneDeep(event), { cell: cellData, originalEvent: event }));
   }
 
-  onColumnSelectionChange(event: MatOptionSelectionChange | MatCheckboxChange, columnDef: DataTableColumnDefinition) {
+  onColumnSelectionChange(event: MatOptionSelectionChange | MatCheckboxChange, columnDef?: DataTableColumnDefinition) {
     // longMenu and dotsMenu events are slightly different, emit only user triggered events
     if (('isUserInput' in event && event.isUserInput) || 'checked' in event) {
       this.columnSelectionChange.emit({ column: columnDef });
@@ -746,6 +729,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  // drag menu functionallity start
   triggerDragMenu(open = true) {
     if (open) {
       this.previousDragMenuColDefs = this.dragMenuColDefs.map((colDef) => clone(colDef));
@@ -785,17 +769,19 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   switchColDefsToDefault() {
-    this.dragMenuColDefs = this.dragMenuOriginalColDefs.map((colDef) => clone(colDef));
+    this.dragMenuColDefs = this.originalHideableColDefs.map((colDef) => clone(colDef));
   }
 
   saveColDefs() {
     const dragMenuColDefs = this.dragMenuColDefs.map((colDef) => clone(colDef));
-    this.columnDefinitions = [...dragMenuColDefs, ...this.remainingOriginalColDefs];
-    this.saveDragMenuColDefs();
+    this.columnDefinitions = [...dragMenuColDefs, ...this.originalUnsetableColDefs];
+    this.storeColDefs();
     this.setDisplayedColumns();
     this.isDragMenuOpen = false;
     this.cdRef.markForCheck();
+    this.columnSelectionChange.emit({ column: 'changed' });
   }
+  // drag menu functionallity end
 
   private getElementWidth(element: HTMLElement | null | undefined): number {
     return Number(element?.style.width.match(/(\d+)px/)?.[1]) || element?.offsetWidth || 0;
