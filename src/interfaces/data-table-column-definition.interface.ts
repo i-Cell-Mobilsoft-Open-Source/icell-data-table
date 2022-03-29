@@ -32,7 +32,7 @@ export interface DataTableColumnDefinition {
   label?: string;
 
   /**
-   * Defines if the column dis hideable.
+   * Defines if the column is hideable.
    */
   hideable?: boolean;
 

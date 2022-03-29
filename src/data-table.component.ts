@@ -486,8 +486,8 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       ...new Set([
         ...$event.value,
         ...(Array.isArray(this.columnSettings)
-          ? (this.columnSettings as DataTableColumnDefinition[]).filter((i) => !i.hideable && i.visible)
-          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter((i) => !i.hideable && i.visible)),
+          ? (this.columnSettings as DataTableColumnDefinition[]).filter(colDef => !colDef.hideable && colDef.visible)
+          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter(colDef => !colDef.hideable && colDef.visible)),
       ]),
     ];
     this.columnSelection.select(selectedColumnsWithAlwaysVisibleColumns);
