@@ -321,6 +321,11 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
    * @emits (ColumnSelectionEvent)
    */
   @Output() public columnSelectionChange: EventEmitter<ColumnSelectionEvent> = new EventEmitter<ColumnSelectionEvent>();
+  /**
+   * Emitted dragMenu trigger event
+   * @emits (boolean)
+   */
+  @Output() public dragMenuTrigger: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   /**
    * @returns True if table is loading data.
@@ -736,6 +741,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       this.dragMenuColDefs = this.previousDragMenuColDefs.map((colDef) => clone(colDef));
     }
+    this.dragMenuTrigger.emit(open);
     this.isDragMenuOpen = open;
     this.cdRef.markForCheck();
   }
@@ -780,6 +786,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     this.isDragMenuOpen = false;
     this.cdRef.markForCheck();
     this.columnSelectionChange.emit({ column: 'changed' });
+    this.dragMenuTrigger.emit(false);
   }
   // drag menu functionallity end
 
