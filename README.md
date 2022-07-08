@@ -57,8 +57,7 @@ Material theme as well. For example:
 > **Note**
 > 
 > If you structure your `assets/` folder in a specific way, you have the
-> option to set the path of the svg, while you import the
-module.
+> option to set the path of the svg, while you import the module.
 
 ``` typescript
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -141,46 +140,53 @@ export class Module {
 <tr class="odd">
 <td><p>label</p></td>
 <td><p><code>string</code></p></td>
-<td><p>❌</p></td>
-<td></td>
+<td><p>✔️</p></td>
+<td><p>''</p></td>
 <td><p>Column label; can be a localization key.</p></td>
 </tr>
 <tr class="even">
 <td><p>hideable</p></td>
 <td><p><code>boolean</code></p></td>
-<td><p>❌</p></td>
-<td></td>
+<td><p>✔️</p></td>
+<td><p>false</p></td>
 <td><p>Defines if the column is hideable.</p></td>
 </tr>
 <tr class="odd">
 <td><p>visible</p></td>
 <td><p><code>boolean</code></p></td>
-<td><p>❌</p></td>
-<td></td>
+<td><p>✔️</p></td>
+<td><p>true</p></td>
 <td><p>Defines if the column is visible. If used with hideable, the column will be in the column menu unchecked.</p></td>
 </tr>
 <tr class="even">
-<td><p>sortable</p></td>
+<td><p>actionColumn</p></td>
 <td><p><code>boolean</code></p></td>
 <td><p>✔️</p></td>
 <td></td>
-<td><p>Defines if the column should be sortable.</p></td>
+<td><p>Defines if the column is for actions.</p></td>
 </tr>
 <tr class="odd">
+<td><p>sortable</p></td>
+<td><p><code>boolean</code></p></td>
+<td><p>✔️</p></td>
+<td><p>true</p></td>
+<td><p>Defines if the column should be sortable.</p></td>
+</tr>
+<tr class="even">
 <td><p>sticky</p></td>
 <td><p><code>boolean</code></p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines if the column should be sticky at the begining of the table.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>stickyEnd</p></td>
 <td><p><code>boolean</code></p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines if the column should be sticky at the end of the table.</p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><p>template</p></td>
 <td><p><code>string</code></p></td>
 <td><p>✔️</p></td>
@@ -188,7 +194,7 @@ export class Module {
 <td><p>Defines how the cell should be rendered.</p>
 <p>If <code>componentTemplate</code> is used you must define the <code>component</code> property as well.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>component</p></td>
 <td><p>any</p></td>
 <td><p>✔️</p></td>
@@ -196,7 +202,7 @@ export class Module {
 <td><p>Defines what component to use to render the cell.</p>
 <p>Use with <code>template = 'componentTemplate'</code>.</p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><p>componentOptions</p></td>
 <td><p>ComponentOptions</p></td>
 <td><p>✔️</p></td>
@@ -204,7 +210,7 @@ export class Module {
 <td><p>Provide input, output bindings for the component rendered in the cell.</p>
 <p>Use with <code>template = 'componentTemplate'</code>.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>parent</p></td>
 <td><p>any</p></td>
 <td><p>✔️</p></td>
@@ -212,28 +218,28 @@ export class Module {
 <td><p>Defines what component to use to render the cell.</p>
 <p>Use with <code>template = 'componentTemplate'</code>.</p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><p>identifier</p></td>
 <td><p>boolean</p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines if the cell should render as header for a11y reasons.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>columnClasses</p></td>
 <td><p>boolean</p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines custom <code>CSS</code> class for the column it self.</p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><p>cellClasses</p></td>
 <td><p>boolean</p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines custom <code>CSS</code> class for the column cells.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>sortButtonAriaLabel</p></td>
 <td><p>string</p></td>
 <td><p>✔️</p></td>

@@ -229,6 +229,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       colDef = setDefaultValue(colDef, 'visible', true);
       colDef = setDefaultValue(colDef, 'hideable', false);
       colDef = setDefaultValue(colDef, 'label', '');
+      colDef = setDefaultValue(colDef, 'sortable', true);
 
       return colDef;
     };
