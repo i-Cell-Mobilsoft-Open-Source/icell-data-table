@@ -94,11 +94,11 @@ export class Module {
 | orderName | `string` | &#10004;&#65039; |  | Custom ordering parameter.
 | valueFormatter | `function` | &#10004;&#65039; |  | Callback to transform the cell's data.
 | valueGetter | `function` | &#10004;&#65039; |  | Callback to transform the row model.
-| label | `string` |&#10004;&#65039; |  | Column label; can be a localization key.
-| hideable | `boolean` | &#10004;&#65039; |  | Defines if the column is hideable.
-| visible | `boolean` | &#10004;&#65039; |  | Defines if the column is visible. If used with hideable, the column will be in the column menu unchecked.
+| label | `string` |&#10004;&#65039; | '' | Column label; can be a localization key.
+| hideable | `boolean` | &#10004;&#65039; | false | Defines if the column is hideable.
+| visible | `boolean` | &#10004;&#65039; | true | Defines if the column is visible. If used with hideable, the column will be in the column menu unchecked.
 | actionColumn | `boolean` | &#10004;&#65039; |  | Defines if the column is for actions.
-| sortable | `boolean` | &#10004;&#65039; |  | Defines if the column should be sortable.
+| sortable | `boolean` | &#10004;&#65039; | true | Defines if the column should be sortable.
 | sticky | `boolean` | &#10004;&#65039; |  | Defines if the column should be sticky at the begining of the table.
 | stickyEnd | `boolean` | &#10004;&#65039; |  | Defines if the column should be sticky at the end of the table.
 | template | `string` | &#10004;&#65039; | `'labelTemplate'` | Defines how the cell should be rendered.
