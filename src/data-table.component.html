@@ -304,7 +304,7 @@
         [sticky]="col.sticky && !col.stickyEnd"
         [stickyEnd]="col.stickyEnd && !col.sticky"
       >
-        <ng-container *ngIf="col.sortable && hasSorting">
+        <ng-container *ngIf="!col.actionColumn && (col.sortable && hasSorting)">
           <th
             *matHeaderCellDef
             mat-header-cell
@@ -333,7 +333,7 @@
             </button>
           </th>
         </ng-container>
-        <ng-container *ngIf="columnMenuStyle !== 'dotsMenu' && columnMenuStyle !== 'dragMenu' && (!col.sortable || !hasSorting)">
+        <ng-container *ngIf="!col.actionColumn && (!col.sortable || !hasSorting)">
           <th
             mat-header-cell
             *matHeaderCellDef
