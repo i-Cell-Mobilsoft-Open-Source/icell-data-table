@@ -555,6 +555,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       // shallow copy is necessary on the array item not on the array
       this.dragMenuColDefs = this.originalHideableColDefs.map((colDef) => clone(colDef));
       this.columnDefinitions = [...this.originalHideableColDefs, ...this.originalUnsetableColDefs];
+      this.storeColDefs();
     }
   }
 
@@ -570,7 +571,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       })
     }
   }
-  
+
   storeColDefs() {
     const storageName = `table-settings-${this.name}`;
     let colDefsToStore: { field: string, visible: boolean }[] = [];
