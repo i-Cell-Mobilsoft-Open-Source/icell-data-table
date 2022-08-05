@@ -556,6 +556,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       this.dragMenuColDefs = this.originalHideableColDefs.map((colDef) => clone(colDef));
       this.columnDefinitions = [...this.originalHideableColDefs, ...this.originalUnsetableColDefs];
       this.storeColDefs();
+      this.columnSelectionChange.emit({ column: 'changed' });
     }
   }
 
