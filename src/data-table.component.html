@@ -115,7 +115,7 @@
                   [checked]="colEntry.visible"
                   [disabled]="!colEntry.hideable"
                   (click)="$event.stopPropagation()"
-                  (change)="$event ? colEntry.visible = !colEntry.visible : null"
+                  (change)="$event ? (colEntry.visible = !colEntry.visible) : null"
                 ></mat-slide-toggle>
                 <label class="drag-menu__list_item-label">{{ colEntry.label | translate }}</label>
                 <mat-icon *ngIf="!colEntry.hideable" class="drag-menu__button-disabled" svgIcon="lock-outline"></mat-icon>
@@ -125,16 +125,11 @@
                   mat-icon-button
                   class="drag-menu__button"
                   (click)="moveOnePosition(colEntry, 1)"
-                  [disabled]="idx === (dragMenuColDefs.length - 1)"
+                  [disabled]="idx === dragMenuColDefs.length - 1"
                 >
                   <mat-icon svgIcon="arrow-down-thin"></mat-icon>
                 </button>
-                <button
-                  mat-icon-button
-                  class="drag-menu__button"
-                  (click)="moveOnePosition(colEntry, -1)"
-                  [disabled]="idx === 0"
-                >
+                <button mat-icon-button class="drag-menu__button" (click)="moveOnePosition(colEntry, -1)" [disabled]="idx === 0">
                   <mat-icon svgIcon="arrow-up-thin"></mat-icon>
                 </button>
                 <div class="drag-menu__list_item-handle" cdkDragHandle>
@@ -197,7 +192,15 @@
     </ng-container>
   </div>
   <div class="horizontal-scroll">
-    <table mat-table [id]="customId" [dataSource]="dataSource" (contentChanged)="tableContentChanged()" multiTemplateDataRows cdkDropListGroup matSort>
+    <table
+      mat-table
+      [id]="customId"
+      [dataSource]="dataSource"
+      (contentChanged)="tableContentChanged()"
+      multiTemplateDataRows
+      cdkDropListGroup
+      matSort
+    >
       <caption [innerHTML]="caption | translate | sanitize"></caption>
       <!-- multiselect -->
       <ng-container matColumnDef="$selectBoxes" sticky>
@@ -304,7 +307,7 @@
         [sticky]="col.sticky && !col.stickyEnd"
         [stickyEnd]="col.stickyEnd && !col.sticky"
       >
-        <ng-container *ngIf="!col.actionColumn && (col.sortable && hasSorting)">
+        <ng-container *ngIf="!col.actionColumn && col.sortable && hasSorting">
           <th
             *matHeaderCellDef
             mat-header-cell
@@ -347,7 +350,7 @@
             [innerHTML]="col.label | translate | sanitize"
           ></th>
         </ng-container>
-        <ng-container *ngIf="col.actionColumn && (columnMenuStyle === 'dotsMenu' || columnMenuStyle === 'dragMenu')">
+        <ng-container *ngIf="col.actionColumn">
           <th
             mat-header-cell
             *matHeaderCellDef
@@ -359,7 +362,10 @@
             [id]="customId + '-header-' + col.field"
             scope="col"
           >
-            <ng-container [ngTemplateOutlet]="columnMenu"></ng-container>
+            <ng-container
+              *ngIf="showColumnMenu && (columnMenuStyle === 'dotsMenu' || columnMenuStyle === 'dragMenu')"
+              [ngTemplateOutlet]="columnMenu"
+            ></ng-container>
           </th>
         </ng-container>
         <ng-container *ngIf="!col?.identifier">
