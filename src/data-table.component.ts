@@ -303,6 +303,12 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public extensions: TemplateRef<any>[] = [];
 
   /**
+   *  Flag to use external column menu
+   */
+
+  @Input() public hasExtColMenu: boolean = false;
+
+  /**
    * Emitted row click event.
    * @emits (RowClickEvent)
    */
@@ -413,6 +419,8 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       if (this.showColumnMenu) {
         this.loadColDefs();
         this.createColumnSelectionModel(changes);
+      }
+      if (this.showColumnMenu || this.hasExtColMenu) {
         this.createColumnSelectionChangeSubscription();
       }
       this.setDisplayedColumns();
@@ -471,15 +479,18 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
         });
       }
       this.columnDefinitions = origCols;
-      this.storeColDefs();
+      if (!this.hasExtColMenu) {
+        this.storeColDefs();
+      }
       this.setDisplayedColumns();
     });
   }
 
   public sortButtonLabel(col: DataTableColumnDefinition) {
     const id = col.orderName || col.field;
+    const label = col.sortButtonAriaLabel || col.label;
     return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
-      id: this.trans.instant(col.sortButtonAriaLabel || col.label),
+      id: label ? this.trans.instant(label) : id,
       direction: this.trans.instant(
         `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
       ),
@@ -492,8 +503,8 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       ...new Set([
         ...$event.value,
         ...(Array.isArray(this.columnSettings)
-          ? (this.columnSettings as DataTableColumnDefinition[]).filter(colDef => !colDef.hideable && colDef.visible)
-          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter(colDef => !colDef.hideable && colDef.visible)),
+          ? (this.columnSettings as DataTableColumnDefinition[]).filter((colDef) => !colDef.hideable && colDef.visible)
+          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter((colDef) => !colDef.hideable && colDef.visible)),
       ]),
     ];
     this.columnSelection.select(selectedColumnsWithAlwaysVisibleColumns);
@@ -541,7 +552,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       const dragMenuColDefs: DataTableColumnDefinition[] = [];
       // the storedColumnSettings determine the order of the columns
       storedColumnSettings.forEach((scs: DataTableColumnDefinition) => {
-        const colDefArray = columnSettings.filter(cd => cd.field === scs.field);
+        const colDefArray = columnSettings.filter((cd) => cd.field === scs.field);
         if (colDefArray.length) {
           // shallow copy is enough due to performance reason
           const colDef = clone(colDefArray[0]);
@@ -565,17 +576,17 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
     if (storedColDefs) {
       this.columnDefinitions.forEach((colDef) => {
-        const storedColDefArray = storedColDefs.filter(scs => scs.field === colDef.field);
+        const storedColDefArray = storedColDefs.filter((scs) => scs.field === colDef.field);
         if (storedColDefArray.length) {
           colDef.visible = storedColDefArray[0].visible;
         }
-      })
+      });
     }
   }
 
   storeColDefs() {
     const storageName = `table-settings-${this.name}`;
-    let colDefsToStore: { field: string, visible: boolean }[] = [];
+    let colDefsToStore: { field: string; visible: boolean }[] = [];
     if (this.columnMenuStyle === 'dragMenu') {
       colDefsToStore = this.dragMenuColDefs.map((colDef) => ({ field: colDef.field, visible: colDef.visible }));
     } else {
@@ -672,10 +683,10 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   // selection checkboxes
   isAllSelected() {
     const numSelected = this.rowSelection.selected.length;
-    const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data
+    const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data;
     const activeRowCount = data?.reduce((count, row) => {
       return this.rowSelectionDisabledStates.get(row) ? count : count + 1;
-    }, 0)
+    }, 0);
     return numSelected === activeRowCount;
   }
 
@@ -684,12 +695,12 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       this.rowSelection.clear();
       return;
     }
-    const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data
+    const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data;
     data.forEach((row) => {
       if (!this.rowSelectionDisabledStates.get(row)) {
         this.rowSelection.select(row);
       }
-    })
+    });
   }
 
   checkboxLabel(row?: any): string {
@@ -733,7 +744,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     if (this._dataSource instanceof MatTableDataSource || this._dataSource instanceof ServerSideDataSource) {
       this._dataSource.data?.forEach((row) => {
         this.rowSelectionDisabledStates.set(row, this.isSelectionDisabledForRow?.(row) ?? false);
-      })
+      });
     }
   }
 
