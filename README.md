@@ -57,7 +57,8 @@ Material theme as well. For example:
 > **Note**
 > 
 > If you structure your `assets/` folder in a specific way, you have the
-> option to set the path of the svg, while you import the module.
+> option to set the path of the svg, while you import the
+module.
 
 ``` typescript
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -354,13 +355,12 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | detailOpenIcon                | `@Input`  | `string`                                              | ✔️       | `chevron-down`     | Icon to use for opened details.                                                                                                        |
 | sortingNoSort                 | `@Input`  | `string`                                              | ✔️       | `sort`             | Icon to use for no sort active.                                                                                                        |
 | sortingAsc                    | `@Input`  | `string`                                              | ✔️       | `sort-ascending`   | Icon to use for sort ascending.                                                                                                        |
-| sortingDesc                   | `@Input`  | `string`                                              | ✔️       | `sort-descending`  | Icon to use for sort descending.                                                                                                 |
+| sortingDesc                   | `@Input`  | `string`                                              | ✔️       | `sort-descending`  | Icon to use for sort descending.                                                                                                       |
 | rowClass                      | `@Input`  | `function`                                            | ✔️       | `() ⇒ ''`          | Dynamically set per-row CSS class.                                                                                                     |
 | evenRowClass                  | `@Input`  | `string`                                              | ✔️       |                    | Dynamically set even row CSS class.                                                                                                    |
 | oddRowClass                   | `@Input`  | `string`                                              | ✔️       |                    | Dynamically set odd row CSS class.                                                                                                     |
 | headerClass                   | `@Input`  | `srting`                                              | ✔️       |                    | Defines the class used by `thead > tr`.                                                                                                |
-| detailStickyColumns           | `@Input`  | `boolean`                                             | ✔️       |                    | If set true the detail row will reflect the same sticky column structure.
-| hasExtColMenu                 | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to use external column menu.                                                              |
+| detailStickyColumns           | `@Input`  | `boolean`                                             | ✔️       |                    | If set true the detail row will reflect the same sticky column structure.                                                              |
 | rowClick                      | `@Output` | `RowClickEvent`                                       | ✔️       |                    | Emitted row click event.                                                                                                               |
 | cellClick                     | `@Output` | `CellClickEvent`                                      | ✔️       |                    | Emitted cell click event.                                                                                                              |
 | rowKeyDown                    | `@Output` | `RowKeyDownEvent`                                     | ✔️       |                    | Emitted row onkeydown event.                                                                                                           |
