@@ -57,7 +57,8 @@ Material theme as well. For example:
 > **Note**
 > 
 > If you structure your `assets/` folder in a specific way, you have the
-> option to set the path of the svg, while you import the module.
+> option to set the path of the svg, while you import the
+module.
 
 ``` typescript
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

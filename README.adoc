@@ -218,6 +218,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | showColumnMenu | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to render column menu.
 | hasSorting | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to enable sorting.
 | fixedHeader | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to have sticky header.
+| hasExtColMenu | `@Input` | `boolean` | &#10004;&#65039; | `false` | Flag to use external column menu.
 | detailClosedIcon | `@Input` | `string` | &#10004;&#65039; | `chevron-right` | Icon to use for closed details.
 | detailOpenIcon | `@Input` | `string` | &#10004;&#65039; | `chevron-down` | Icon to use for opened details.
 | sortingNoSort | `@Input` | `string` | &#10004;&#65039; | `sort` | Icon to use for no sort active.
