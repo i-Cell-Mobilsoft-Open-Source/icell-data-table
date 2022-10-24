@@ -37,7 +37,7 @@ export class CellTemplatesComponent {
       { rx: '<', entity: '&lt;' },
       { rx: '>', entity: '&gt;' },
       { rx: '"', entity: '&quot;' },
-      { rx: '\'', entity: '&#x27;' },
+      { rx: "'", entity: '&#x27;' },
       { rx: '/', entity: '&#x2F;' },
     ];
     entities.forEach((item) => {
