@@ -328,7 +328,8 @@ For translation we utilize `@ngx-translate`.
     "SORT_NONE": "no sorting",
     "SORT_ASC": "sorting ascending",
     "SORT_DESC": "sorting descending",
-    "NOROWSTOSHOW": "No data present."
+    "NOROWSTOSHOW": "No data present.",
+    "EMPTY_CELL": "-"
   }
   ...
 }
