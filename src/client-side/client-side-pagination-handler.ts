@@ -1,7 +1,7 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { PaginationHandler, PaginationParams } from '../interfaces';
 
@@ -11,7 +11,9 @@ import { PaginationHandler, PaginationParams } from '../interfaces';
 export class ClientSidePaginationHandler implements PaginationHandler {
 
   public paginationParams: PaginationParams;
-  public paginationSubject: Subject<void> = new Subject();
+
+  private paginationSubject: Subject<void> = new Subject();
+  public pagination$: Observable<void> = this.paginationSubject.asObservable();
 
   private _paginator: MatPaginator;
 
