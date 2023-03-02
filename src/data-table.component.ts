@@ -2,8 +2,10 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceCssPixelValue } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
+import { hasModifierKey } from '@angular/cdk/keycodes';
+import { ConnectionPositionPair } from '@angular/cdk/overlay';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -19,23 +21,24 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { MatOptionSelectionChange, ThemePalette } from '@angular/material/core';
+import { UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ThemePalette } from '@angular/material/core';
+import { MatOptionSelectionChange } from '@angular/material/core';
 import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
 import { MatColumnDef, MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { ResizeEvent } from 'angular-resizable-element';
-import { cloneDeep, orderBy as _orderBy } from 'lodash-es';
+import { clone, cloneDeep, orderBy as _orderBy } from 'lodash-es';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
 import { CellClickEvent, DataTableColumnDefinition, RowClickEvent } from './interfaces';
+import { ColumnSelectionEvent } from './interfaces/column-selection-event.interface';
 import { DataTableColumnSettings } from './interfaces/data-table-column-settings.interface';
 import { DataTableGroupingHeader } from './interfaces/data-table-grouping-header.interface';
 import { RowKeyDownEvent } from './interfaces/row-key-down-event.interface';
 import { ServerSideDataSource } from './server-side/server-side-data-source';
-import { FormControl } from '@angular/forms';
-import { ColumnSelectionEvent } from './interfaces/column-selection-event.interface';
 
 /**
  *
@@ -67,7 +70,7 @@ import { ColumnSelectionEvent } from './interfaces/column-selection-event.interf
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnChanges {
+export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   // cell template holder
   @ViewChild('cellTemplates', { static: true }) public cellTemplates: CellTemplatesComponent;
   @ViewChild(MatSort, { static: true }) public sort: MatSort;
@@ -84,7 +87,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    * Native table indentifier.
    */
-  /* tslint:disable */
+  /* eslint-disable */
   @Input('id') public customId: string;
   /**
    * Flag indicating to render with *detail* rows.
@@ -105,7 +108,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   /**
    *  Display options for showColumnMenu column selector.
    */
-  @Input() public columnMenuStyle: 'selectField' | 'dotsMenu' = 'selectField';
+  @Input() public columnMenuStyle: 'selectField' | 'dotsMenu' | 'dragMenu' = 'selectField';
   /**
    * Default placeholder text for column menu select.
    */
@@ -114,6 +117,14 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * Flag to render with checkboxes for multiselect rows.
    */
   @Input() public useSelection: boolean = false;
+  /**
+   * Function to set row checkbox disabled status.
+   */
+  @Input() public isSelectionDisabledForRow: (row: any) => boolean;
+  /**
+   * Function to provide custom functionality when contentchanged event happened.
+   */
+  @Input() public tablecontentChangedCallback: (value?: any) => any;
   /**
    * This parameter should point to a boolean attribute in the table rows.
    * The said row[hideSelectParameter] value will hide / enable the select checkbox if used with useSelection.
@@ -172,6 +183,8 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   private _colDef: DataTableColumnDefinition[] = [];
   private _groupingHeaders: DataTableGroupingHeader[] = [];
 
+  public rowSelectionDisabledStates = new Map<any, boolean>();
+
   /**
    * Column Definitions.
    */
@@ -217,6 +230,7 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
       colDef = setDefaultValue(colDef, 'visible', true);
       colDef = setDefaultValue(colDef, 'hideable', false);
       colDef = setDefaultValue(colDef, 'label', '');
+      colDef = setDefaultValue(colDef, 'sortable', true);
 
       return colDef;
     };
@@ -290,6 +304,12 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   @Input() public extensions: TemplateRef<any>[] = [];
 
   /**
+   *  Flag to use external column menu
+   */
+
+  @Input() public hasExtColMenu: boolean = false;
+
+  /**
    * Emitted row click event.
    * @emits (RowClickEvent)
    */
@@ -309,6 +329,11 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
    * @emits (ColumnSelectionEvent)
    */
   @Output() public columnSelectionChange: EventEmitter<ColumnSelectionEvent> = new EventEmitter<ColumnSelectionEvent>();
+  /**
+   * Emitted dragMenu trigger event
+   * @emits (boolean)
+   */
+  @Output() public dragMenuTrigger: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   /**
    * @returns True if table is loading data.
@@ -337,10 +362,10 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     this.expandedRow = null;
   }
 
-  public columnSelectorFormControl = new FormControl();
+  public columnSelectorFormControl = new UntypedFormControl();
 
-  public parsedColumnSettings: any[];
-  public originalColumnSettings: DataTableColumnDefinition[];
+  private originalHideableColDefs: DataTableColumnDefinition[];
+  private originalUnsetableColDefs: DataTableColumnDefinition[] = [];
   public actualColumns: string[];
   public groupingColumns: string[];
   public isResizing: boolean;
@@ -355,6 +380,20 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
 
   public detailColSpan: number;
 
+  public isDragMenuOpen: boolean = false;
+  public dragMenuPositions: ConnectionPositionPair[] = [
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetX: -48,
+      offsetY: -12,
+    },
+  ];
+  public dragMenuColDefs: DataTableColumnDefinition[] = [];
+  private previousDragMenuColDefs: DataTableColumnDefinition[] = [];
+
   constructor(
     public trans: TranslateService,
     public changeDetect: ChangeDetectorRef,
@@ -365,27 +404,28 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     private focusMonitor: FocusMonitor
   ) {}
 
-  public sortButtonLabel(col: DataTableColumnDefinition) {
-    const id = col.orderName || col.field;
-    return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
-      id: this.trans.instant(col.sortButtonAriaLabel || col.label),
-      direction: this.trans.instant(
-        `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
-      ),
-    });
+  ngOnInit() {
+    if (this.columnMenuStyle === 'dragMenu') {
+      this.initializeDragMenuSettings();
+    }
+    this.setDisplayedColumns();
+    this.onLangChange = this.trans.onLangChange.subscribe(() => this.matSortService.changes.next());
   }
 
-  public handleColumnSelectionChange($event) {
-    this.columnSelection.clear();
-    const selectedColumnsWithAlwaysVisibleColumns = [
-      ...new Set([
-        ...$event.value,
-        ...(Array.isArray(this.columnSettings)
-          ? (this.columnSettings as DataTableColumnDefinition[]).filter((i) => !i.hideable && i.visible)
-          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter((i) => !i.hideable && i.visible)),
-      ]),
-    ];
-    this.columnSelection.select(selectedColumnsWithAlwaysVisibleColumns);
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.columnMenuStyle !== 'dragMenu' && changes.columnSettings) {
+      if (changes.columnSettings.firstChange) {
+        this.initializeColumnSettings();
+      }
+      if (this.showColumnMenu) {
+        this.loadColDefs();
+        this.createColumnSelectionModel(changes);
+      }
+      if (this.showColumnMenu || this.hasExtColMenu) {
+        this.createColumnSelectionChangeSubscription();
+      }
+      this.setDisplayedColumns();
+    }
   }
 
   ngOnDestroy() {
@@ -394,37 +434,12 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     this.onLangChange.unsubscribe();
   }
 
-  ngAfterViewInit() {
-    this.matSortService.sortButtonLabel = this.sortButtonLabel.bind(this);
-    // debug localization
-    // this.trans.set('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', 'Change sorting for {{id}}, {{direction}}', 'en');
-    // this.trans.set('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', '{{id}} oszlop sorrendjének megváltoztatása, {{direction}}', 'hu');
-  }
-
-  ngOnInit() {
-    this.setDisplayedColumns();
-    this.onLangChange = this.trans.onLangChange.subscribe(() => this.matSortService.changes.next());
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.columnSettings) {
-      this.loadColumnSettings();
-      if (changes.columnSettings?.firstChange) {
-        this.initializeColumnSettings();
-      }
-      this.createColumnSelectionModel(changes);
-      this.createColumnSelectionChangeSubscription();
+  private initializeDragMenuSettings() {
+    if (Array.isArray(this.columnSettings)) {
+      this.originalHideableColDefs = this.columnSettings.filter((colDef) => !colDef.actionColumn && (colDef.visible || colDef.hideable));
+      this.originalUnsetableColDefs = this.columnSettings.filter((colDef) => colDef.actionColumn || (!colDef.visible && !colDef.hideable));
+      this.loadDragMenuColDefs(this.columnSettings);
     }
-    this.setDisplayedColumns();
-  }
-
-  private createColumnSelectionModel(changes: SimpleChanges) {
-    this.columnSelection = new SelectionModel<any>(
-      true,
-      changes.columnSettings.currentValue.filter((entry) => entry?.visible),
-      true
-    );
-    this.columnSelectorFormControl.patchValue(changes.columnSettings.currentValue.filter((entry) => entry?.visible));
   }
 
   private initializeColumnSettings() {
@@ -434,7 +449,15 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
       this.columnDefinitions = this.columnSettings.columnDefinitions;
       this.groupingHeaders = this.columnSettings.groupingHeaders;
     }
-    this.originalColumnSettings = [...this.columnDefinitions];
+  }
+
+  private createColumnSelectionModel(changes: SimpleChanges) {
+    this.columnSelection = new SelectionModel<any>(
+      true,
+      changes.columnSettings.currentValue.filter((entry) => entry?.visible),
+      true
+    );
+    this.columnSelectorFormControl.patchValue(changes.columnSettings.currentValue.filter((entry) => entry?.visible));
   }
 
   private createColumnSelectionChangeSubscription() {
@@ -457,9 +480,35 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
         });
       }
       this.columnDefinitions = origCols;
-      this.saveColumnSettings();
+      if (!this.hasExtColMenu) {
+        this.storeColDefs();
+      }
       this.setDisplayedColumns();
     });
+  }
+
+  public sortButtonLabel(col: DataTableColumnDefinition) {
+    const id = col.orderName || col.field;
+    const label = col.sortButtonAriaLabel || col.label;
+    return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
+      id: label ? this.trans.instant(label) : id,
+      direction: this.trans.instant(
+        `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
+      ),
+    });
+  }
+
+  public handleColumnSelectionChange($event) {
+    this.columnSelection.clear();
+    const selectedColumnsWithAlwaysVisibleColumns = [
+      ...new Set([
+        ...$event.value,
+        ...(Array.isArray(this.columnSettings)
+          ? (this.columnSettings as DataTableColumnDefinition[]).filter((colDef) => !colDef.hideable && colDef.visible)
+          : (this.columnSettings as DataTableColumnSettings).columnDefinitions.filter((colDef) => !colDef.hideable && colDef.visible)),
+      ]),
+    ];
+    this.columnSelection.select(selectedColumnsWithAlwaysVisibleColumns);
   }
 
   hasGroupingHeaders() {
@@ -497,37 +546,55 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     return detailRowTemplates;
   }
 
-  loadColumnSettings() {
+  loadDragMenuColDefs(columnSettings: DataTableColumnDefinition[]) {
     const storedColumnSettings = this.localStorage.retrieve(`table-settings-${this.name}`);
 
-    try {
-      this.parsedColumnSettings = JSON.parse(storedColumnSettings);
-    } catch (e) {
-      console.error(`couldn't parse table settings`, e);
-    }
-
-    if (this.parsedColumnSettings) {
-      const currentSettings = [...this.columnDefinitions];
-      currentSettings.forEach((cs) => {
-        cs = Object.assign(
-          cs,
-          this.parsedColumnSettings.find((pcs) => pcs.field === cs.field)
-        );
+    if (storedColumnSettings) {
+      const dragMenuColDefs: DataTableColumnDefinition[] = [];
+      // the storedColumnSettings determine the order of the columns
+      storedColumnSettings.forEach((scs: DataTableColumnDefinition) => {
+        const colDefArray = columnSettings.filter((cd) => cd.field === scs.field);
+        if (colDefArray.length) {
+          // shallow copy is enough due to performance reason
+          const colDef = clone(colDefArray[0]);
+          colDef.visible = scs.visible;
+          dragMenuColDefs.push(colDef);
+        }
       });
-      this.columnDefinitions = currentSettings;
+      this.dragMenuColDefs = dragMenuColDefs;
+      this.columnDefinitions = [...dragMenuColDefs, ...this.originalUnsetableColDefs];
+    } else {
+      // shallow copy is necessary on the array item not on the array
+      this.dragMenuColDefs = this.originalHideableColDefs.map((colDef) => clone(colDef));
+      this.columnDefinitions = [...this.originalHideableColDefs, ...this.originalUnsetableColDefs];
+      this.storeColDefs();
+      this.columnSelectionChange.emit({ column: 'changed' });
     }
   }
 
-  saveColumnSettings() {
-    this.localStorage.store(
-      `table-settings-${this.name}`,
-      JSON.stringify(this.columnDefinitions.map((cs) => ({ field: cs.field, visible: cs.visible })))
-    );
+  loadColDefs() {
+    const storedColDefs = this.localStorage.retrieve(`table-settings-${this.name}`);
+
+    if (storedColDefs) {
+      this.columnDefinitions.forEach((colDef) => {
+        const storedColDefArray = storedColDefs.filter((scs) => scs.field === colDef.field);
+        if (storedColDefArray.length) {
+          colDef.visible = storedColDefArray[0].visible;
+        }
+      });
+    }
   }
 
-  resetDefaultColumnSettings() {
-    this.localStorage.clear(`table-settings-${this.name}`);
-    this.saveColumnSettings();
+  storeColDefs() {
+    const storageName = `table-settings-${this.name}`;
+    let colDefsToStore: { field: string; visible: boolean }[] = [];
+    if (this.columnMenuStyle === 'dragMenu') {
+      colDefsToStore = this.dragMenuColDefs.map((colDef) => ({ field: colDef.field, visible: colDef.visible }));
+    } else {
+      const hideableColDefsToStore = this.columnDefinitions.filter((colDef) => !colDef.actionColumn && (colDef.visible || colDef.hideable));
+      colDefsToStore = hideableColDefsToStore.map((colDef) => ({ field: colDef.field, visible: colDef.visible }));
+    }
+    this.localStorage.store(storageName, colDefsToStore);
   }
 
   // custom sorting
@@ -617,15 +684,24 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
   // selection checkboxes
   isAllSelected() {
     const numSelected = this.rowSelection.selected.length;
-    return numSelected === this.rowCount;
+    const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data;
+    const activeRowCount = data?.reduce((count, row) => {
+      return this.rowSelectionDisabledStates.get(row) ? count : count + 1;
+    }, 0);
+    return numSelected === activeRowCount;
   }
 
   masterToggle() {
-    this.isAllSelected()
-      ? this.rowSelection.clear()
-      : Array.isArray(this.dataSource)
-      ? this.dataSource.forEach((row) => this.rowSelection.select(row))
-      : this.dataSource.data.forEach((row) => this.rowSelection.select(row));
+    if (this.isAllSelected()) {
+      this.rowSelection.clear();
+      return;
+    }
+    const data = Array.isArray(this.dataSource) ? this.dataSource : this.dataSource.data;
+    data.forEach((row) => {
+      if (!this.rowSelectionDisabledStates.get(row)) {
+        this.rowSelection.select(row);
+      }
+    });
   }
 
   checkboxLabel(row?: any): string {
@@ -648,12 +724,86 @@ export class DataTableComponent implements AfterViewInit, OnInit, OnDestroy, OnC
     this.cellClick.emit(Object.assign({}, cloneDeep(event), { cell: cellData, originalEvent: event }));
   }
 
-  onColumnSelectionChange(event: MatOptionSelectionChange | MatCheckboxChange, columnDef: DataTableColumnDefinition) {
+  onColumnSelectionChange(event: MatOptionSelectionChange | MatCheckboxChange, columnDef?: DataTableColumnDefinition) {
     // longMenu and dotsMenu events are slightly different, emit only user triggered events
     if (('isUserInput' in event && event.isUserInput) || 'checked' in event) {
       this.columnSelectionChange.emit({ column: columnDef });
     }
   }
+
+  isHeaderCheckboxDisabled() {
+    return Array.from(this.rowSelectionDisabledStates.values()).every((disabledState) => disabledState === true);
+  }
+
+  tableContentChanged() {
+    this.tablecontentChangedCallback?.();
+    this.updateSelectionDisabledStates();
+  }
+
+  updateSelectionDisabledStates() {
+    this.rowSelectionDisabledStates.clear();
+    if (this._dataSource instanceof MatTableDataSource || this._dataSource instanceof ServerSideDataSource) {
+      this._dataSource.data?.forEach((row) => {
+        this.rowSelectionDisabledStates.set(row, this.isSelectionDisabledForRow?.(row) ?? false);
+      });
+    }
+  }
+
+  // drag menu functionallity start
+  triggerDragMenu(open = true) {
+    if (open) {
+      this.previousDragMenuColDefs = this.dragMenuColDefs.map((colDef) => clone(colDef));
+    } else {
+      this.dragMenuColDefs = this.previousDragMenuColDefs.map((colDef) => clone(colDef));
+    }
+    this.dragMenuTrigger.emit(open);
+    this.isDragMenuOpen = open;
+    this.cdRef.markForCheck();
+  }
+
+  updateDragMenuOpen(event: KeyboardEvent) {
+    if (event.code === 'Escape' && !hasModifierKey(event)) {
+      this.triggerDragMenu(false);
+    }
+  }
+
+  drop(event: CdkDragDrop<any[]>) {
+    if (event.currentIndex !== event.previousIndex) {
+      moveItemInArray(this.dragMenuColDefs, event.previousIndex, event.currentIndex);
+    }
+  }
+
+  moveOnePosition(colEntry: DataTableColumnDefinition, direction: number) {
+    const previousIndex = this.dragMenuColDefs.indexOf(colEntry);
+    const currentIndex = previousIndex + direction;
+    if (currentIndex !== previousIndex && currentIndex >= 0 && currentIndex < this.dragMenuColDefs.length) {
+      moveItemInArray(this.dragMenuColDefs, previousIndex, currentIndex);
+    }
+  }
+
+  switchAllColTo(state: boolean) {
+    this.dragMenuColDefs.forEach((colDef) => {
+      if (colDef.hideable) {
+        colDef.visible = state;
+      }
+    });
+  }
+
+  switchColDefsToDefault() {
+    this.dragMenuColDefs = this.originalHideableColDefs.map((colDef) => clone(colDef));
+  }
+
+  saveColDefs() {
+    const dragMenuColDefs = this.dragMenuColDefs.map((colDef) => clone(colDef));
+    this.columnDefinitions = [...dragMenuColDefs, ...this.originalUnsetableColDefs];
+    this.storeColDefs();
+    this.setDisplayedColumns();
+    this.isDragMenuOpen = false;
+    this.cdRef.markForCheck();
+    this.columnSelectionChange.emit({ column: 'changed' });
+    this.dragMenuTrigger.emit(false);
+  }
+  // drag menu functionallity end
 
   private getElementWidth(element: HTMLElement | null | undefined): number {
     return Number(element?.style.width.match(/(\d+)px/)?.[1]) || element?.offsetWidth || 0;

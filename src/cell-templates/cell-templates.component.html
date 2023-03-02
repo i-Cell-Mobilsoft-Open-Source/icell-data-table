@@ -1,12 +1,12 @@
 <!-- cell templates -->
 <!-- default cell -->
 <ng-template #labelTemplate [cellTemplate]="'labelTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <span class="cell-content" [innerHTML]="getFieldData(row, col) || ' ' | translate | sanitize"></span>
+  <span class="cell-content" [innerHTML]="getFieldData(row, col) || 'ICELL_DATA_TABLE.EMPTY_CELL' | translate | sanitize"></span>
 </ng-template>
 
 <!-- strong cell -->
 <ng-template #labelBoldTemplate [cellTemplate]="'labelBoldTemplate'" let-row="row" let-col="col" let-idx="rowIdx">
-  <strong class="cell-content" [innerHTML]="getFieldData(row, col) || ' ' | translate | sanitize"></strong>
+  <strong class="cell-content" [innerHTML]="getFieldData(row, col) || 'ICELL_DATA_TABLE.EMPTY_CELL' | translate | sanitize"></strong>
 </ng-template>
 
 <!-- numeric cell -->

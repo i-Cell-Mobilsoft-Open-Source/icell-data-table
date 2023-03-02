@@ -1,6 +1,6 @@
-import { Component, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { get as _get, isFunction as _isFunction, isString as _isString, isNumber as _isNumber } from 'lodash-es';
+import { get as _get, isFunction as _isFunction, isNumber as _isNumber, isString as _isString } from 'lodash-es';
 import { InputsType } from 'ng-dynamic-component';
 import { CellTemplateDirective } from '../directives/cell-template.directive';
 import { DataTableColumnDefinition } from '../interfaces';
@@ -17,12 +17,10 @@ import { DataTableColumnDefinition } from '../interfaces';
   selector: 'cell-templates',
   templateUrl: './cell-templates.component.html',
 })
-export class CellTemplatesComponent implements OnInit {
+export class CellTemplatesComponent {
   @ViewChildren(CellTemplateDirective) templates: QueryList<CellTemplateDirective>;
 
   constructor(public translate: TranslateService) {}
-
-  ngOnInit(): void {}
 
   /**
    * @returns The specified template.
@@ -39,7 +37,7 @@ export class CellTemplatesComponent implements OnInit {
       { rx: '<', entity: '&lt;' },
       { rx: '>', entity: '&gt;' },
       { rx: '"', entity: '&quot;' },
-      { rx: '\'', entity: '&#x27;' },
+      { rx: "'", entity: '&#x27;' },
       { rx: '/', entity: '&#x2F;' },
     ];
     entities.forEach((item) => {
