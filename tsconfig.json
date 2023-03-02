@@ -11,21 +11,15 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
-    "lib": [
-      "es2018",
-      "es2019",
-      "dom"
-    ],
+    "lib": ["es2018", "es2019", "dom"],
     "paths": {
-      "data-table": [
-        "dist/data-table/data-table",
-        "dist/data-table"
-      ]
+      "data-table": ["dist/data-table/data-table", "dist/data-table"]
     },
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
+    "compilationMode": "partial"
   }
 }
