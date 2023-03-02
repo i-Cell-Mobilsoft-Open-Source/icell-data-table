@@ -24,7 +24,7 @@ ic-data-table {
   table {
     width: 100%;
 
-    td.mat-cell,
+    td.mat-mdc-cell,
     th.mat-cell {
       border-bottom-color: rgba(0, 0, 0, 0.12);
       border-left-color: rgba(0, 0, 0, 0.12);
@@ -77,8 +77,8 @@ ic-data-table {
       font-weight: normal;
     }
 
-    th.mat-header-cell:not(.master-detail-header),
-    td.mat-cell:not(.master-detail-cell),
+    th.mat-mdc-header-cell:not(.master-detail-header),
+    td.mat-mdc-cell:not(.master-detail-cell),
     th.mat-cell:not(.master-detail-cell) {
       border-left: 1px solid #efefef;
       padding-left: 8px;
@@ -132,7 +132,7 @@ ic-data-table {
   border-radius: 4px;
   background: white;
 
-  .mat-slide-toggle.cdk-focused .mat-ripple {
+  .mat-mdc-slide-toggle.cdk-focused .mat-ripple {
     border: 1px solid rgb(42, 105, 178);
     background-color: rgba(42, 105, 178, 0.12);
     border-radius: 100%;

@@ -22,11 +22,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ThemePalette } from '@angular/material/core';
-import { MatLegacyOptionSelectionChange as MatOptionSelectionChange } from '@angular/material/legacy-core';
+import { MatOptionSelectionChange } from '@angular/material/core';
 import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
-import { MatLegacyColumnDef as MatColumnDef, MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatColumnDef, MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { ResizeEvent } from 'angular-resizable-element';
 import { clone, cloneDeep, orderBy as _orderBy } from 'lodash-es';

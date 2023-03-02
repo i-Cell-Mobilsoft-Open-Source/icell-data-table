@@ -8,19 +8,12 @@
       "files": [
         "*.ts"
       ],
-      "parserOptions": {
-        "project": [
-          "src/tsconfig.lib.json",
-          "src/tsconfig.spec.json"
-        ],
-        "createDefaultProgram": true
-      },
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
           {
             "type": "attribute",
-            "prefix": ["lib", "ic", "mat", "cell", "ngx"],
+            "prefix": "lib",
             "style": "camelCase"
           }
         ],
@@ -28,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": ["lib", "ic", "mat", "cell", "ngx"],
+            "prefix": "lib",
             "style": "kebab-case"
           }
         ]

@@ -1,7 +1,7 @@
 import { CollectionViewer, SelectionModel } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/table';
 import { ChangeDetectorRef } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, MatLegacyPaginatorIntl as MatPaginatorIntl } from '@angular/material/legacy-paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { get as _get, identity as _identity, isFunction as _isFunction } from 'lodash-es';
 import { BehaviorSubject, merge, Observable, of, Subscription } from 'rxjs';
