@@ -22,7 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { ResizableModule } from 'angular-resizable-element';
-import { DynamicIoModule, DynamicModule } from 'ng-dynamic-component';
+import { DynamicModule } from 'ng-dynamic-component';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
 import { DataTableComponent } from './data-table.component';
 import { CellTemplateDirective } from './directives/cell-template.directive';
@@ -66,7 +66,6 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
     TranslateModule,
     ResizableModule,
     DynamicModule,
-    // DynamicIoModule,
     HttpClientModule,
     DragDropModule,
     OverlayModule,
