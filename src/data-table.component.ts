@@ -21,7 +21,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatOptionSelectionChange, ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
@@ -361,7 +361,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     this.expandedRow = null;
   }
 
-  public columnSelectorFormControl = new FormControl();
+  public columnSelectorFormControl = new UntypedFormControl();
 
   private originalHideableColDefs: DataTableColumnDefinition[];
   private originalUnsetableColDefs: DataTableColumnDefinition[] = [];
