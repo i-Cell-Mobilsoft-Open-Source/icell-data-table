@@ -431,7 +431,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   ngOnDestroy() {
     this.destroyedSignal.next(true);
     this.destroyedSignal.complete();
-    this.onLangChange.unsubscribe();
+    this.onLangChange?.unsubscribe();
   }
 
   private initializeDragMenuSettings() {
