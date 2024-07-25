@@ -12,16 +12,16 @@ npm i @i-cell/data-table
 
 # Requirements
 
-The table supports `Angular v11.1.0` currently.
+The table supports `Angular v13.1.3` currently.
 
 In order to use the table, you need to install these dependencies:
 
 | Package             | Command to install        | Current version |
 | ------------------- | ------------------------- | --------------- |
-| Angular material \* | `npm i @angular/material` | 11.1.0          |
-| Angular CDK         | `npm i @angular/cdk`      | 11.1.0          |
-| ngx-translate       | `npm i ngx-translate`     | 13.0.0          |
-| ngx-webstorage      | `npm i ngx-webstorage`    | 6.0.0           |
+| Angular material \* | `npm i @angular/material` | 13.1.3          |
+| Angular CDK         | `npm i @angular/cdk`      | 13.1.3          |
+| ngx-translate       | `npm i ngx-translate`     | 14.0.0          |
+| ngx-webstorage      | `npm i ngx-webstorage`    | 9.0.0           |
 
 \*if you need to add Angular Material to an existing project, make sure
 to load the required material palettes in your `styles.scss` for the
@@ -46,19 +46,22 @@ Material theme as well. For example:
 
 ## Configuration
 
-> **Important**
-> 
-> The table uses `materialdesignicons` svg icon, you will need to
-> download the latest `mdi.svg` from
-> [here](https://materialdesignicons.com/api/download/angularmaterial/38EF63D0-4744-11E4-B3CF-842B2B6CFE1B).
-> Place the downloaded svg inside the `assets/` folder of your
-> application.
+<div class="important">
 
-> **Note**
-> 
-> If you structure your `assets/` folder in a specific way, you have the
-> option to set the path of the svg, while you import the
-module.
+The table uses `materialdesignicons` svg icon, you will need to download
+the latest `mdi.svg` from
+[here](https://materialdesignicons.com/api/download/angularmaterial/38EF63D0-4744-11E4-B3CF-842B2B6CFE1B).
+Place the downloaded svg inside the `assets/` folder of your
+application.
+
+</div>
+
+<div class="note">
+
+If you structure your `assets/` folder in a specific way, you have the
+option to set the path of the svg, while you import the module.
+
+</div>
 
 ``` typescript
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -141,46 +144,53 @@ export class Module {
 <tr class="odd">
 <td><p>label</p></td>
 <td><p><code>string</code></p></td>
-<td><p>❌</p></td>
-<td></td>
+<td><p>✔️</p></td>
+<td><p>''</p></td>
 <td><p>Column label; can be a localization key.</p></td>
 </tr>
 <tr class="even">
 <td><p>hideable</p></td>
 <td><p><code>boolean</code></p></td>
-<td><p>❌</p></td>
-<td></td>
+<td><p>✔️</p></td>
+<td><p>false</p></td>
 <td><p>Defines if the column is hideable.</p></td>
 </tr>
 <tr class="odd">
 <td><p>visible</p></td>
 <td><p><code>boolean</code></p></td>
-<td><p>❌</p></td>
-<td></td>
+<td><p>✔️</p></td>
+<td><p>true</p></td>
 <td><p>Defines if the column is visible. If used with hideable, the column will be in the column menu unchecked.</p></td>
 </tr>
 <tr class="even">
-<td><p>sortable</p></td>
+<td><p>actionColumn</p></td>
 <td><p><code>boolean</code></p></td>
 <td><p>✔️</p></td>
 <td></td>
-<td><p>Defines if the column should be sortable.</p></td>
+<td><p>Defines if the column is for actions.</p></td>
 </tr>
 <tr class="odd">
+<td><p>sortable</p></td>
+<td><p><code>boolean</code></p></td>
+<td><p>✔️</p></td>
+<td><p>true</p></td>
+<td><p>Defines if the column should be sortable.</p></td>
+</tr>
+<tr class="even">
 <td><p>sticky</p></td>
 <td><p><code>boolean</code></p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines if the column should be sticky at the begining of the table.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>stickyEnd</p></td>
 <td><p><code>boolean</code></p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines if the column should be sticky at the end of the table.</p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><p>template</p></td>
 <td><p><code>string</code></p></td>
 <td><p>✔️</p></td>
@@ -188,7 +198,7 @@ export class Module {
 <td><p>Defines how the cell should be rendered.</p>
 <p>If <code>componentTemplate</code> is used you must define the <code>component</code> property as well.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>component</p></td>
 <td><p>any</p></td>
 <td><p>✔️</p></td>
@@ -196,7 +206,7 @@ export class Module {
 <td><p>Defines what component to use to render the cell.</p>
 <p>Use with <code>template = 'componentTemplate'</code>.</p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><p>componentOptions</p></td>
 <td><p>ComponentOptions</p></td>
 <td><p>✔️</p></td>
@@ -204,7 +214,7 @@ export class Module {
 <td><p>Provide input, output bindings for the component rendered in the cell.</p>
 <p>Use with <code>template = 'componentTemplate'</code>.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>parent</p></td>
 <td><p>any</p></td>
 <td><p>✔️</p></td>
@@ -212,28 +222,28 @@ export class Module {
 <td><p>Defines what component to use to render the cell.</p>
 <p>Use with <code>template = 'componentTemplate'</code>.</p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><p>identifier</p></td>
 <td><p>boolean</p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines if the cell should render as header for a11y reasons.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>columnClasses</p></td>
 <td><p>boolean</p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines custom <code>CSS</code> class for the column it self.</p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><p>cellClasses</p></td>
 <td><p>boolean</p></td>
 <td><p>✔️</p></td>
 <td></td>
 <td><p>Defines custom <code>CSS</code> class for the column cells.</p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><p>sortButtonAriaLabel</p></td>
 <td><p>string</p></td>
 <td><p>✔️</p></td>
@@ -243,19 +253,21 @@ export class Module {
 </tbody>
 </table>
 
-> **Note**
-> 
-> The `template` field can have the following values:
-> 
->   - `'labelTemplate'`
-> 
->   - `'labelBoldTemplate'`
-> 
->   - `'numericTemplate'`
-> 
->   - `'iconTemplate'`
-> 
->   - `'componentTemplate'`
+<div class="note">
+
+The `template` field can have the following values:
+
+  - `'labelTemplate'`
+
+  - `'labelBoldTemplate'`
+
+  - `'numericTemplate'`
+
+  - `'iconTemplate'`
+
+  - `'componentTemplate'`
+
+</div>
 
 **some.ts.**
 
@@ -344,6 +356,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | showColumnMenu                | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to render column menu.                                                                                                            |
 | hasSorting                    | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to enable sorting.                                                                                                                |
 | fixedHeader                   | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to have sticky header.                                                                                                            |
+| hasExtColMenu                 | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to use external column menu.                                                                                                      |
 | detailClosedIcon              | `@Input`  | `string`                                              | ✔️       | `chevron-right`    | Icon to use for closed details.                                                                                                        |
 | detailOpenIcon                | `@Input`  | `string`                                              | ✔️       | `chevron-down`     | Icon to use for opened details.                                                                                                        |
 | sortingNoSort                 | `@Input`  | `string`                                              | ✔️       | `sort`             | Icon to use for no sort active.                                                                                                        |
@@ -461,7 +474,8 @@ For translation we utilize `@ngx-translate`.
     "SORT_NONE": "no sorting",
     "SORT_ASC": "sorting ascending",
     "SORT_DESC": "sorting descending",
-    "NOROWSTOSHOW": "No data present."
+    "NOROWSTOSHOW": "No data present.",
+    "EMPTY_CELL": "-"
   }
   ...
 }
