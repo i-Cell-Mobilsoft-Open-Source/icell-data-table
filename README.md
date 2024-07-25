@@ -46,19 +46,22 @@ Material theme as well. For example:
 
 ## Configuration
 
-> **Important**
-> 
-> The table uses `materialdesignicons` svg icon, you will need to
-> download the latest `mdi.svg` from
-> [here](https://materialdesignicons.com/api/download/angularmaterial/38EF63D0-4744-11E4-B3CF-842B2B6CFE1B).
-> Place the downloaded svg inside the `assets/` folder of your
-> application.
+<div class="important">
 
-> **Note**
-> 
-> If you structure your `assets/` folder in a specific way, you have the
-> option to set the path of the svg, while you import the
-module.
+The table uses `materialdesignicons` svg icon, you will need to download
+the latest `mdi.svg` from
+[here](https://materialdesignicons.com/api/download/angularmaterial/38EF63D0-4744-11E4-B3CF-842B2B6CFE1B).
+Place the downloaded svg inside the `assets/` folder of your
+application.
+
+</div>
+
+<div class="note">
+
+If you structure your `assets/` folder in a specific way, you have the
+option to set the path of the svg, while you import the module.
+
+</div>
 
 ``` typescript
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -250,19 +253,21 @@ export class Module {
 </tbody>
 </table>
 
-> **Note**
-> 
-> The `template` field can have the following values:
-> 
->   - `'labelTemplate'`
-> 
->   - `'labelBoldTemplate'`
-> 
->   - `'numericTemplate'`
-> 
->   - `'iconTemplate'`
-> 
->   - `'componentTemplate'`
+<div class="note">
+
+The `template` field can have the following values:
+
+  - `'labelTemplate'`
+
+  - `'labelBoldTemplate'`
+
+  - `'numericTemplate'`
+
+  - `'iconTemplate'`
+
+  - `'componentTemplate'`
+
+</div>
 
 **some.ts.**
 
@@ -351,6 +356,7 @@ this.columnSettings: DataTableColumnDefinition[] = [
 | showColumnMenu                | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to render column menu.                                                                                                            |
 | hasSorting                    | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to enable sorting.                                                                                                                |
 | fixedHeader                   | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to have sticky header.                                                                                                            |
+| hasExtColMenu                 | `@Input`  | `boolean`                                             | ✔️       | `false`            | Flag to use external column menu.                                                                                                      |
 | detailClosedIcon              | `@Input`  | `string`                                              | ✔️       | `chevron-right`    | Icon to use for closed details.                                                                                                        |
 | detailOpenIcon                | `@Input`  | `string`                                              | ✔️       | `chevron-down`     | Icon to use for opened details.                                                                                                        |
 | sortingNoSort                 | `@Input`  | `string`                                              | ✔️       | `sort`             | Icon to use for no sort active.                                                                                                        |
@@ -468,7 +474,8 @@ For translation we utilize `@ngx-translate`.
     "SORT_NONE": "no sorting",
     "SORT_ASC": "sorting ascending",
     "SORT_DESC": "sorting descending",
-    "NOROWSTOSHOW": "No data present."
+    "NOROWSTOSHOW": "No data present.",
+    "EMPTY_CELL": "-"
   }
   ...
 }
