@@ -548,9 +548,11 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
   loadDragMenuColDefs(columnSettings: DataTableColumnDefinition[]) {
     const storedColumnSettings = this.localStorage.retrieve(`table-settings-${this.name}`);
+    let storeColDefs = false;
 
     if (storedColumnSettings) {
       const dragMenuColDefs: DataTableColumnDefinition[] = [];
+      const dragMenuFields: string[] = [];
       // the storedColumnSettings determine the order of the columns
       storedColumnSettings.forEach((scs: DataTableColumnDefinition) => {
         const colDefArray = columnSettings.filter((cd) => cd.field === scs.field);
@@ -559,14 +561,27 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
           const colDef = clone(colDefArray[0]);
           colDef.visible = scs.visible;
           dragMenuColDefs.push(colDef);
+          dragMenuFields.push(colDef.field);
         }
       });
+
+      // pick up newly added columns and add as non-visible (selectable in column menu) to the end of the list
+      this.originalHideableColDefs
+        .filter((colDefElement: DataTableColumnDefinition) => !dragMenuFields.includes(colDefElement.field))
+        .forEach((colDefElement: DataTableColumnDefinition) => {
+          dragMenuColDefs.push({ ...colDefElement, visible: false });
+          storeColDefs = true;
+        });
       this.dragMenuColDefs = dragMenuColDefs;
       this.columnDefinitions = [...dragMenuColDefs, ...this.originalUnsetableColDefs];
     } else {
       // shallow copy is necessary on the array item not on the array
       this.dragMenuColDefs = this.originalHideableColDefs.map((colDef) => clone(colDef));
       this.columnDefinitions = [...this.originalHideableColDefs, ...this.originalUnsetableColDefs];
+      storeColDefs = true;
+    }
+
+    if (storeColDefs) {
       this.storeColDefs();
       this.columnSelectionChange.emit({ column: 'changed' });
     }
