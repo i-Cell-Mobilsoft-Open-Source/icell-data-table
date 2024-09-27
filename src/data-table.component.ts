@@ -206,7 +206,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
-   * @expoerimental
+   * @experimental
    */
   public get context() {
     return this;
@@ -438,7 +438,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     if (Array.isArray(this.columnSettings)) {
       this.originalHideableColDefs = this.columnSettings.filter((colDef) => !colDef.actionColumn && (colDef.visible || colDef.hideable));
       this.originalUnsetableColDefs = this.columnSettings.filter((colDef) => colDef.actionColumn || (!colDef.visible && !colDef.hideable));
-      this.loadDragMenuColDefs(this.columnSettings);
+      this.loadDragMenuColDefs();
     }
   }
 
@@ -546,22 +546,24 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     return detailRowTemplates;
   }
 
-  loadDragMenuColDefs(columnSettings: DataTableColumnDefinition[]) {
+  loadDragMenuColDefs() {
     const storedColumnSettings = this.localStorage.retrieve(`table-settings-${this.name}`);
-    let storeColDefs = false;
+    let hasChangesToStore = false;
 
     if (storedColumnSettings) {
       const dragMenuColDefs: DataTableColumnDefinition[] = [];
       const dragMenuFields: string[] = [];
       // the storedColumnSettings determine the order of the columns
       storedColumnSettings.forEach((scs: DataTableColumnDefinition) => {
-        const colDefArray = columnSettings.filter((cd) => cd.field === scs.field);
+        const colDefArray = this.originalHideableColDefs.filter((cd) => cd.field === scs.field);
         if (colDefArray.length) {
-          // shallow copy is enough due to performance reason
-          const colDef = clone(colDefArray[0]);
+          const colDef = clone(colDefArray[0]); // shallow copy is enough due to performance reason
           colDef.visible = scs.visible;
           dragMenuColDefs.push(colDef);
           dragMenuFields.push(colDef.field);
+        } else {
+          // when stored colDef not found in original columnSettings
+          hasChangesToStore = true;
         }
       });
 
@@ -570,7 +572,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
         .filter((colDefElement: DataTableColumnDefinition) => !dragMenuFields.includes(colDefElement.field))
         .forEach((colDefElement: DataTableColumnDefinition) => {
           dragMenuColDefs.push({ ...colDefElement, visible: false });
-          storeColDefs = true;
+          hasChangesToStore = true;
         });
       this.dragMenuColDefs = dragMenuColDefs;
       this.columnDefinitions = [...dragMenuColDefs, ...this.originalUnsetableColDefs];
@@ -578,10 +580,10 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       // shallow copy is necessary on the array item not on the array
       this.dragMenuColDefs = this.originalHideableColDefs.map((colDef) => clone(colDef));
       this.columnDefinitions = [...this.originalHideableColDefs, ...this.originalUnsetableColDefs];
-      storeColDefs = true;
+      hasChangesToStore = true;
     }
 
-    if (storeColDefs) {
+    if (hasChangesToStore) {
       this.storeColDefs();
       this.columnSelectionChange.emit({ column: 'changed' });
     }
