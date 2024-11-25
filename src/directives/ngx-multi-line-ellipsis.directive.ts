@@ -6,7 +6,8 @@ import { Directive, ElementRef, Input, AfterViewInit, Renderer2 } from '@angular
  * source: https://raw.githubusercontent.com/moonykolo/ngx-multi-line-ellipsis/master/lib/ngx-multi-line-ellipsis.directive.ts
  */
 @Directive({
-  selector: '[ngxEllipsis]',
+    selector: '[ngxEllipsis]',
+    standalone: false
 })
 export class NgxMultiLineEllipsisDirective implements AfterViewInit {
   @Input() lines: number;

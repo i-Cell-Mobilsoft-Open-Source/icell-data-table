@@ -1,8 +1,8 @@
-import { A11yModule } from '@angular/cdk/a11y'
+import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { Inject, InjectionToken, ModuleWithProviders, NgModule, NO_ERRORS_SCHEMA, Optional } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -44,6 +44,9 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
  * Provide module with `.forRoot(mdiSvgResourcePath)`.
  */
 @NgModule({
+  declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective, SanitizeTranformPipe],
+  exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective, SanitizeTranformPipe],
+  schemas: [NO_ERRORS_SCHEMA],
   imports: [
     A11yModule,
     CommonModule,
@@ -66,14 +69,10 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
     TranslateModule,
     ResizableModule,
     DynamicModule,
-    HttpClientModule,
     DragDropModule,
     OverlayModule,
   ],
-  declarations: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective, SanitizeTranformPipe],
-  exports: [DataTableComponent, CellTemplateDirective, CellTemplatesComponent, NgxMultiLineEllipsisDirective, SanitizeTranformPipe],
-  providers: [MatSortHeaderIntl],
-  schemas: [NO_ERRORS_SCHEMA],
+  providers: [MatSortHeaderIntl, provideHttpClient(withInterceptorsFromDi())],
 })
 export class DataTableModule {
   constructor(
@@ -81,7 +80,9 @@ export class DataTableModule {
     private domSanitizer: DomSanitizer,
     @Optional() @Inject(DATATABLE_CONFIG_TOKEN) private config: DataTableConfig
   ) {
-    this.matIconRegistry.addSvgIconSet(this.domSanitizer.bypassSecurityTrustResourceUrl(config ? config.mdiSvgResourcePath : './assets/mdi.svg'));
+    this.matIconRegistry.addSvgIconSet(
+      this.domSanitizer.bypassSecurityTrustResourceUrl(config ? config.mdiSvgResourcePath : './assets/mdi.svg')
+    );
   }
 
   /**

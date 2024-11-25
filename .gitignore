@@ -60,3 +60,4 @@ commit.log
 **/*.tgz
 !/**/.gitkeep
 README.xml
+*.tgz

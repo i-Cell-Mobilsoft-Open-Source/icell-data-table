@@ -57,18 +57,19 @@ import { ServerSideDataSource } from './server-side/server-side-data-source';
  */
 
 @Component({
-  selector: 'ic-data-table',
-  templateUrl: 'data-table.component.html',
-  styleUrls: ['data-table.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default,
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
-      state('expanded', style({ height: '*', visibility: 'visible' })),
-      transition('expanded <=> collapsed', animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'ic-data-table',
+    templateUrl: 'data-table.component.html',
+    styleUrls: ['data-table.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
+            state('expanded', style({ height: '*', visibility: 'visible' })),
+            transition('expanded <=> collapsed', animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+    ],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   // cell template holder
