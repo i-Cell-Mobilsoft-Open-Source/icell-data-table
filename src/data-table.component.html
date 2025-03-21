@@ -320,20 +320,22 @@
             [id]="customId + '-header-' + col.field"
             scope="col"
           >
-            <span [innerHTML]="col.label | translate | sanitize"></span>
-            <button
-              mat-icon-button
-              type="button"
-              [class.grey]="!isSorted(col?.orderName || col?.field)"
-              (click)="sortClickEvent(col?.orderName || col?.field, col)"
-              [attr.aria-label]="sortButtonLabel(col)"
-            >
-              <ng-container [ngSwitch]="getSortDirection(col?.orderName || col?.field)">
-                <mat-icon *ngSwitchCase="''" [svgIcon]="sortingNoSort"></mat-icon>
-                <mat-icon *ngSwitchCase="'asc'" [svgIcon]="sortingAsc"></mat-icon>
-                <mat-icon *ngSwitchCase="'desc'" [svgIcon]="sortingDesc"></mat-icon>
-              </ng-container>
-            </button>
+            <div class="table-header-label-wrapper">
+              <span [innerHTML]="col.label | translate | sanitize"></span>
+              <button
+                mat-icon-button
+                type="button"
+                [class.grey]="!isSorted(col?.orderName || col?.field)"
+                (click)="sortClickEvent(col?.orderName || col?.field, col)"
+                [attr.aria-label]="sortButtonLabel(col)"
+              >
+                <ng-container [ngSwitch]="getSortDirection(col?.orderName || col?.field)">
+                  <mat-icon *ngSwitchCase="''" [svgIcon]="sortingNoSort"></mat-icon>
+                  <mat-icon *ngSwitchCase="'asc'" [svgIcon]="sortingAsc"></mat-icon>
+                  <mat-icon *ngSwitchCase="'desc'" [svgIcon]="sortingDesc"></mat-icon>
+                </ng-container>
+              </button>
+            </div>
           </th>
         </ng-container>
         <ng-container *ngIf="!col.actionColumn && (!col.sortable || !hasSorting)">
