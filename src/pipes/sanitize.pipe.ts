@@ -2,8 +2,8 @@ import { inject, Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({
-    name: 'sanitize',
-    standalone: true
+  standalone:false,
+  name: 'sanitize',
 })
 export class SanitizeTranformPipe implements PipeTransform {
   private _sanitizer: DomSanitizer = inject(DomSanitizer);
