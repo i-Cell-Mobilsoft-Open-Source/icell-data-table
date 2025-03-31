@@ -1,6 +1,6 @@
 import { CollectionViewer, SelectionModel } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/table';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Injector, runInInjectionContext } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { get as _get, identity as _identity, isFunction as _isFunction } from 'lodash-es';
@@ -41,6 +41,7 @@ export class ServerSideDataSource implements DataSource<any> {
    * @param cdRef Needed to factory a `mat-paginator` component.
    * @param withDetail Flag to extend the response for master-detail representation.
    * @param clearSelectionOnPageChange Flag if set the selection will be cleared on paging.
+   * @param injector Parent injector.
    * @param mappingFn A function that maps the response data from the server to a [DataWithQueryResponseDetails]{@link ServerSideDataSource#DataWithQueryResponseDetails} type.
    */
   constructor(
@@ -53,13 +54,13 @@ export class ServerSideDataSource implements DataSource<any> {
     private cdRef: ChangeDetectorRef,
     public withDetail: boolean = false,
     public clearSelectionOnPageChange: boolean = false,
+    public injector: Injector,
     public mappingFn: (resp: any) => DataWithQueryResponseDetails = _identity
   ) {
     if (!_isFunction(this.dataSourceEndpoint)) {
       throw new Error('The `dataSourceEndpoint` argument should be a function!');
     }
-
-    this.paginator = new MatPaginator(this.paginatorIntl, this.cdRef);
+    runInInjectionContext(this.injector, () => (this.paginator = new MatPaginator(this.paginatorIntl, this.cdRef)));
   }
 
   connect(_collectionViewer: CollectionViewer): Observable<any[] | readonly any[]> {

@@ -14,11 +14,9 @@ import { SanitizeTranformPipe } from 'src/pipes/sanitize.pipe';
  *
  */
 @Component({
-    // eslint-disable-next-line @angular-eslint/component-selector
-    selector: 'cell-templates',
-    templateUrl: './cell-templates.component.html',
-    imports: [TranslateModule, SanitizeTranformPipe],
-    standalone: true
+  standalone: false,
+  selector: 'cell-templates',
+  templateUrl: './cell-templates.component.html',
 })
 export class CellTemplatesComponent {
   public templates = viewChildren(CellTemplateDirective);

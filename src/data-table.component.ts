@@ -1,21 +1,22 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceCssPixelValue } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { hasModifierKey } from '@angular/cdk/keycodes';
 import { ConnectionPositionPair } from '@angular/cdk/overlay';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
+  Injector,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  runInInjectionContext,
   SimpleChanges,
   TemplateRef,
   ViewChild,
@@ -23,13 +24,12 @@ import {
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { ThemePalette } from '@angular/material/core';
-import { MatOptionSelectionChange } from '@angular/material/core';
+import { MatOptionSelectionChange, ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
-import { MatColumnDef, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { ResizeEvent } from 'angular-resizable-element';
-import { clone, cloneDeep, orderBy as _orderBy } from 'lodash-es';
+import { orderBy as _orderBy, clone, cloneDeep } from 'lodash-es';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { CellTemplatesComponent } from './cell-templates/cell-templates.component';
@@ -57,19 +57,19 @@ import { ServerSideDataSource } from './server-side/server-side-data-source';
  */
 
 @Component({
-    selector: 'ic-data-table',
-    templateUrl: 'data-table.component.html',
-    styleUrls: ['data-table.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Default,
-    animations: [
-        trigger('detailExpand', [
-            state('collapsed', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
-            state('expanded', style({ height: '*', visibility: 'visible' })),
-            transition('expanded <=> collapsed', animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-        ]),
-    ],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  standalone: false,
+  selector: 'ic-data-table',
+  templateUrl: 'data-table.component.html',
+  styleUrls: ['data-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default,
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
+      state('expanded', style({ height: '*', visibility: 'visible' })),
+      transition('expanded <=> collapsed', animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   // cell template holder
@@ -402,7 +402,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     private matSortService: MatSortHeaderIntl,
     private localStorage: LocalStorageService,
     private cdRef: ChangeDetectorRef,
-    private focusMonitor: FocusMonitor
+    private injector: Injector
   ) {}
 
   ngOnInit() {
@@ -604,17 +604,24 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     if (!sortInfo) {
       return false;
     }
+
     if (!sortInfo.sortables.has(id)) {
-      const sortHeader = new MatSortHeader(
-        this.matSortService,
-        this.cdRef,
-        this.sort,
-        <MatColumnDef>{ name: id },
-        this.focusMonitor,
-        this.elementRef
-      );
-      sortHeader.id = id;
-      sortInfo.sortables.set(id, sortHeader);
+      const matSortHeaderInjector = Injector.create({ providers: [
+        {
+          provide: MatSort,
+          useValue: this.sort
+        },
+        {
+          provide: 'MAT_SORT_HEADER_COLUMN_DEF',
+          useValue: { name: id }
+        }
+      ], parent: this.injector });
+
+      runInInjectionContext(matSortHeaderInjector, () => {
+        const sortHeader = new MatSortHeader();
+        sortHeader.id = id;
+        sortInfo.sortables.set(id, sortHeader);
+      });
     }
     return sortInfo.active === id && sortInfo.direction !== '';
   }

@@ -1,8 +1,8 @@
 import { Directive, Input, TemplateRef } from '@angular/core';
 
 @Directive({
-    selector: '[cellTemplate]',
-    standalone: false
+  standalone: false,
+  selector: '[cellTemplate]',
 })
 export class CellTemplateDirective {
   @Input('cellTemplate') public name: string;
