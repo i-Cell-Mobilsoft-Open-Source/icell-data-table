@@ -1,9 +1,9 @@
 <cell-templates #cellTemplates></cell-templates>
 <ng-template #default let-row="row" let-cols="cols">
-  <table [id]="customId" cdk-table [dataSource]="row">
+  <table [id]="customId" mat-table [dataSource]="row">
     <ng-container *ngFor="let col of generateDefaultColDefs(cols); let colIndex = index" matColumnDef="{{ col.field }}">
       <th mat-header-cell *matHeaderCellDef scope="col">{{ col.label }}</th>
-      <td cdk-cell *matCellDef="let row; let idx = index">{{ row[col.field] }}</td>
+      <td mat-cell *matCellDef="let row; let idx = index">{{ row[col.field] }}</td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="cols"></tr>
     <tr mat-row *matRowDef="let row; columns: cols"></tr>
@@ -193,7 +193,7 @@
   </div>
   <div class="horizontal-scroll">
     <table
-      cdk-table
+      mat-table
       [id]="customId"
       [dataSource]="dataSource"
       (contentChanged)="tableContentChanged()"
@@ -215,7 +215,7 @@
           >
           </mat-checkbox>
         </th>
-        <td cdk-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
+        <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
           <mat-checkbox
             *ngIf="hideSelectParameter ? !row[hideSelectParameter] : true"
             [color]="color"
@@ -230,7 +230,7 @@
       </ng-container>
       <!-- column menu -->
       <ng-container matColumnDef="$columnMenu" stickyEnd>
-        <td cdk-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
+        <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
           <button *ngIf="row.actions?.length" mat-icon-button [matMenuTriggerFor]="menu" aria-label="">
             <mat-icon [svgIcon]="'dots-vertical'"></mat-icon>
           </button>
@@ -259,7 +259,7 @@
           </span>
         </th>
         <td
-          cdk-cell
+          mat-cell
           *matCellDef="let row; let idx = index"
           class="master-detail-cell"
           [class.master-detail-cell--expand]="showDetailHeader"
@@ -277,13 +277,13 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="$empty" sticky>
-        <td cdk-cell *matCellDef="let row; let idx = index"></td>
+        <td mat-cell *matCellDef="let row; let idx = index"></td>
       </ng-container>
       <ng-container matColumnDef="$emptyEnd" stickyEnd>
-        <td cdk-cell *matCellDef="let row; let idx = index"></td>
+        <td mat-cell *matCellDef="let row; let idx = index"></td>
       </ng-container>
       <ng-container matColumnDef="$expandedDetail">
-        <td cdk-cell *matCellDef="let row; let idx = index" [attr.colspan]="detailColSpan">
+        <td mat-cell *matCellDef="let row; let idx = index" [attr.colspan]="detailColSpan">
           <div class="detail" [@detailExpand]="row.$expanded || allRowsExpanded ? 'expanded' : 'collapsed'">
             <ng-container *ngIf="detailTemplate">
               <ng-container *ngTemplateOutlet="detailTemplate; context: { row: row, idx: idx }"></ng-container>
@@ -370,7 +370,7 @@
         </ng-container>
         <ng-container *ngIf="!col?.identifier">
           <td
-            cdk-cell
+            mat-cell
             *matCellDef="let row; let idx = index"
             (click)="onCellClick($event, { row: row, col: col })"
             [class]="col.cellClasses || ''"
@@ -383,9 +383,9 @@
         </ng-container>
         <ng-container *ngIf="col?.identifier">
           <th
-            cdk-cell
+            mat-cell
             role="gridcell"
-            class="cdk-cell cdk-cell cdk-column-{{ col.field }} mat-column-{{ col.field }} {{ col.cellClasses || '' }}"
+            class="mat-cell mat-cell cdk-column-{{ col.field }} mat-column-{{ col.field }} {{ col.cellClasses || '' }}"
             scope="row"
             *matCellDef="let row; let idx = index"
             (click)="onCellClick($event, { row: row, col: col })"
@@ -414,7 +414,7 @@
       <!-- noDataRow -->
       <ng-container *ngIf="hasNoRowsToShowOverlayNoBelow">
         <tr class="mat-row" *matNoDataRow>
-          <td class="cdk-cell" [attr.colspan]="actualColumns.length">
+          <td class="mat-cell" [attr.colspan]="actualColumns.length">
             <span class="noRowsToShowOverlay" [innerHTML]="'ICELL_DATA_TABLE.NOROWSTOSHOW' | translate | sanitize"></span>
           </td>
         </tr>

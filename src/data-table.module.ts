@@ -15,9 +15,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortHeaderIntl, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
@@ -70,7 +70,7 @@ export const DATATABLE_CONFIG_TOKEN = new InjectionToken<DataTableConfig>('TOKEN
     ResizableModule,
     DynamicModule,
     DragDropModule,
-    OverlayModule,
+    OverlayModule
   ],
   providers: [MatSortHeaderIntl, provideHttpClient(withInterceptorsFromDi())],
 })

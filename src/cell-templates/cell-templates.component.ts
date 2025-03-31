@@ -1,9 +1,9 @@
+import { Component, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { get as _get, isFunction as _isFunction, isNumber as _isNumber, isString as _isString } from 'lodash-es';
+import { InputsType } from 'ng-dynamic-component';
 import { CellTemplateDirective } from '../directives/cell-template.directive';
 import { DataTableColumnDefinition } from '../interfaces';
-import { Component, TemplateRef, viewChildren } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { SanitizeTranformPipe } from 'src/pipes/sanitize.pipe';
 
 /**
  * Collection of built-in cell templates.
@@ -19,8 +19,7 @@ import { SanitizeTranformPipe } from 'src/pipes/sanitize.pipe';
   templateUrl: './cell-templates.component.html',
 })
 export class CellTemplatesComponent {
-  public templates = viewChildren(CellTemplateDirective);
-  // @ViewChildren(CellTemplateDirective) templates: QueryList<CellTemplateDirective>;
+  @ViewChildren(CellTemplateDirective) templates: QueryList<CellTemplateDirective>;
 
   constructor(public translate: TranslateService) {}
 
@@ -29,7 +28,7 @@ export class CellTemplatesComponent {
    * @param templateName specific template to be returned.
    */
   public getTemplate(templateName: string): TemplateRef<any> {
-    return this.templates().find((x) => x.name.toLowerCase() === templateName.toLowerCase()).template;
+    return this.templates.toArray().find((x) => x.name.toLowerCase() === templateName.toLowerCase()).template;
   }
 
   private preSanitize(input: string) {
@@ -87,7 +86,7 @@ export class CellTemplatesComponent {
    * @param colDef Cell's colun definition
    * @internal
    */
-  getComponentInputs(rowData: any, colDef: DataTableColumnDefinition) {
+  getComponentInputs(rowData: any, colDef: DataTableColumnDefinition): InputsType {
     return {
       data: rowData,
       parent: colDef.parent,
