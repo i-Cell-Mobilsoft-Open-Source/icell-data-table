@@ -16,7 +16,7 @@ jobs:
   build:
     name: Publish
     # The type of runner that the job will run on
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Install asciidoctor
