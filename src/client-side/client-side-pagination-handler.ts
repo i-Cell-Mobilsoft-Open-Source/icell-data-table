@@ -1,4 +1,4 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Injector, runInInjectionContext } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subject } from 'rxjs';
@@ -9,7 +9,6 @@ import { PaginationHandler, PaginationParams } from '../interfaces';
  * Client side pagination handler.
  */
 export class ClientSidePaginationHandler implements PaginationHandler {
-
   public paginationParams: PaginationParams;
 
   private paginationSubject: Subject<void> = new Subject();
@@ -22,15 +21,21 @@ export class ClientSidePaginationHandler implements PaginationHandler {
    * @param paginatorIntl Used to factory `mat-paginator`.
    * @param cdRef Used to factory `mat-paginator`.
    * @param paginationParams Pagination configuration.
+   * @param injector Parent injector.
    */
-  constructor(dataSource: MatTableDataSource<any>,
+  constructor(
+    dataSource: MatTableDataSource<any>,
     paginatorIntl: MatPaginatorIntl,
     cdRef: ChangeDetectorRef,
-    paginationParams: PaginationParams) {
-    this._paginator = new MatPaginator(paginatorIntl, cdRef);
-    this.initializePaginatior(paginationParams);
-    this.paginationParams = paginationParams;
-    dataSource.paginator = this._paginator;
+    paginationParams: PaginationParams,
+    injector: Injector
+  ) {
+    runInInjectionContext(injector, () => {
+      this._paginator = new MatPaginator(paginatorIntl, cdRef);
+      this.initializePaginatior(paginationParams);
+      this.paginationParams = paginationParams;
+      dataSource.paginator = this._paginator;
+    });
   }
 
   goToFirstPage(): void {
@@ -78,5 +83,4 @@ export class ClientSidePaginationHandler implements PaginationHandler {
     };
     this.paginationSubject.next();
   }
-
 }
