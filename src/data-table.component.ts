@@ -311,6 +311,11 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public hasExtColMenu: boolean = false;
 
   /**
+   * Flag to use idsCheckbox instead of mat-checkbox.
+   */
+  @Input() public useIdsCheckbox: boolean = false;
+
+  /**
    * Emitted row click event.
    * @emits (RowClickEvent)
    */

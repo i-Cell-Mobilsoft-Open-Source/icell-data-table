@@ -19,14 +19,22 @@
       <ng-container *ngFor="let col of columnDefinitions">
         <button mat-menu-item *ngIf="col.hideable" (click)="$event.stopPropagation(); columnSelection.toggle(col)">
           <mat-checkbox
+            *ngIf="!useIdsCheckbox"
             [color]="color"
             [name]="'column-checkbox--' + col.field"
             (click)="$event.stopPropagation()"
             (change)="$event ? columnSelection.toggle(col) : null; onColumnSelectionChange($event, col)"
             [checked]="columnSelection.isSelected(col)"
-          >
-            <span [innerHTML]="col.label | translate | sanitize"></span>
-          </mat-checkbox>
+            ><span [innerHTML]="col.label | translate | sanitize"></span
+          ></mat-checkbox>
+          <label idsCheckbox *ngIf="useIdsCheckbox" class="ids-checkbox" [class.checked]="columnSelection.isSelected(col)"
+            ><input
+              type="checkbox"
+              [name]="'column-checkbox--' + col.field"
+              (click)="$event.stopPropagation()"
+              (change)="$event ? columnSelection.toggle(col) : null; onColumnSelectionChange($event, col)"
+              [checked]="columnSelection.isSelected(col)" /><span [innerHTML]="col.label | translate | sanitize"></span
+          ></label>
         </button>
       </ng-container>
     </mat-menu>
@@ -206,26 +214,43 @@
       <ng-container matColumnDef="$selectBoxes" sticky>
         <th mat-header-cell *matHeaderCellDef scope="col" role="cell" class="master-detail-header">
           <mat-checkbox
+            *ngIf="!useIdsCheckbox"
             [color]="color"
             (change)="$event ? masterToggle() : null"
             [checked]="rowSelection.hasValue() && isAllSelected()"
             [indeterminate]="rowSelection.hasValue() && !isAllSelected()"
             [aria-label]="checkboxLabel()"
             [disabled]="isHeaderCheckboxDisabled()"
-          >
-          </mat-checkbox>
+          ></mat-checkbox>
+          <label idsCheckbox *ngIf="useIdsCheckbox" class="ids-checkbox" [class.checked]="rowSelection.hasValue() && isAllSelected()"
+            ><input
+              type="checkbox"
+              (change)="$event ? masterToggle() : null"
+              [checked]="rowSelection.hasValue() && isAllSelected()"
+              [indeterminate]="rowSelection.hasValue() && !isAllSelected()"
+              [aria-label]="checkboxLabel()"
+              [disabled]="isHeaderCheckboxDisabled()"
+          /></label>
         </th>
         <td mat-cell *matCellDef="let row; let idx = index" class="master-detail-cell">
           <mat-checkbox
-            *ngIf="hideSelectParameter ? !row[hideSelectParameter] : true"
+            *ngIf="!useIdsCheckbox && (hideSelectParameter ? !row[hideSelectParameter] : true)"
             [color]="color"
             (click)="$event.stopPropagation()"
             (change)="$event ? rowSelection.toggle(row) : null"
             [checked]="rowSelection.isSelected(row)"
             [aria-label]="checkboxLabel(row)"
             [disabled]="rowSelectionDisabledStates.get(row)"
-          >
-          </mat-checkbox>
+          ></mat-checkbox>
+          <label idsCheckbox *ngIf="useIdsCheckbox" class="ids-checkbox" [class.checked]="rowSelection.isSelected(row)"
+            ><input
+              type="checkbox"
+              [disabled]="rowSelectionDisabledStates.get(row)"
+              (click)="$event.stopPropagation()"
+              (change)="$event ? rowSelection.toggle(row) : null"
+              [checked]="rowSelection.isSelected(row)"
+              [aria-label]="checkboxLabel(row)"
+          /></label>
         </td>
       </ng-container>
       <!-- column menu -->

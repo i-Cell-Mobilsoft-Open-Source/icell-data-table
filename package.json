@@ -1,10 +1,10 @@
 {
   "name": "@i-cell/data-table",
-  "version": "5.0.2",
+  "version": "5.0.4",
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "build:prod": "npm run docs:readme && ng build -c production",
+    "build:prod": "ng build -c production",
     "docs:cleanup": "rm ./README.md",
     "docs:readme": "bash ./scripts/readme-adoc2md",
     "pack": "npm pack dist/",
