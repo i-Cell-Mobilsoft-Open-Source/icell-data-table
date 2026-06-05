@@ -29,7 +29,7 @@
                   (click)="$event.stopPropagation()"
                   (change)="$event ? columnSelection.toggle(col) : null; onColumnSelectionChange($event, col)"
                   [checked]="columnSelection.isSelected(col)"
-                  ><span [innerHTML]="col.label | translate | sanitize"></span
+                  ><span [innerHTML]="col.label! | translate | sanitize"></span
                 ></mat-checkbox>
               }
               @if (useIdsCheckbox) {
@@ -39,7 +39,7 @@
                   [name]="'column-checkbox--' + col.field"
                   (click)="$event.stopPropagation()"
                   (change)="$event ? columnSelection.toggle(col) : null; onColumnSelectionChange($event, col)"
-                  [checked]="columnSelection.isSelected(col)" /><span [innerHTML]="col.label | translate | sanitize"></span
+                  [checked]="columnSelection.isSelected(col)" /><span [innerHTML]="col.label! | translate | sanitize"></span
                 ></label>
               }
             </button>
@@ -57,7 +57,7 @@
           @for (colEntry of columnDefinitions; track colEntry) {
             @if (colEntry.hideable) {
               <mat-option [value]="colEntry" (onSelectionChange)="onColumnSelectionChange($event, colEntry)">
-                {{ colEntry.label | translate }}
+                {{ colEntry.label! | translate }}
               </mat-option>
             }
           }
@@ -139,7 +139,7 @@
                     (click)="$event.stopPropagation()"
                     (change)="$event ? (colEntry.visible = !colEntry.visible) : null"
                   ></mat-slide-toggle>
-                  <label class="drag-menu__list_item-label">{{ colEntry.label | translate }}</label>
+                  <label class="drag-menu__list_item-label">{{ colEntry.label! | translate }}</label>
                   @if (!colEntry.hideable) {
                     <mat-icon class="drag-menu__button-disabled" svgIcon="lock-outline"></mat-icon>
                   }
@@ -382,7 +382,7 @@
               [id]="customId + '-header-' + col.field"
               scope="col"
               >
-              <span [innerHTML]="col.label | translate | sanitize"></span>
+              <span [innerHTML]="col.label! | translate | sanitize"></span>
               <button
                 mat-icon-button
                 type="button"
@@ -415,7 +415,7 @@
               [resizeEdges]="{ bottom: false, right: true, top: false, left: true }"
               [id]="customId + '-header-' + col.field"
               scope="col"
-              [innerHTML]="col.label | translate | sanitize"
+              [innerHTML]="col.label! | translate | sanitize"
             ></th>
           }
           @if (col.actionColumn) {
