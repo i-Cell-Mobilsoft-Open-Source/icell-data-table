@@ -79,7 +79,7 @@
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.0.0",
     "ng-packagr": "^20.3.2",
-    "ngx-webstorage": "^19.0.1",
+    "ngx-webstorage": "^20.0.0",
     "protractor": "^7.0.0",
     "rxjs": "~7.5.2",
     "ts-node": "~8.3.0",
