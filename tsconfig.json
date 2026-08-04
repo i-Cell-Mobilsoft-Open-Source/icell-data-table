@@ -8,12 +8,14 @@
     "declaration": false,
     "experimentalDecorators": true,
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "lib": ["es2018", "es2019", "dom"],
     "paths": {
-      "data-table": ["dist/data-table/data-table", "dist/data-table"]
+      "data-table": [
+        "dist/data-table/data-table",
+        "dist/data-table"
+      ]
     },
     "useDefineForClassFields": false
   },

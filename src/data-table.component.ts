@@ -73,8 +73,8 @@ import { ServerSideDataSource } from './server-side/server-side-data-source';
 })
 export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   // cell template holder
-  @ViewChild('cellTemplates', { static: true }) public cellTemplates: CellTemplatesComponent;
-  @ViewChild(MatSort, { static: true }) public sort: MatSort;
+  @ViewChild('cellTemplates', { static: true }) public cellTemplates!: CellTemplatesComponent;
+  @ViewChild(MatSort, { static: true }) public sort!: MatSort;
 
   get rowCount(): number {
     let numRows: number;
@@ -89,7 +89,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
    * Native table indentifier.
    */
   /* eslint-disable */
-  @Input('id') public customId: string;
+  @Input('id') public customId!: string;
   /**
    * Flag indicating to render with *detail* rows.
    */
@@ -121,11 +121,11 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * Function to set row checkbox disabled status.
    */
-  @Input() public isSelectionDisabledForRow: (row: any) => boolean;
+  @Input() public isSelectionDisabledForRow!: (row: any) => boolean;
   /**
    * Function to provide custom functionality when contentchanged event happened.
    */
-  @Input() public tablecontentChangedCallback: (value?: any) => any;
+  @Input() public tablecontentChangedCallback!: (value?: any) => any;
   /**
    * This parameter should point to a boolean attribute in the table rows.
    * The said row[hideSelectParameter] value will hide / enable the select checkbox if used with useSelection.
@@ -135,7 +135,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
    * <ic-data-table [useSelection]=true, [hideSelectParameter]="hide" ... >
    *   this will result in {a,2} not having a select box in the first column.
    */
-  @Input() public hideSelectParameter: string = null;
+  @Input() public hideSelectParameter!: string;
   /**
    * Use this palette for mat elements
    */
@@ -148,7 +148,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
    * Flag to have sticky header.
    */
   @Input() public fixedHeader: boolean = false;
-  private _dataSource: any[] | MatTableDataSource<any> | ServerSideDataSource;
+  private _dataSource!: any[] | MatTableDataSource<any> | ServerSideDataSource;
   /**
    * DataSource.
    */
@@ -175,7 +175,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * Name of the table.
    */
-  @Input() public name: string;
+  @Input() public name!: string;
   /**
    * Caption of the table.
    */
@@ -220,7 +220,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
    */
 
   @Input() public set columnSettings(columnSetts: DataTableColumnDefinition[] | DataTableColumnSettings) {
-    const setDefaultValue = (colDef, colDefParam, defaultValue) => {
+    const setDefaultValue = (colDef: any, colDefParam: any, defaultValue: any) => {
       if (colDef[colDefParam] === undefined) {
         colDef[colDefParam] = defaultValue;
       }
@@ -256,7 +256,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * Custom user defined *detail* view.
    */
-  @Input() public detailTemplate: TemplateRef<any>;
+  @Input() public detailTemplate!: TemplateRef<any>;
 
   /**
    * Icon to use for closed details.
@@ -309,6 +309,11 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
    */
 
   @Input() public hasExtColMenu: boolean = false;
+
+  /**
+   * Flag to use idsCheckbox instead of mat-checkbox.
+   */
+  @Input() public useIdsCheckbox: boolean = false;
 
   /**
    * Emitted row click event.
@@ -365,21 +370,21 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
   public columnSelectorFormControl = new UntypedFormControl();
 
-  private originalHideableColDefs: DataTableColumnDefinition[];
+  private originalHideableColDefs!: DataTableColumnDefinition[];
   private originalUnsetableColDefs: DataTableColumnDefinition[] = [];
-  public actualColumns: string[];
-  public groupingColumns: string[];
-  public isResizing: boolean;
+  public actualColumns!: string[];
+  public groupingColumns!: string[];
+  public isResizing!: boolean;
 
   private destroyedSignal: ReplaySubject<boolean> = new ReplaySubject(1);
-  private onLangChange: Subscription;
+  private onLangChange!: Subscription;
 
   expandedRow: any;
 
   public columnSelection: SelectionModel<any> = new SelectionModel<any>(true, [], true);
   public rowSelection: SelectionModel<any> = new SelectionModel<any>(true, [], true);
 
-  public detailColSpan: number;
+  public detailColSpan!: number;
 
   public isDragMenuOpen: boolean = false;
   public dragMenuPositions: ConnectionPositionPair[] = [
@@ -448,17 +453,17 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       this.columnDefinitions = this.columnSettings;
     } else {
       this.columnDefinitions = this.columnSettings.columnDefinitions;
-      this.groupingHeaders = this.columnSettings.groupingHeaders;
+      this.groupingHeaders = this.columnSettings.groupingHeaders!;
     }
   }
 
   private createColumnSelectionModel(changes: SimpleChanges) {
     this.columnSelection = new SelectionModel<any>(
       true,
-      changes.columnSettings.currentValue.filter((entry) => entry?.visible),
+      changes.columnSettings.currentValue.filter((entry: any) => entry?.visible),
       true
     );
-    this.columnSelectorFormControl.patchValue(changes.columnSettings.currentValue.filter((entry) => entry?.visible));
+    this.columnSelectorFormControl.patchValue(changes.columnSettings.currentValue.filter((entry: any) => entry?.visible));
   }
 
   private createColumnSelectionChangeSubscription() {
@@ -466,7 +471,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       const origCols = [...this.columnDefinitions];
       if (chg.added.length > 0) {
         chg.added.flat().forEach((added) => {
-          const column = origCols.find((col) => col.field === added.field);
+          const column = origCols.find((col) => col.field === added.field)!;
           if (column.hideable) {
             column.visible = true;
           }
@@ -474,7 +479,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       }
       if (chg.removed.length > 0) {
         chg.removed.flat().forEach((removed) => {
-          const column = origCols.find((col) => col.field === removed.field);
+          const column = origCols.find((col) => col.field === removed.field)!;
           if (column.hideable) {
             column.visible = false;
           }
@@ -494,12 +499,12 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     return this.trans.instant('ICELL_DATA_TABLE.SORT_BUTTON_LABEL', {
       id: label ? this.trans.instant(label) : id,
       direction: this.trans.instant(
-        `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id).toUpperCase()}`
+        `ICELL_DATA_TABLE.SORT_${this.getSortDirection(id) === '' ? 'NONE' : this.getSortDirection(id)!.toUpperCase()}`
       ),
     });
   }
 
-  public handleColumnSelectionChange($event) {
+  public handleColumnSelectionChange($event: any) {
     this.columnSelection.clear();
     const selectedColumnsWithAlwaysVisibleColumns = [
       ...new Set([
@@ -578,7 +583,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
     if (storedColDefs) {
       this.columnDefinitions.forEach((colDef) => {
-        const storedColDefArray = storedColDefs.filter((scs) => scs.field === colDef.field);
+        const storedColDefArray = storedColDefs.filter((scs: any) => scs.field === colDef.field);
         if (storedColDefArray.length) {
           colDef.visible = storedColDefArray[0].visible;
         }
@@ -590,10 +595,10 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     const storageName = `table-settings-${this.name}`;
     let colDefsToStore: { field: string; visible: boolean }[] = [];
     if (this.columnMenuStyle === 'dragMenu') {
-      colDefsToStore = this.dragMenuColDefs.map((colDef) => ({ field: colDef.field, visible: colDef.visible }));
+      colDefsToStore = this.dragMenuColDefs.map((colDef) => ({ field: colDef.field, visible: colDef.visible! }));
     } else {
-      const hideableColDefsToStore = this.columnDefinitions.filter((colDef) => !colDef.actionColumn && (colDef.visible || colDef.hideable));
-      colDefsToStore = hideableColDefsToStore.map((colDef) => ({ field: colDef.field, visible: colDef.visible }));
+      const hideableColDefsToStore = this.columnDefinitions.filter((colDef) => !colDef.actionColumn && (colDef.visible || colDef.hideable)!);
+      colDefsToStore = hideableColDefsToStore.map((colDef) => ({ field: colDef.field, visible: colDef.visible! }));
     }
     this.localStorage.store(storageName, colDefsToStore);
   }
@@ -633,7 +638,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
 
   sortClickEvent(id: string, col?: DataTableColumnDefinition) {
     const sortInfo = (this.dataSource as MatTableDataSource<any> | ServerSideDataSource)?.sort;
-    const sortable = sortInfo?.sortables.get(id);
+    const sortable = sortInfo?.sortables.get(id)!;
     if (sortInfo) {
       sortInfo.sort(sortable);
     }
@@ -732,7 +737,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
     this.cellClick.emit(Object.assign({}, cloneDeep(event), { cell: cellData, originalEvent: event }));
   }
 
-  onColumnSelectionChange(event: MatOptionSelectionChange | MatCheckboxChange, columnDef?: DataTableColumnDefinition) {
+  onColumnSelectionChange(event: MatOptionSelectionChange | MatCheckboxChange | any, columnDef?: DataTableColumnDefinition) {
     // longMenu and dotsMenu events are slightly different, emit only user triggered events
     if (('isUserInput' in event && event.isUserInput) || 'checked' in event) {
       this.columnSelectionChange.emit({ column: columnDef });
